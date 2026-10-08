@@ -56,7 +56,7 @@ export function CatalogTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
               className={cn(
                 "flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300",
                 selected
-                  ? "border-brand-600 bg-brand-600 text-white shadow-lg shadow-brand-900/40"
+                  ? "border-red-400/60 bg-brand-600 text-white shadow-[0_0_24px_rgba(255,30,30,0.6)] [text-shadow:0_0_10px_rgba(255,255,255,0.5)]"
                   : "border-line bg-surface text-zinc-300 hover:-translate-y-0.5 hover:border-line-strong hover:text-white",
               )}
             >

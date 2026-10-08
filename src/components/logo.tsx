@@ -25,16 +25,27 @@ export function Logo({
   tone = "light",
   size = "md",
   eager,
+  glow = false,
 }: {
   className?: string;
   tone?: "light" | "dark";
   size?: "sm" | "md";
   /** Para el logo visible al cargar (encabezado): se descarga de inmediato. */
   eager?: boolean;
+  /** Halo rojo que respira alrededor de la insignia (tienda). */
+  glow?: boolean;
 }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <LogoBadge size={size === "md" ? 44 : 34} eager={eager} />
+      <span className="relative flex shrink-0 rounded-full">
+        {glow && (
+          <span
+            aria-hidden="true"
+            className="absolute -inset-1 animate-neon-pulse rounded-full shadow-[0_0_16px_4px_rgba(255,40,30,0.55)]"
+          />
+        )}
+        <LogoBadge size={size === "md" ? 44 : 34} eager={eager} className="relative" />
+      </span>
       <span className="flex flex-col font-display leading-none uppercase italic">
         <span
           className={cn(

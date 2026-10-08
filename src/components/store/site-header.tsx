@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, Zap } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -9,6 +9,7 @@ import { getCategories } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { CartButton, CartDrawer } from "./cart/cart-drawer";
 import { HeaderNavLinks } from "./header-nav";
+import { Marquee } from "./marquee";
 import { ActiveHeaderNav } from "./header-nav-active";
 import { MobileMenu } from "./mobile-menu";
 
@@ -19,17 +20,20 @@ export async function SiteHeader() {
   return (
     <>
       {settings.announcement && (
-        <div className="bg-brand-600 text-white">
-          <Container className="flex h-9 items-center justify-center text-center text-xs font-semibold tracking-wide sm:text-sm">
-            <p className="truncate">{settings.announcement}</p>
-          </Container>
+        <div className="relative z-50 bg-brand-600 text-white shadow-[0_0_24px_rgba(255,30,30,0.5)]">
+          <Marquee seconds={30} repeat={4} className="h-9 items-center text-xs font-semibold tracking-wide sm:text-sm">
+            <p className="flex items-center gap-6 px-6 whitespace-nowrap [text-shadow:0_0_10px_rgba(255,255,255,0.45)]">
+              {settings.announcement}
+              <Zap className="size-3.5 fill-current text-signal-400" aria-hidden="true" />
+            </p>
+          </Marquee>
         </div>
       )}
       <header className="sticky top-0 z-40 border-b border-white/8 bg-zinc-950/85 backdrop-blur-md">
         <Container className="flex h-16 items-center gap-2 lg:gap-6">
           <MobileMenu categories={menuCategories} />
           <Link href="/" aria-label="Solis Racing Parts, ir al inicio" className="shrink-0">
-            <Logo eager />
+            <Logo eager glow />
           </Link>
           <Suspense fallback={<HeaderNavLinks />}>
             <ActiveHeaderNav />

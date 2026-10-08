@@ -21,7 +21,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-1 hover:border-brand-600/50 hover:shadow-xl hover:shadow-brand-950/40",
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-1 hover:border-brand-500/70 hover:shadow-[0_0_30px_rgba(255,30,30,0.3)]",
         className,
       )}
       style={style}

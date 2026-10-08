@@ -23,8 +23,14 @@ export function Marquee({
   className?: string;
   trackClassName?: string;
 }) {
+  // Solo la primera repetición se lee y recibe foco; el resto es relleno visual.
   const copy = Array.from({ length: repeat }, (_, index) => (
-    <div key={index} className={cn("flex shrink-0 items-center", trackClassName)}>
+    <div
+      key={index}
+      className={cn("flex shrink-0 items-center", trackClassName)}
+      aria-hidden={index > 0 ? true : undefined}
+      inert={index > 0 ? true : undefined}
+    >
       {children}
     </div>
   ));

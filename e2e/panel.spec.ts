@@ -60,7 +60,8 @@ test("los cambios de configuración se reflejan en la tienda", async ({ page }) 
   await page.getByRole("button", { name: "Guardar configuración" }).click();
   await expect(page.getByText("Configuración guardada")).toBeVisible();
   await page.goto("/");
-  await expect(page.getByText("Envío gratis a todo Chile este fin de semana")).toBeVisible();
+  // El anuncio se desplaza en una banda que lo repite: basta con la primera copia.
+  await expect(page.getByText("Envío gratis a todo Chile este fin de semana").first()).toBeVisible();
 });
 
 test("un borrador sin precio no se puede publicar", async ({ page }) => {

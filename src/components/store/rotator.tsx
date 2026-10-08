@@ -56,6 +56,8 @@ export function Rotator({ slides, label, seconds = 4.5 }: { slides: Slide[]; lab
       <div className="grid" aria-live={running && !paused ? "off" : "polite"}>
         {slides.map((slide, i) => {
           const active = i === index;
+          // La que sale se va rápido hacia un lado; la nueva entra después desde el otro (sin encimarse).
+          const position = active ? "active" : i < index ? "prev" : "next";
           return (
             <div
               key={slide.id}
@@ -65,7 +67,8 @@ export function Rotator({ slides, label, seconds = 4.5 }: { slides: Slide[]; lab
               aria-hidden={!active}
               inert={!active}
               data-active={active}
-              className="[grid-area:1/1] transition duration-700 ease-out data-[active=false]:pointer-events-none data-[active=false]:translate-x-6 data-[active=false]:scale-[0.97] data-[active=false]:opacity-0"
+              data-position={position}
+              className="[grid-area:1/1] transition ease-out data-[active=false]:pointer-events-none data-[active=false]:scale-[0.97] data-[active=false]:opacity-0 data-[active=false]:duration-200 data-[active=true]:delay-200 data-[active=true]:duration-700 data-[position=next]:translate-x-8 data-[position=prev]:-translate-x-8"
             >
               {slide.content}
             </div>

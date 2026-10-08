@@ -3,7 +3,9 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon } from "@/components/icons";
 import { CatalogTabs } from "@/components/store/catalog-tabs";
+import { HeroSpotlight } from "@/components/store/hero-spotlight";
 import { Marquee } from "@/components/store/marquee";
+import { GlitchText, LightTrails, NeonFloor, NeonSign, ScannerLine, StartLights } from "@/components/store/neon";
 import { Price } from "@/components/store/price";
 import { ProductGrid } from "@/components/store/product-card";
 import { ProductImage } from "@/components/store/product-image";
@@ -53,28 +55,43 @@ export default async function HomePage() {
   return (
     <>
       {/* Portada */}
-      <section className="relative overflow-hidden border-b border-line">
+      <section className="relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="bg-speedlines absolute inset-y-0 -right-[300px] -left-[300px] animate-speedlines" />
         </div>
+        <NeonFloor className="h-[32%] opacity-45 sm:h-[42%] sm:opacity-60" />
+        <LightTrails />
+        <HeroSpotlight />
         <div
-          className="absolute top-1/2 right-[-10%] size-[42rem] -translate-y-1/2 animate-glow rounded-full bg-brand-600/20 blur-[120px]"
+          className="absolute top-1/2 right-[-10%] size-[42rem] -translate-y-1/2 animate-glow rounded-full bg-brand-600/25 blur-[120px]"
           aria-hidden="true"
         />
         <div
-          className="absolute -top-48 left-[-15%] size-[30rem] animate-glow rounded-full bg-orange-500/10 blur-[110px] [animation-delay:-3s]"
+          className="absolute -top-48 left-[-15%] size-[30rem] animate-glow rounded-full bg-red-600/15 blur-[110px] [animation-delay:-3s]"
           aria-hidden="true"
         />
-        <div className="absolute inset-y-0 right-[8%] hidden w-40 -skew-x-[20deg] bg-brand-600/10 lg:block" aria-hidden="true" />
-        <div className="absolute inset-y-0 right-[2%] hidden w-10 -skew-x-[20deg] bg-brand-600/20 lg:block" aria-hidden="true" />
+        {/* Barras inclinadas de neón */}
+        <div
+          className="absolute inset-y-0 right-[8%] hidden w-40 -skew-x-[20deg] animate-neon-pulse border-l-2 border-red-500/70 bg-brand-600/10 shadow-[0_0_60px_rgba(255,0,0,0.3)] lg:block"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-y-0 right-[2%] hidden w-10 -skew-x-[20deg] animate-neon-pulse bg-brand-600/35 shadow-[0_0_44px_rgba(255,20,20,0.6)] [animation-delay:-1.5s] lg:block"
+          aria-hidden="true"
+        />
 
         <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20 lg:[grid-template-areas:'text_show'_'stats_show']">
           <div className="[grid-area:text]">
-            <Eyebrow className="animate-rise tracking-[0.12em] sm:tracking-[0.2em]">Performance · Electrónica · Seteos</Eyebrow>
+            <div className="flex animate-rise flex-wrap items-center gap-x-4 gap-y-3">
+              <StartLights />
+              <Eyebrow className="tracking-[0.12em] sm:tracking-[0.2em]">Performance · Electrónica · Seteos</Eyebrow>
+            </div>
             <h1 className="mt-5 font-display text-5xl leading-[0.92] font-extrabold tracking-tight uppercase italic sm:text-6xl lg:text-7xl">
-              <span className="block animate-rise [animation-delay:100ms]">Más potencia.</span>
+              <span className="block animate-rise [animation-delay:100ms]">
+                <GlitchText>Más potencia.</GlitchText>
+              </span>
               <span className="block animate-rise [animation-delay:220ms]">
-                <span className="text-shine animate-shine-text pr-3">Más control.</span>
+                <NeonSign className="pr-3">Más control.</NeonSign>
               </span>
             </h1>
             <p className="mt-6 max-w-xl animate-rise text-base text-zinc-300 [animation-delay:340ms] sm:text-lg">
@@ -84,12 +101,19 @@ export default async function HomePage() {
             <div className="mt-8 flex animate-rise flex-col gap-3 [animation-delay:460ms] sm:flex-row sm:flex-wrap">
               <Link
                 href={catalog.length > 0 ? "#catalogo" : "/productos"}
-                className={buttonClasses({ size: "lg", className: "group" })}
+                className={buttonClasses({ size: "lg", className: "neon-cta group" })}
               >
                 Ver catálogo
                 <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/servicios" className={buttonClasses({ size: "lg", variant: "outline" })}>
+              <Link
+                href="/servicios"
+                className={buttonClasses({
+                  size: "lg",
+                  variant: "outline",
+                  className: "hover:border-brand-500 hover:shadow-[0_0_24px_rgba(255,30,30,0.45)]",
+                })}
+              >
                 <Gauge className="size-5" />
                 Agendar un seteo
               </Link>
@@ -103,8 +127,8 @@ export default async function HomePage() {
 
           {spotlight.length > 0 && (
             <div className="relative animate-rise [grid-area:show] [animation-delay:260ms]">
-              <Tachometer animated className="pointer-events-none absolute -top-24 -right-16 hidden w-[26rem] opacity-40 lg:block" />
-              <div className="relative rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-2xl shadow-black/50 backdrop-blur sm:p-7">
+              <Tachometer animated className="pointer-events-none absolute -top-24 -right-16 hidden w-[26rem] opacity-60 lg:block" />
+              <div className="neon-beam relative rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-2xl shadow-black/50 backdrop-blur sm:p-7">
                 <div className="mb-5 flex items-center justify-between gap-3">
                   <p className="flex items-center gap-2.5 font-display text-sm font-bold tracking-[0.2em] text-brand-500 uppercase">
                     <span className="relative flex size-2.5" aria-hidden="true">
@@ -135,6 +159,7 @@ export default async function HomePage() {
             </div>
           )}
         </Container>
+        <ScannerLine className="bottom-0" />
       </section>
 
       {/* Bandas en movimiento */}
@@ -156,7 +181,7 @@ export default async function HomePage() {
         )}
         <div
           className={cn(
-            "absolute -left-[5%] w-[110%] -translate-y-1/2 -rotate-[2.5deg] bg-brand-600 py-3 text-white shadow-2xl shadow-black/60 sm:top-1/2 sm:py-4",
+            "absolute -left-[5%] w-[110%] -translate-y-1/2 -rotate-[2.5deg] border-y border-red-300/40 bg-brand-600 py-3 text-white shadow-[0_0_50px_rgba(255,20,20,0.55)] [text-shadow:0_0_14px_rgba(255,255,255,0.5)] sm:top-1/2 sm:py-4",
             shelves.length > 0 ? "top-[70%]" : "top-1/2",
           )}
         >
@@ -350,7 +375,7 @@ function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div>
       <dt className="text-xs tracking-wide text-muted uppercase">{label}</dt>
-      <dd className="mt-1 font-display text-3xl font-bold italic">
+      <dd className="mt-1 font-display text-3xl font-bold italic [text-shadow:0_0_18px_rgba(255,40,40,0.75)]">
         <span className="sr-only">{value}</span>
         <span aria-hidden="true" className="count-up tabular-nums" style={{ "--to": value } as CSSProperties} />
       </dd>

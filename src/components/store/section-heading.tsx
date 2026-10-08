@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <p className={cn("flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-brand-500 uppercase", className)}>
-      <span className="h-px w-6 bg-brand-600" aria-hidden="true" />
+      <span className="h-px w-6 bg-brand-500 shadow-[0_0_8px_2px_rgba(255,30,30,0.55)]" aria-hidden="true" />
       {children}
     </p>
   );

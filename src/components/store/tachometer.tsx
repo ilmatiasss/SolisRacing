@@ -25,8 +25,26 @@ export function Tachometer({ className, animated = false }: { className?: string
 
   return (
     <svg viewBox="0 0 300 300" aria-hidden="true" className={className}>
+      <defs>
+        <filter id="tachometer-neon" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       <path d={arc(start, start + sweep, r)} fill="none" stroke="rgb(255 255 255 / 0.12)" strokeWidth="2" />
-      <path d={arc(redline, start + sweep, r)} fill="none" stroke="#e10600" strokeWidth="6" strokeLinecap="round" />
+      <path
+        d={arc(redline, start + sweep, r)}
+        fill="none"
+        stroke="#ff2a2a"
+        strokeWidth="6"
+        strokeLinecap="round"
+        filter={animated ? "url(#tachometer-neon)" : undefined}
+        className={animated ? "animate-redline" : undefined}
+      />
       {ticks.map((i) => {
         const angle = start + (sweep / 40) * i;
         const major = i % 5 === 0;
@@ -65,6 +83,7 @@ export function Tachometer({ className, animated = false }: { className?: string
       })}
       <g
         className={animated ? "animate-needle" : undefined}
+        filter={animated ? "url(#tachometer-neon)" : undefined}
         style={{ transformBox: "view-box", transformOrigin: `${cx}px ${cy}px` }}
       >
         <line x1={cx} y1={cy} x2={nx} y2={ny} stroke="#ff3020" strokeWidth="4" strokeLinecap="round" />
