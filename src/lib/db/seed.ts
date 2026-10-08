@@ -266,6 +266,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
 
   {
     name: "Cañería de nylon 2 metros",
+    image: "/catalogo/caneria-de-nylon-2-metros.webp",
     sku: "SR-REL-002",
     category: "Relojería",
     price: 15000,
@@ -277,6 +278,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Pod para reloj de 52 mm",
+    image: "/catalogo/pod-para-reloj-de-52-mm.webp",
     sku: "SR-REL-003",
     category: "Relojería",
     price: 24000,
@@ -288,6 +290,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Reloj de presión de combustible mecánico",
+    image: "/catalogo/reloj-de-presion-de-combustible-mecanico.webp",
     sku: "SR-REL-004",
     category: "Relojería",
     price: 45000,
@@ -301,6 +304,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* Red Line */
   {
     name: "Líquido de frenos Race Red Line",
+    image: "/catalogo/liquido-de-frenos-race-red-line.webp",
     sku: "SR-RL-001",
     brand: "Red Line",
     category: "Red Line",
@@ -313,6 +317,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aditivo refrigerante Red Line WaterWetter",
+    image: "/catalogo/aditivo-refrigerante-red-line-waterwetter.webp",
     sku: "SR-RL-002",
     brand: "Red Line",
     category: "Red Line",
@@ -325,6 +330,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aditivo para rodaje de motor Red Line",
+    image: "/catalogo/aditivo-para-rodaje-de-motor-red-line.webp",
     sku: "SR-RL-003",
     brand: "Red Line",
     category: "Red Line",
@@ -337,6 +343,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite para rodaje de motor Red Line",
+    image: "/catalogo/aceite-para-rodaje-de-motor-red-line.webp",
     sku: "SR-RL-004",
     brand: "Red Line",
     category: "Red Line",
@@ -349,6 +356,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite Race 60WT Red Line",
+    image: "/catalogo/aceite-race-60wt-red-line.webp",
     sku: "SR-RL-005",
     brand: "Red Line",
     category: "Red Line",
@@ -361,6 +369,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite Race 50WT Red Line",
+    image: "/catalogo/aceite-race-50wt-red-line.webp",
     sku: "SR-RL-006",
     brand: "Red Line",
     category: "Red Line",
@@ -373,6 +382,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite Gear clanes Red Line",
+    image: "/catalogo/aceite-gear-clanes-red-line.webp",
     sku: "SR-RL-007",
     brand: "Red Line",
     category: "Red Line",
@@ -385,6 +395,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite de motor 5W-30 Red Line",
+    image: "/catalogo/aceite-de-motor-5w-30-red-line.webp",
     sku: "SR-RL-008",
     brand: "Red Line",
     category: "Red Line",
@@ -397,6 +408,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite de motor 10W-40 Red Line",
+    image: "/catalogo/aceite-de-motor-10w-40-red-line.webp",
     sku: "SR-RL-009",
     brand: "Red Line",
     category: "Red Line",
@@ -409,6 +421,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aceite de motor 10W-60 Red Line",
+    image: "/catalogo/aceite-de-motor-10w-60-red-line.webp",
     sku: "SR-RL-010",
     brand: "Red Line",
     category: "Red Line",
@@ -423,6 +436,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* VP Racing */
   {
     name: "Refrigerante VP Racing",
+    image: "/catalogo/refrigerante-vp-racing.webp",
     sku: "SR-VP-001",
     brand: "VP Racing",
     category: "VP Racing",
@@ -435,6 +449,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Aditivo refrigerante VP Racing",
+    image: "/catalogo/aditivo-refrigerante-vp-racing.webp",
     sku: "SR-VP-002",
     brand: "VP Racing",
     category: "VP Racing",
@@ -447,6 +462,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Líquido de frenos Race VP Racing",
+    image: "/catalogo/liquido-de-frenos-race-vp-racing.webp",
     sku: "SR-VP-003",
     brand: "VP Racing",
     category: "VP Racing",
@@ -512,6 +528,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Botonera universal con botón start",
+    image: "/catalogo/botonera-universal-con-boton-start.webp",
     sku: "SR-VAR-005",
     category: "Varios",
     price: 30000,
@@ -523,6 +540,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Empaque para turbo T3",
+    image: "/catalogo/empaque-para-turbo.webp",
     sku: "SR-VAR-006",
     category: "Varios",
     price: 5000,
@@ -534,6 +552,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Empaque para turbo T4",
+    image: "/catalogo/empaque-para-turbo.webp",
     sku: "SR-VAR-007",
     category: "Varios",
     price: 5000,
@@ -545,6 +564,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Empaque para turbo T4 twin scroll",
+    image: "/catalogo/empaque-para-turbo.webp",
     sku: "SR-VAR-008",
     category: "Varios",
     price: 5000,
@@ -556,6 +576,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Suples para capot",
+    image: "/catalogo/suples-para-capot.webp",
     sku: "SR-VAR-009",
     category: "Varios",
     price: 13000,
