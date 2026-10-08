@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/*
+ * Tokens semánticos: cada sección define su paleta (tienda oscura, panel claro)
+ * y los componentes usan bg-surface, border-line, text-muted, etc.
+ */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+}
+
+@theme {
+  --color-brand-50: #fff1f0;
+  --color-brand-100: #ffe0dd;
+  --color-brand-200: #ffc6c0;
+  --color-brand-300: #ff9e94;
+  --color-brand-400: #ff6656;
+  --color-brand-500: #ff3020;
+  --color-brand-600: #e10600;
+  --color-brand-700: #bd0500;
+  --color-brand-800: #9c0a03;
+  --color-brand-900: #810f08;
+  --color-brand-950: #470300;
+
+  --color-signal-300: #ffe066;
+  --color-signal-400: #ffd60a;
+  --color-signal-500: #f5c400;
+}
+
+.theme-store {
+  --bg: #09090b;
+  --surface: #111114;
+  --surface-2: #19191d;
+  --line: #26262c;
+  --line-strong: #3a3a42;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  color-scheme: dark;
+}
+
+.theme-admin {
+  --bg: #f5f5f6;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --fg: #18181b;
+  --muted: #6b6b75;
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #09090b;
+  color: #fafafa;
+  font-feature-settings: "cv11", "ss01";
+}
+
+body:has(.theme-admin) {
+  background: #f5f5f6;
+  color: #18181b;
+}
+
+::selection {
+  background: var(--color-brand-600);
+  color: #fff;
+}
+
+/* Fondo con líneas diagonales tipo "speed lines" para secciones destacadas. */
+.bg-speedlines {
+  background-image: repeating-linear-gradient(
+    115deg,
+    transparent 0 22px,
+    rgb(255 255 255 / 0.025) 22px 23px
+  );
+}
+
+/* Patrón de bandera a cuadros, muy sutil. */
+.bg-checkered {
+  background-image:
+    linear-gradient(45deg, rgb(255 255 255 / 0.05) 25%, transparent 25%),
+    linear-gradient(-45deg, rgb(255 255 255 / 0.05) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgb(255 255 255 / 0.05) 75%),
+    linear-gradient(-45deg, transparent 75%, rgb(255 255 255 / 0.05) 75%);
+  background-size: 24px 24px;
+  background-position:
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+}
+
+/* Texto largo escrito en el panel: respeta saltos de línea. */
+.prose-text p + p {
+  margin-top: 0.75rem;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
