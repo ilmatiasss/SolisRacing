@@ -4,8 +4,9 @@ import { LogoBadge } from "@/components/logo";
 import { cn } from "@/lib/cn";
 
 /**
- * Imagen de producto. Las fotos se muestran sobre fondo claro (como suelen venir
- * de los fabricantes); sin foto, se muestra un placeholder con el ícono de la categoría.
+ * Imagen de producto. Las fotos de la tienda son cuadradas y con fondo oscuro, así que
+ * llenan el recuadro; si una foto no es cuadrada, se ve completa sobre fondo oscuro.
+ * Sin foto, se muestra un placeholder con el ícono de la categoría.
  */
 export function ProductImage({
   src,
@@ -25,7 +26,7 @@ export function ProductImage({
 }) {
   if (src) {
     return (
-      <div className={cn("relative overflow-hidden bg-linear-to-b from-white to-zinc-200", className)}>
+      <div className={cn("relative overflow-hidden bg-zinc-800", className)}>
         <Image
           src={src}
           alt={alt}
@@ -33,7 +34,7 @@ export function ProductImage({
           sizes={sizes}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
-          className="object-contain p-[6%] mix-blend-multiply"
+          className="object-contain"
         />
       </div>
     );

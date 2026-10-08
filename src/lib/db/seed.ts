@@ -7,6 +7,7 @@ import {
   brands,
   categories,
   productFitments,
+  productImages,
   products,
   services,
   vehicleMakes,
@@ -64,6 +65,8 @@ type InitialProduct = {
   description: string;
   specs: ProductSpec[];
   fitments?: InitialFitment[];
+  /** Foto en `public/catalogo/`. */
+  image?: string;
 };
 
 /** Stock provisorio para los productos publicados (WhatsApp no muestra el stock). */
@@ -73,6 +76,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* FuelTech */
   {
     name: "FuelTech FT550",
+    image: "/catalogo/fueltech-ft550.webp",
     sku: "SR-FT-001",
     brand: "FuelTech",
     category: "FuelTech",
@@ -87,6 +91,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Wideband Nano V2",
+    image: "/catalogo/wideband-nano-v2.webp",
     sku: "SR-FT-002",
     brand: "FuelTech",
     category: "FuelTech",
@@ -100,6 +105,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Sensor de presión PS10B FuelTech",
+    image: "/catalogo/sensor-de-presion-ps10b-fueltech.webp",
     sku: "SR-FT-003",
     brand: "FuelTech",
     category: "FuelTech",
@@ -115,6 +121,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* Sensores */
   {
     name: "Sensor wideband Bosch LSU 4.2",
+    image: "/catalogo/sensor-wideband-bosch-lsu-4-2.webp",
     sku: "SR-SEN-001",
     brand: "Bosch",
     category: "Sensores",
@@ -127,6 +134,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Sensor wideband Bosch LSU 4.9",
+    image: "/catalogo/sensor-wideband-bosch-lsu-4-9.webp",
     sku: "SR-SEN-002",
     brand: "Bosch",
     category: "Sensores",
@@ -140,6 +148,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Sensor de velocidad de rueda para ECU programable",
+    image: "/catalogo/sensor-de-velocidad-de-rueda-para-ecu-programable.webp",
     sku: "SR-SEN-003",
     category: "Sensores",
     price: 40000,
@@ -153,6 +162,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* Combustible */
   {
     name: "Riel para unión de 2 bombas externas EPMAN",
+    image: "/catalogo/riel-para-union-de-2-bombas-externas-epman.webp",
     sku: "SR-COM-001",
     brand: "EPMAN",
     category: "Combustible",
@@ -167,6 +177,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Soporte doble para bomba de combustible externa EPMAN",
+    image: "/catalogo/soporte-doble-para-bomba-de-combustible-externa-epman.webp",
     sku: "SR-COM-002",
     brand: "EPMAN",
     category: "Combustible",
@@ -179,6 +190,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Tanque de combustible 20 litros",
+    image: "/catalogo/tanque-de-combustible-20-litros.webp",
     sku: "SR-COM-003",
     category: "Combustible",
     price: 130000,
@@ -196,6 +208,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* Fittings */
   {
     name: "Llaves ajustables para fitting",
+    image: "/catalogo/llaves-ajustables-para-fitting.webp",
     sku: "SR-FIT-001",
     category: "Fittings",
     price: 40000,
@@ -207,6 +220,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Fitting ORB",
+    image: "/catalogo/fitting-orb.webp",
     sku: "SR-FIT-002",
     category: "Fittings",
     price: 0,
@@ -219,6 +233,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Abrazaderas dobles para fitting",
+    image: "/catalogo/abrazaderas-dobles-para-fitting.webp",
     sku: "SR-FIT-003",
     category: "Fittings",
     price: 0,
@@ -233,6 +248,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* Relojería */
   {
     name: "Kit reloj de presión de aceite 52 mm con pod",
+    image: "/catalogo/kit-reloj-de-presion-de-aceite-52-mm-con-pod.webp",
     sku: "SR-REL-001",
     category: "Relojería",
     price: 79000,
@@ -445,6 +461,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   /* Varios */
   {
     name: "Wastegate 38 mm EPMAN",
+    image: "/catalogo/wastegate-38-mm-epman.webp",
     sku: "SR-VAR-001",
     brand: "EPMAN",
     category: "Varios",
@@ -458,6 +475,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Bujía NGK BKR7E",
+    image: "/catalogo/bujia-ngk-bkr7e.webp",
     sku: "SR-VAR-002",
     brand: "NGK",
     category: "Varios",
@@ -470,6 +488,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Copla recta 2\" a 2,5\"",
+    image: "/catalogo/copla-recta.webp",
     sku: "SR-VAR-003",
     category: "Varios",
     price: 14000,
@@ -481,6 +500,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
   },
   {
     name: "Copla recta 2,5\" a 3\"",
+    image: "/catalogo/copla-recta.webp",
     sku: "SR-VAR-004",
     category: "Varios",
     price: 14000,
@@ -663,7 +683,11 @@ export async function seedDemoData(db: Database) {
         })
         .onConflictDoNothing()
         .returning({ id: products.id });
-      if (!row || !product.fitments?.length) continue;
+      if (!row) continue;
+      if (product.image) {
+        await tx.insert(productImages).values({ productId: row.id, url: product.image, alt: product.name });
+      }
+      if (!product.fitments?.length) continue;
       const fitments = product.fitments
         .map((fitment) => ({
           productId: row.id,
