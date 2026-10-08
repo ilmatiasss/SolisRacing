@@ -1,5 +1,5 @@
-/** Tacómetro decorativo (SVG puro) para la portada. */
-export function Tachometer({ className }: { className?: string }) {
+/** Tacómetro decorativo (SVG puro) para la portada; con `animated`, la aguja acelera y queda en ralentí. */
+export function Tachometer({ className, animated = false }: { className?: string; animated?: boolean }) {
   const cx = 150;
   const cy = 150;
   const r = 120;
@@ -63,7 +63,12 @@ export function Tachometer({ className }: { className?: string }) {
           </text>
         );
       })}
-      <line x1={cx} y1={cy} x2={nx} y2={ny} stroke="#ff3020" strokeWidth="4" strokeLinecap="round" />
+      <g
+        className={animated ? "animate-needle" : undefined}
+        style={{ transformBox: "view-box", transformOrigin: `${cx}px ${cy}px` }}
+      >
+        <line x1={cx} y1={cy} x2={nx} y2={ny} stroke="#ff3020" strokeWidth="4" strokeLinecap="round" />
+      </g>
       <circle cx={cx} cy={cy} r="12" fill="#18181b" stroke="#ff3020" strokeWidth="3" />
       <text
         x={cx}

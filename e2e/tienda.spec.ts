@@ -3,11 +3,19 @@ import { addProductToCart, fillCheckout, placeTransferOrder, visible } from "./h
 
 test.describe.configure({ mode: "serial" });
 
-test("la portada muestra el buscador por auto y filtra repuestos compatibles", async ({ page }) => {
+test("la portada muestra los destacados y el catálogo por categoría", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /Más potencia/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Encuentra repuestos compatibles" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Productos destacados" })).toBeVisible();
 
+  const tab = page.getByRole("tab", { name: /Red Line/ });
+  await tab.click();
+  await expect(tab).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel").getByRole("link", { name: "Aceite Race 60WT Red Line" })).toBeVisible();
+});
+
+test("el buscador por auto filtra repuestos compatibles", async ({ page }) => {
+  await page.goto("/productos");
   await page.locator("#finder-make").selectOption("honda");
   await page.locator("#finder-model").selectOption("civic");
   await page.locator("#finder-year").selectOption("1998");

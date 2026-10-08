@@ -46,6 +46,7 @@ export type ProductCardData = {
   universal: boolean;
   brandName: string | null;
   categoryName: string | null;
+  categorySlug: string | null;
   categoryIcon: string | null;
   imageUrl: string | null;
   imageAlt: string | null;
@@ -79,6 +80,7 @@ const cardColumns = {
   universal: products.universal,
   brandName: brands.name,
   categoryName: categories.name,
+  categorySlug: categories.slug,
   categoryIcon: categories.icon,
 };
 
@@ -187,6 +189,18 @@ export async function getOnSaleProducts(limit = 8) {
   const rows = await cardQuery()
     .where(and(isActive, isNotNull(products.compareAtPrice), gt(products.compareAtPrice, products.price)))
     .orderBy(desc(gt(products.stock, 0)), desc(products.createdAt))
+    .limit(limit);
+  return attachMainImages(rows);
+}
+
+/** Productos publicados para la vitrina de la portada (destacados y con stock primero). */
+export async function getCatalogPreview(limit = 120) {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(CATALOG_TAG);
+  const rows = await cardQuery()
+    .where(isActive)
+    .orderBy(desc(gt(products.stock, 0)), desc(products.featured), asc(products.name))
     .limit(limit);
   return attachMainImages(rows);
 }

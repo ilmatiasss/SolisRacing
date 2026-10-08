@@ -154,9 +154,10 @@ export async function WhatsAppFloatingButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escríbenos por WhatsApp"
-      className="fixed right-4 bottom-4 z-30 flex size-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-lg shadow-black/40 transition-transform hover:scale-105 sm:right-6 sm:bottom-6"
+      className="fixed right-4 bottom-4 z-30 flex size-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-lg shadow-black/40 transition-transform hover:scale-110 sm:right-6 sm:bottom-6"
     >
-      <WhatsAppIcon className="size-7" />
+      <span aria-hidden="true" className="absolute inset-0 animate-ping-slow rounded-full bg-[#25d366]/35" />
+      <WhatsAppIcon className="relative size-7" />
     </a>
   );
 }
