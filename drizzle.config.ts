@@ -1,5 +1,6 @@
 import { loadEnvConfig } from "@next/env";
 import { defineConfig } from "drizzle-kit";
+import { databaseUrl } from "./src/lib/db/url";
 
 loadEnvConfig(process.cwd());
 
@@ -9,6 +10,6 @@ export default defineConfig({
   out: "./drizzle",
   casing: "snake_case",
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? "",
+    url: databaseUrl() ?? "",
   },
 });

@@ -51,11 +51,19 @@ Next.js 16 (App Router, Cache Components), React 19, TypeScript, Tailwind CSS 4,
    | `WEBPAY_ENVIRONMENT` | `integration` mientras pruebas, `production` para cobrar |
    | `SEED_DEMO_DATA` | `true` para cargar el catálogo inicial (productos y precios de su catálogo de WhatsApp, con stock provisorio de 5 unidades), `false` para partir vacío |
 
-5. **Deploy**. En cada publicación, Vercel ejecuta `npm run vercel-build`, que aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga el catálogo inicial (si corresponde) antes de compilar.
+5. **Deploy**. En cada publicación, Vercel ejecuta `npm run build`, que primero aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga el catálogo inicial (si corresponde), y luego compila. Si el primer deploy se hizo antes de conectar la base de datos, falla: conéctala (paso 2) y usa *Deployments → ⋯ → Redeploy*.
 6. Entra a `https://tu-dominio/admin` con `ADMIN_EMAIL` y `ADMIN_PASSWORD`, completa **Configuración** (correo, dirección, datos bancarios, tarifas; el WhatsApp y el Instagram ya vienen con los de Solis Racing Parts) y carga tus productos.
 7. **Dominio propio**: en *Settings → Domains* agrega tu dominio (un `.cl` se compra en [NIC Chile](https://www.nic.cl)).
 
 > Si cambias variables de entorno en Vercel, vuelve a desplegar para que se apliquen.
+
+### Si el deploy falla
+
+Abre el deploy fallido en *Deployments* y mira las últimas líneas del registro (*Build Logs*):
+
+- **"No hay base de datos conectada"**: falta conectar Neon al proyecto (paso 2) o se conectó a otro proyecto o ambiente. Revisa *Storage* y luego *Redeploy*. La tienda acepta `DATABASE_URL`, `POSTGRES_URL` o esas mismas variables con el prefijo que hayas elegido al conectar (por ejemplo `STORAGE_DATABASE_URL`).
+- **"ADMIN_PASSWORD debe tener al menos 8 caracteres"**: cambia la variable y vuelve a desplegar.
+- **`relation "…" does not exist`**: el comando de build fue reemplazado. En *Settings → Build and Deployment*, deja el *Build Command* sin override (`npm run build`).
 
 ## Webpay Plus (Transbank)
 
@@ -98,7 +106,7 @@ Para probar pagos sin conexión a Transbank, usa `WEBPAY_ENVIRONMENT=mock`: el c
 | Comando | Qué hace |
 | --- | --- |
 | `npm run dev` | Servidor de desarrollo |
-| `npm run build` / `npm start` | Compilar y ejecutar en modo producción |
+| `npm run build` / `npm start` | Preparar la base de datos (migraciones, administrador y catálogo inicial) y compilar / ejecutar en modo producción |
 | `npm run lint` / `npm run typecheck` | Revisiones de código |
 | `npm test` | Pruebas unitarias (RUT, precios, despachos, filtros…) |
 | `npm run test:e2e` | Pruebas de punta a punta: compras con Webpay simulado, transferencias y panel. Usan una base de datos de pruebas que se reinicia (`E2E_DATABASE_URL`, por defecto `solisracing_test`) |
@@ -128,7 +136,7 @@ e2e/, tests/unit/    Pruebas
 ## Antes de lanzar
 
 - El logo está recortado de la foto de perfil de Instagram: cuando tengas el archivo original en buena resolución, reemplaza `src/assets/logo-solis-racing-parts.png`, `src/app/icon.png`, `src/app/apple-icon.png` y la imagen para compartir `src/app/opengraph-image.jpg`.
-- Revisa el catálogo inicial: ajusta el stock real (viene en 5 unidades por producto), ponle precio y publica los borradores sin precio (Fitting ORB y abrazaderas dobles), reemplaza las fotos mejoradas desde las capturas por las originales (`public/catalogo/`; ideal: cuadradas y con el mismo fondo oscuro) y revisa los textos de los servicios.
+- Revisa el catálogo inicial: ajusta el stock real (viene en 5 unidades por producto), ponle precio y publica los borradores sin precio (Fitting ORB y abrazaderas dobles), reemplaza las fotos recortadas de las capturas de WhatsApp por las originales (`public/catalogo/`; ideal: cuadradas y con el mismo fondo oscuro) y revisa los textos de los servicios.
 - Completa la configuración de la tienda: correo (viene vacío y ahí llegan los avisos de pedidos), confirma dirección y horario (vienen de Instagram: Ausonia 244, Antofagasta), razón social, RUT, datos bancarios y tarifas de despacho. El resumen del panel te recuerda lo que falta.
 - Revisa con un asesor los textos de **términos, privacidad y despachos y devoluciones** (son una base general y deben ajustarse a tu empresa).
 - Activa Webpay en producción y configura el correo SMTP.

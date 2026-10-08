@@ -2,6 +2,7 @@ import { attachDatabasePool } from "@vercel/functions";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./schema";
+import { databaseUrl } from "./url";
 
 export type Database = NodePgDatabase<typeof schema>;
 
@@ -9,10 +10,12 @@ type DbGlobal = { __solisDb?: { pool: Pool; db: Database } };
 const globalForDb = globalThis as unknown as DbGlobal;
 
 function createDatabase() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = databaseUrl();
   if (!connectionString) {
     throw new Error(
-      "Falta la variable de entorno DATABASE_URL. Copia .env.example a .env y configura la conexión a PostgreSQL (ver README).",
+      process.env.VERCEL
+        ? "Falta conectar la base de datos: en Vercel, ve a Storage → Create Database → Neon, conéctala a este proyecto y vuelve a desplegar (Deployments → Redeploy)."
+        : "Falta la variable de entorno DATABASE_URL. Copia .env.example a .env y configura la conexión a PostgreSQL (ver README).",
     );
   }
   const pool = new Pool({

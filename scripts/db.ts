@@ -4,20 +4,31 @@
  *   npm run db:seed     → carga el catálogo inicial si no hay productos
  *   npm run db:setup    → migraciones + usuario administrador + catálogo inicial (si SEED_DEMO_DATA=true)
  *
- * `db:setup` se ejecuta automáticamente en cada deploy de Vercel (script `vercel-build`).
+ * `db:setup` se ejecuta antes de compilar (script `build`), así cada deploy de Vercel deja la base
+ * de datos lista: el prerender de las páginas ya consulta las tablas.
  */
 import { loadEnvConfig } from "@next/env";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import path from "node:path";
 import { closeDatabase, getDb } from "../src/lib/db";
+import { databaseEnvNames, databaseUrl } from "../src/lib/db/url";
 import { countProducts, ensureAdminUser, seedDemoData } from "../src/lib/db/seed";
 
 loadEnvConfig(process.cwd());
 
 async function runMigrations() {
-  if (!process.env.DATABASE_URL) {
+  if (!databaseUrl()) {
+    const found = databaseEnvNames();
     throw new Error(
-      "DATABASE_URL no está configurada. En Vercel, conecta una base de datos Postgres (por ejemplo Neon) desde la pestaña Storage.",
+      [
+        "No hay base de datos conectada (falta DATABASE_URL).",
+        process.env.VERCEL
+          ? "En Vercel: Storage → Create Database → Neon → conéctala a este proyecto (Production, Preview y Development) y luego Deployments → ⋯ → Redeploy."
+          : "Copia .env.example a .env y configura DATABASE_URL (ver README).",
+        found.length ? `Variables de base de datos encontradas: ${found.join(", ")}.` : "",
+      ]
+        .filter(Boolean)
+        .join("\n  "),
     );
   }
   console.log("› Aplicando migraciones…");
@@ -40,7 +51,8 @@ async function runAdmin() {
 }
 
 async function runSeed({ onlyIfEnabled }: { onlyIfEnabled: boolean }) {
-  if (onlyIfEnabled && process.env.SEED_DEMO_DATA !== "true") {
+  const seedEnabled = ["true", "1", "si", "sí"].includes(process.env.SEED_DEMO_DATA?.trim().toLowerCase() ?? "");
+  if (onlyIfEnabled && !seedEnabled) {
     console.log("› SEED_DEMO_DATA no está activado: se omite el catálogo inicial");
     return;
   }
