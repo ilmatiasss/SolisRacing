@@ -86,7 +86,7 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
   after(async () => {
     const settings = await readStoreSettings();
     const email = inquiryAdminEmail(inquiry, settings);
-    await sendEmail({ to: settings.email, replyTo: inquiry.email, ...email });
+    if (settings.email) await sendEmail({ to: settings.email, replyTo: inquiry.email, ...email });
   });
 
   return { ok: true };

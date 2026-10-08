@@ -13,6 +13,7 @@ import { Field, Input, Textarea } from "@/components/ui/field";
 import { saveOrderNotes } from "@/lib/actions/admin/orders";
 import { requireAdmin } from "@/lib/auth";
 import { getRegion } from "@/lib/chile";
+import { readStoreSettings } from "@/lib/data/settings";
 import { formatCLP, formatDateTime, formatOrderNumber, whatsappLink } from "@/lib/format";
 import {
   ORDER_STATUS_TONES,
@@ -34,7 +35,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
   await requireAdmin();
   const orderId = Number((await params).id);
   if (!Number.isInteger(orderId)) notFound();
-  const order = await getOrderById(orderId);
+  const [order, settings] = await Promise.all([getOrderById(orderId), readStoreSettings()]);
   if (!order) notFound();
 
   const number = formatOrderNumber(order.id);
@@ -62,7 +63,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
         actions={
           <>
             <a
-              href={whatsappLink(order.customerPhone, `Hola ${order.customerName.split(" ")[0]}, te escribimos de Solis Racing por tu pedido ${number}.`)}
+              href={whatsappLink(order.customerPhone, `Hola ${order.customerName.split(" ")[0]}, te escribimos de ${settings.storeName} por tu pedido ${number}.`)}
               target="_blank"
               rel="noopener noreferrer"
               className={buttonClasses({ variant: "outline", size: "sm" })}

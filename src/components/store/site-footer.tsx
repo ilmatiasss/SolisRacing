@@ -88,12 +88,14 @@ export async function SiteFooter() {
                 {settings.phone}
               </a>
             </li>
-            <li className="flex gap-3">
-              <Mail className="mt-0.5 size-4 shrink-0 text-brand-500" />
-              <a href={`mailto:${settings.email}`} className="hover:text-white">
-                {settings.email}
-              </a>
-            </li>
+            {settings.email && (
+              <li className="flex gap-3">
+                <Mail className="mt-0.5 size-4 shrink-0 text-brand-500" />
+                <a href={`mailto:${settings.email}`} className="hover:text-white">
+                  {settings.email}
+                </a>
+              </li>
+            )}
             <li className="flex gap-3">
               <Clock className="mt-0.5 size-4 shrink-0 text-brand-500" />
               <span className="whitespace-pre-line">{settings.openingHours}</span>
@@ -148,7 +150,7 @@ export async function WhatsAppFloatingButton() {
   if (!settings.whatsapp) return null;
   return (
     <a
-      href={whatsappLink(settings.whatsapp, "Hola Solis Racing, tengo una consulta.")}
+      href={whatsappLink(settings.whatsapp, `Hola ${settings.storeName}, tengo una consulta.`)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escríbenos por WhatsApp"

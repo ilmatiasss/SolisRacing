@@ -46,7 +46,7 @@ export default async function SettingsPage() {
         <Card title="Contacto y redes">
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Correo" htmlFor="email" hint="Aquí llegan los avisos de pedidos y solicitudes.">
-              <Input id="email" name="email" type="email" defaultValue={s.email} required />
+              <Input id="email" name="email" type="email" defaultValue={s.email} placeholder="ventas@tudominio.cl" />
             </Field>
             <Field label="WhatsApp" htmlFor="whatsapp" hint="Con código de país, ej: +56 9 1234 5678.">
               <Input id="whatsapp" name="whatsapp" defaultValue={s.whatsapp} />

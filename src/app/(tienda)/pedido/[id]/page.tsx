@@ -137,7 +137,7 @@ async function OrderView({ params, searchParams }: Props) {
               <DataRow label="N° de cuenta" value={settings.payments.transferAccountNumber} />
               <DataRow label="Titular" value={settings.payments.transferHolder} />
               {settings.payments.transferRut && <DataRow label="RUT" value={settings.payments.transferRut} />}
-              <DataRow label="Correo" value={settings.payments.transferEmail} />
+              {settings.payments.transferEmail && <DataRow label="Correo" value={settings.payments.transferEmail} />}
               <DataRow label="Monto a transferir" value={formatCLP(order.total)} strong />
               <DataRow label="Comentario" value={number} strong />
             </dl>
@@ -294,8 +294,8 @@ async function OrderView({ params, searchParams }: Props) {
             className="font-semibold text-brand-400 hover:underline"
           >
             Escríbenos por WhatsApp
-          </a>{" "}
-          o a {settings.email}. Guarda este enlace para revisar el estado de tu pedido.
+          </a>
+          {settings.email && <> o a {settings.email}</>}. Guarda este enlace para revisar el estado de tu pedido.
         </p>
       </div>
     </Container>

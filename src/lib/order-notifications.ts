@@ -11,8 +11,8 @@ export async function notifyNewOrder(orderId: number) {
   const customer = orderReceivedEmail(order, settings);
   const admin = newOrderAdminEmail(order, settings);
   await Promise.all([
-    sendEmail({ to: order.customerEmail, replyTo: settings.email, ...customer }),
-    sendEmail({ to: settings.email, replyTo: order.customerEmail, ...admin }),
+    sendEmail({ to: order.customerEmail, replyTo: settings.email || undefined, ...customer }),
+    settings.email ? sendEmail({ to: settings.email, replyTo: order.customerEmail, ...admin }) : null,
   ]);
 }
 
@@ -21,5 +21,5 @@ export async function notifyOrderStatus(orderId: number) {
   const [order, settings] = await Promise.all([getOrderById(orderId), readStoreSettings()]);
   if (!order) return;
   const email = orderStatusEmail(order, settings);
-  if (email) await sendEmail({ to: order.customerEmail, replyTo: settings.email, ...email });
+  if (email) await sendEmail({ to: order.customerEmail, replyTo: settings.email || undefined, ...email });
 }

@@ -20,16 +20,16 @@ const barlow = Barlow_Condensed({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Solis Racing · Partes de performance y seteos",
-    template: "%s · Solis Racing",
+    default: "Solis Racing Parts · Partes de performance y seteos",
+    template: "%s · Solis Racing Parts",
   },
   description:
     "Repuestos y accesorios de performance para tu auto, reprogramación ECU y seteos en dinamómetro. Despachos a todo Chile y pago con Webpay.",
-  applicationName: "Solis Racing",
+  applicationName: "Solis Racing Parts",
   openGraph: {
     type: "website",
     locale: "es_CL",
-    siteName: "Solis Racing",
+    siteName: "Solis Racing Parts",
   },
   robots: { index: true, follow: true },
 };

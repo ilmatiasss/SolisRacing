@@ -53,7 +53,7 @@ export async function saveSettings(_prev: SettingsState, formData: FormData): Pr
 
   const settings = next as unknown as StoreSettings;
   if (!settings.storeName) return { error: "El nombre de la tienda no puede quedar vacío." };
-  if (!z.email().safeParse(settings.email).success) return { error: "Revisa el correo de la tienda." };
+  if (settings.email && !z.email().safeParse(settings.email).success) return { error: "Revisa el correo de la tienda." };
   if (settings.payments.transferEmail && !z.email().safeParse(settings.payments.transferEmail).success) {
     return { error: "Revisa el correo para enviar comprobantes de transferencia." };
   }

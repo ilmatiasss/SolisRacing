@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Producto no encontrado" };
   const description = truncate(
-    product.shortDescription ?? product.description ?? `${product.name} en Solis Racing.`,
+    product.shortDescription ?? product.description ?? `${product.name} en Solis Racing Parts.`,
     160,
   );
   return {

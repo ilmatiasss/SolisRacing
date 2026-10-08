@@ -12,6 +12,7 @@ import { deleteInquiry, updateInquiry } from "@/lib/actions/admin/services";
 import { requireAdmin } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { listInquiriesAdmin } from "@/lib/data/admin";
+import { readStoreSettings } from "@/lib/data/settings";
 import type { InquiryStatus } from "@/lib/db/schema";
 import { formatDate, formatDateTime, whatsappLink } from "@/lib/format";
 import { INQUIRY_STATUS_LABELS, INQUIRY_STATUS_TONES } from "@/lib/order-status";
@@ -27,7 +28,10 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
   const statusParam = stringParam(sp.estado);
   const status = statusParam && statusParam in INQUIRY_STATUS_LABELS ? (statusParam as InquiryStatus) : undefined;
   const page = pageParam(sp.pagina);
-  const { rows, total, pageCount } = await listInquiriesAdmin({ status, page });
+  const [{ rows, total, pageCount }, settings] = await Promise.all([
+    listInquiriesAdmin({ status, page }),
+    readStoreSettings(),
+  ]);
 
   return (
     <>
@@ -76,7 +80,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
                         <Phone className="size-4" /> {inquiry.phone}
                       </a>
                       <a
-                        href={whatsappLink(inquiry.phone, `Hola ${inquiry.name.split(" ")[0]}, te escribimos de Solis Racing por tu solicitud.`)}
+                        href={whatsappLink(inquiry.phone, `Hola ${inquiry.name.split(" ")[0]}, te escribimos de ${settings.storeName} por tu solicitud.`)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1.5 text-emerald-700 hover:underline"

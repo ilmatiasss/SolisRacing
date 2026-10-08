@@ -126,7 +126,7 @@ export function ProductForm({
               label="URL del producto"
               htmlFor="slug"
               error={errors.slug}
-              hint={`solisracing.cl/productos/${effectiveSlug || "…"}`}
+              hint={`/productos/${effectiveSlug || "…"}`}
             >
               <Input
                 id="slug"

@@ -44,7 +44,7 @@ export function AdminSidebar() {
     <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-surface lg:flex">
       <div className="flex h-16 items-center border-b border-line px-5">
         <Link href="/admin" aria-label="Inicio del panel">
-          <Logo tone="dark" className="[&_span]:text-xl" />
+          <Logo tone="dark" size="sm" />
         </Link>
       </div>
       <div className="flex-1 overflow-y-auto p-3">
@@ -68,7 +68,7 @@ export function AdminTopbar() {
         <NavWithCounts mobile />
       </Suspense>
       <Link href="/admin">
-        <Logo tone="dark" className="[&_span]:text-lg" />
+        <Logo tone="dark" size="sm" />
       </Link>
     </header>
   );

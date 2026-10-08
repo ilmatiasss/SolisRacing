@@ -8,7 +8,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Proyecto: tienda Solis Racing
+## Proyecto: tienda Solis Racing Parts
 
 Ecommerce para Chile (partes de performance para autos + seteos). La interfaz va en **español de Chile**; precios en CLP enteros con IVA incluido.
 

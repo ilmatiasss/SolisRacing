@@ -28,7 +28,7 @@ export async function SiteHeader() {
       <header className="sticky top-0 z-40 border-b border-white/8 bg-zinc-950/85 backdrop-blur-md">
         <Container className="flex h-16 items-center gap-2 lg:gap-6">
           <MobileMenu categories={menuCategories} />
-          <Link href="/" aria-label="Solis Racing, ir al inicio" className="shrink-0">
+          <Link href="/" aria-label="Solis Racing Parts, ir al inicio" className="shrink-0">
             <Logo />
           </Link>
           <Suspense fallback={<HeaderNavLinks />}>

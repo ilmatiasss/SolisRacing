@@ -20,8 +20,7 @@ export default async function TermsPage() {
         <h2>1. Identificación</h2>
         <p>
           Este sitio es operado por {s.legalName}
-          {s.legalRut && <>, RUT {s.legalRut}</>}, con domicilio en {s.address}, {s.city}. Contacto: {s.email} ·{" "}
-          {s.phone}.
+          {s.legalRut && <>, RUT {s.legalRut}</>}, con domicilio en {s.address}, {s.city}. Contacto: {[s.email, s.phone].filter(Boolean).join(" · ")}.
         </p>
       </section>
       <section>

@@ -1,6 +1,6 @@
 import { ArrowRight, Gauge, Headset, ShieldCheck, Truck, Wrench } from "lucide-react";
 import Link from "next/link";
-import { DynamicIcon } from "@/components/icons";
+import { DynamicIcon, InstagramIcon } from "@/components/icons";
 import { ProductGrid } from "@/components/store/product-card";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
 import { Tachometer } from "@/components/store/tachometer";
@@ -221,6 +221,34 @@ export default async function HomePage() {
         </div>
       </Container>
 
+      {/* Instagram */}
+      {settings.instagram && (
+        <Container className="pt-16">
+          <div className="relative overflow-hidden rounded-3xl border border-line bg-linear-to-br from-[#833ab4]/25 via-[#fd1d1d]/15 to-[#fcb045]/20 p-8 sm:p-10">
+            <div className="bg-speedlines absolute inset-0" aria-hidden="true" />
+            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-5">
+                <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                  <InstagramIcon className="size-8" />
+                </span>
+                <div>
+                  <h2 className="font-display text-3xl font-extrabold uppercase italic">Síguenos en Instagram</h2>
+                  <p className="mt-1 text-zinc-300">Proyectos, instalaciones, novedades y ofertas del taller.</p>
+                </div>
+              </div>
+              <a
+                href={settings.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonClasses({ variant: "light", size: "lg" })}
+              >
+                <InstagramIcon className="size-5" />@{instagramHandle(settings.instagram)}
+              </a>
+            </div>
+          </div>
+        </Container>
+      )}
+
       {/* Marcas */}
       {brands.length > 0 && (
         <Container className="pt-16">
@@ -240,4 +268,12 @@ export default async function HomePage() {
       )}
     </>
   );
+}
+
+function instagramHandle(url: string) {
+  try {
+    return new URL(url).pathname.split("/").filter(Boolean)[0] ?? "instagram";
+  } catch {
+    return "instagram";
+  }
 }

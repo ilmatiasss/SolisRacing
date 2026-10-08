@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/auth";
 import { getDashboardData } from "@/lib/data/admin";
+import { readStoreSettings } from "@/lib/data/settings";
+import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
 import { ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
 import { expireAbandonedWebpayOrders } from "@/lib/orders";
@@ -19,8 +21,14 @@ export const instant = false;
 export default async function DashboardPage() {
   const user = await requireAdmin();
   await expireAbandonedWebpayOrders().catch(() => 0);
-  const data = await getDashboardData();
+  const [data, settings] = await Promise.all([getDashboardData(), readStoreSettings()]);
   const env = webpayEnvironment();
+  const pending = [
+    !settings.email && "el correo de la tienda (ahí llegan los avisos de pedidos y solicitudes)",
+    settings.address === DEFAULT_SETTINGS.address && "la dirección del taller",
+    settings.payments.transferAccountNumber === DEFAULT_SETTINGS.payments.transferAccountNumber &&
+      "los datos bancarios para transferencias",
+  ].filter((item): item is string => Boolean(item));
 
   return (
     <>
@@ -43,6 +51,16 @@ export default async function DashboardPage() {
             tarjeta no son reales. Cuando Transbank te entregue tu código de comercio y API Key, configura{" "}
             <code className="font-mono">WEBPAY_ENVIRONMENT=production</code> (ver README).
           </span>
+        </Notice>
+      )}
+
+      {pending.length > 0 && (
+        <Notice tone="info" className="mb-6">
+          <strong>Completa los datos de tu tienda:</strong> {pending.length > 1 ? "faltan" : "falta"}{" "}
+          {new Intl.ListFormat("es", { type: "conjunction" }).format(pending)}.{" "}
+          <Link href="/admin/configuracion" className="font-semibold underline">
+            Ir a Configuración
+          </Link>
         </Notice>
       )}
 

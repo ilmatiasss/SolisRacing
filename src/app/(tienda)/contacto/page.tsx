@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const settings = await getStoreSettings();
-  const cards = [
+  const allCards = [
     {
       icon: WhatsAppIcon,
       title: "WhatsApp",
       value: settings.whatsapp,
-      href: whatsappLink(settings.whatsapp, "Hola Solis Racing, tengo una consulta."),
+      href: whatsappLink(settings.whatsapp, `Hola ${settings.storeName}, tengo una consulta.`),
       external: true,
     },
     { icon: Phone, title: "Teléfono", value: settings.phone, href: `tel:${settings.phone.replace(/\s/g, "")}` },
@@ -28,13 +28,14 @@ export default async function ContactPage() {
     {
       icon: MapPin,
       title: "Taller",
-      value: `${settings.address}, ${settings.city}`,
+      value: [settings.address, settings.city].filter(Boolean).join(", "),
       href:
         settings.mapsUrl ||
         `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${settings.address}, ${settings.city}`)}`,
       external: true,
     },
   ];
+  const cards = allCards.filter((card) => card.value.trim());
 
   return (
     <>

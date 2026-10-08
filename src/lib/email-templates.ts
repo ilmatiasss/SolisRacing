@@ -37,7 +37,7 @@ function layout(settings: StoreSettings, title: string, body: string): string {
         </td></tr>
         <tr><td style="background:#fafafa;padding:20px 28px;font-size:12px;color:#71717a;line-height:1.6">
           ${e(settings.storeName)} · ${e(settings.address)}, ${e(settings.city)}<br>
-          ${e(settings.email)} · WhatsApp ${e(settings.whatsapp)}
+          ${[settings.email, settings.whatsapp && `WhatsApp ${settings.whatsapp}`].filter(Boolean).map((v) => e(String(v))).join(" · ")}
         </td></tr>
       </table>
     </td></tr>
@@ -122,7 +122,7 @@ function transferBlock(settings: StoreSettings, order: EmailOrder) {
     Tipo de cuenta: ${e(p.transferAccountType)}<br>
     N° de cuenta: ${e(p.transferAccountNumber)}<br>
     Titular: ${e(p.transferHolder)}${p.transferRut ? `<br>RUT: ${e(p.transferRut)}` : ""}<br>
-    Correo: ${e(p.transferEmail)}<br>
+    ${p.transferEmail ? `Correo: ${e(p.transferEmail)}<br>` : ""}
     Monto: <strong>${formatCLP(order.total)}</strong><br>
     Asunto o comentario: <strong>${formatOrderNumber(order.id)}</strong>
     ${p.transferInstructions ? `<br><br>${e(p.transferInstructions)}` : ""}

@@ -10,14 +10,35 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
-/** Logotipo provisorio: reemplázalo por el logo oficial cuando lo tengas. */
-export function Logo({ className, tone = "light" }: { className?: string; tone?: "light" | "dark" }) {
+/** Logotipo provisorio de Solis Racing Parts: reemplázalo por el logo oficial cuando lo tengas. */
+export function Logo({
+  className,
+  tone = "light",
+  size = "md",
+}: {
+  className?: string;
+  tone?: "light" | "dark";
+  size?: "sm" | "md";
+}) {
   return (
     <span className={cn("inline-flex items-center gap-1.5", className)}>
-      <LogoMark className="h-7 w-auto" />
-      <span className="font-display text-2xl leading-none font-extrabold tracking-wide uppercase italic">
+      <LogoMark className={size === "md" ? "h-7 w-auto" : "h-5 w-auto"} />
+      <span
+        className={cn(
+          "font-display leading-none font-extrabold tracking-wide uppercase italic",
+          size === "md" ? "text-2xl" : "text-lg",
+        )}
+      >
         <span className={tone === "light" ? "text-white" : "text-zinc-900"}>Solis</span>{" "}
         <span className="text-brand-600">Racing</span>
+      </span>
+      <span
+        className={cn(
+          "ml-0.5 self-center rounded-[3px] border px-1 py-px font-display text-[0.6rem] leading-none font-bold tracking-[0.2em] uppercase",
+          tone === "light" ? "border-white/40 text-white/80" : "border-zinc-400 text-zinc-600",
+        )}
+      >
+        Parts
       </span>
     </span>
   );

@@ -69,7 +69,7 @@ export default async function ShippingPolicyPage() {
       <section>
         <h2>Cómo solicitar un cambio o devolución</h2>
         <p>
-          Escríbenos a {s.email} o por WhatsApp al {s.whatsapp} indicando tu número de pedido y el motivo. Te
+          Escríbenos {s.email && <>a {s.email} o </>}por WhatsApp al {s.whatsapp} indicando tu número de pedido y el motivo. Te
           responderemos con las instrucciones para el envío o la entrega en el taller.
         </p>
       </section>

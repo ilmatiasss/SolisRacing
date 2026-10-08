@@ -32,7 +32,7 @@ export default async function PrivacyPage() {
       <section>
         <h2>Tus derechos</h2>
         <p>
-          Puedes solicitar el acceso, rectificación o eliminación de tus datos escribiendo a {s.email}, conforme a la
+          Puedes solicitar el acceso, rectificación o eliminación de tus datos escribiéndonos {s.email ? `a ${s.email}` : `por WhatsApp al ${s.whatsapp}`}, conforme a la
           legislación chilena vigente sobre protección de datos personales.
         </p>
       </section>

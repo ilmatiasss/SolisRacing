@@ -67,21 +67,22 @@ export const DEFAULT_SHIPPING_RATES: Record<RegionCode, number> = {
 };
 
 export const DEFAULT_SETTINGS: StoreSettings = {
-  storeName: "Solis Racing",
+  storeName: "Solis Racing Parts",
   tagline: "Partes de performance y seteos para tu auto",
   announcement: "Despachos a todo Chile · Paga con Webpay o transferencia",
-  email: "ventas@solisracing.cl",
-  phone: "+56 9 1234 5678",
-  whatsapp: "+56 9 1234 5678",
+  // Sin correo por defecto: se configura en el panel (Configuración).
+  email: "",
+  phone: "+56 9 7147 4939",
+  whatsapp: "+56 9 7147 4939",
   address: "Av. Ejemplo 1234",
   city: "Santiago, Chile",
   mapsUrl: "",
   openingHours: "Lunes a viernes: 9:30 a 18:30\nSábado: 10:00 a 14:00",
-  instagram: "",
+  instagram: "https://www.instagram.com/solis_racingparts/",
   facebook: "",
   tiktok: "",
   youtube: "",
-  legalName: "Solis Racing SpA",
+  legalName: "Solis Racing Parts",
   legalRut: "",
   payments: {
     webpayEnabled: true,
@@ -89,9 +90,9 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     transferBank: "Banco de Chile",
     transferAccountType: "Cuenta corriente",
     transferAccountNumber: "00-000-00000-00",
-    transferHolder: "Solis Racing SpA",
+    transferHolder: "Solis Racing Parts",
     transferRut: "",
-    transferEmail: "ventas@solisracing.cl",
+    transferEmail: "",
     transferInstructions:
       "Envíanos el comprobante por WhatsApp o correo indicando tu número de pedido. Despachamos una vez confirmado el pago.",
   },

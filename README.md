@@ -1,6 +1,6 @@
-# Solis Racing · Tienda online
+# Solis Racing Parts · Tienda online
 
-Ecommerce a medida para **Solis Racing**: venta de partes de performance para autos y agenda de seteos, pensado para Chile (pesos chilenos, regiones y comunas, RUT, boleta o factura, Webpay y transferencia).
+Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www.instagram.com/solis_racingparts/)): venta de partes de performance para autos y agenda de seteos, pensado para Chile (pesos chilenos, regiones y comunas, RUT, boleta o factura, Webpay y transferencia).
 
 ## Qué incluye
 
@@ -47,13 +47,13 @@ Next.js 16 (App Router, Cache Components), React 19, TypeScript, Tailwind CSS 4,
    | `ADMIN_EMAIL` | Tu correo para entrar al panel |
    | `ADMIN_PASSWORD` | Una contraseña segura (mínimo 8 caracteres) |
    | `AUTH_SECRET` | Texto aleatorio largo (por ejemplo, el resultado de `openssl rand -base64 32`) |
-   | `NEXT_PUBLIC_SITE_URL` | La URL de tu tienda, ej. `https://solisracing.cl` |
+   | `NEXT_PUBLIC_SITE_URL` | La URL de tu tienda, ej. `https://www.tudominio.cl` |
    | `WEBPAY_ENVIRONMENT` | `integration` mientras pruebas, `production` para cobrar |
    | `SEED_DEMO_DATA` | `true` si quieres partir con el catálogo de ejemplo, `false` para partir vacío |
 
 5. **Deploy**. En cada publicación, Vercel ejecuta `npm run vercel-build`, que aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga los datos de ejemplo (si corresponde) antes de compilar.
-6. Entra a `https://tu-dominio/admin` con `ADMIN_EMAIL` y `ADMIN_PASSWORD`, completa **Configuración** (WhatsApp, dirección, datos bancarios, tarifas) y carga tus productos.
-7. **Dominio propio**: en *Settings → Domains* agrega tu dominio (ej. `solisracing.cl`, que se compra en [NIC Chile](https://www.nic.cl)).
+6. Entra a `https://tu-dominio/admin` con `ADMIN_EMAIL` y `ADMIN_PASSWORD`, completa **Configuración** (correo, dirección, datos bancarios, tarifas; el WhatsApp y el Instagram ya vienen con los de Solis Racing Parts) y carga tus productos.
+7. **Dominio propio**: en *Settings → Domains* agrega tu dominio (un `.cl` se compra en [NIC Chile](https://www.nic.cl)).
 
 > Si cambias variables de entorno en Vercel, vuelve a desplegar para que se apliquen.
 
@@ -129,7 +129,7 @@ e2e/, tests/unit/    Pruebas
 
 - Reemplaza el logo provisorio (`src/components/logo.tsx` y `src/app/icon.svg`) por el oficial.
 - Borra o edita los productos y servicios de ejemplo, y sube fotos reales (idealmente con fondo blanco).
-- Completa la configuración de la tienda: razón social, RUT, contacto, datos bancarios y tarifas de despacho.
+- Completa la configuración de la tienda: correo (viene vacío y ahí llegan los avisos de pedidos), dirección del taller, razón social, RUT, datos bancarios y tarifas de despacho. El resumen del panel te recuerda lo que falta.
 - Revisa con un asesor los textos de **términos, privacidad y despachos y devoluciones** (son una base general y deben ajustarse a tu empresa).
 - Activa Webpay en producción y configura el correo SMTP.
 
