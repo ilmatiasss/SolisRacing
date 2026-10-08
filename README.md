@@ -49,9 +49,9 @@ Next.js 16 (App Router, Cache Components), React 19, TypeScript, Tailwind CSS 4,
    | `AUTH_SECRET` | Texto aleatorio largo (por ejemplo, el resultado de `openssl rand -base64 32`) |
    | `NEXT_PUBLIC_SITE_URL` | La URL de tu tienda, ej. `https://www.tudominio.cl` |
    | `WEBPAY_ENVIRONMENT` | `integration` mientras pruebas, `production` para cobrar |
-   | `SEED_DEMO_DATA` | `true` para cargar el catálogo inicial (productos y precios de su catálogo de WhatsApp, con stock provisorio de 5 unidades), `false` para partir vacío |
+   | `SEED_DEMO_DATA` | Opcional. El catálogo inicial (productos y precios de su catálogo de WhatsApp, con stock provisorio de 5 unidades) se carga solo, una vez, cuando la base de datos está vacía. Pon `false` para partir sin productos |
 
-5. **Deploy**. En cada publicación, Vercel ejecuta `npm run build`, que primero aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga el catálogo inicial (si corresponde), y luego compila. Si el primer deploy se hizo antes de conectar la base de datos, falla: conéctala (paso 2) y usa *Deployments → ⋯ → Redeploy*.
+5. **Deploy**. En cada publicación, Vercel ejecuta `npm run build`, que primero aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga el catálogo inicial (la primera vez), y luego compila. Si el primer deploy se hizo antes de conectar la base de datos, falla: conéctala (paso 2) y usa *Deployments → ⋯ → Redeploy*.
 6. Entra a `https://tu-dominio/admin` con `ADMIN_EMAIL` y `ADMIN_PASSWORD`, completa **Configuración** (correo, dirección, datos bancarios, tarifas; el WhatsApp y el Instagram ya vienen con los de Solis Racing Parts) y carga tus productos.
 7. **Dominio propio**: en *Settings → Domains* agrega tu dominio (un `.cl` se compra en [NIC Chile](https://www.nic.cl)).
 

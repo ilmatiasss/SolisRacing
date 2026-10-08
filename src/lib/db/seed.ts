@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { slugify } from "../text";
 import type { Database } from "./index";
 import {
@@ -10,6 +10,7 @@ import {
   productImages,
   products,
   services,
+  settings,
   vehicleMakes,
   vehicleModels,
   type ProductSpec,
@@ -642,6 +643,21 @@ const INITIAL_SERVICES = [
 ];
 
 /* -------------------------------------------------------------------------- */
+
+const INITIAL_CATALOG_KEY = "initial_catalog_loaded";
+
+/** El catálogo inicial se carga una sola vez por base de datos (aunque después borres los productos). */
+export async function initialCatalogLoaded(db: Database) {
+  const [row] = await db.select({ key: settings.key }).from(settings).where(eq(settings.key, INITIAL_CATALOG_KEY));
+  return Boolean(row);
+}
+
+export async function markInitialCatalogLoaded(db: Database) {
+  await db
+    .insert(settings)
+    .values({ key: INITIAL_CATALOG_KEY, value: { at: new Date().toISOString() } })
+    .onConflictDoNothing();
+}
 
 export async function countProducts(db: Database) {
   const [row] = await db.select({ value: count() }).from(products);

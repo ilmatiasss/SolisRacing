@@ -2,7 +2,8 @@
  * Tareas de base de datos:
  *   npm run db:migrate  → aplica las migraciones pendientes
  *   npm run db:seed     → carga el catálogo inicial si no hay productos
- *   npm run db:setup    → migraciones + usuario administrador + catálogo inicial (si SEED_DEMO_DATA=true)
+ *   npm run db:setup    → migraciones + usuario administrador + catálogo inicial (una sola vez, con la
+ *                         base de datos vacía; SEED_DEMO_DATA=false lo desactiva)
  *
  * `db:setup` se ejecuta antes de compilar (script `build`), así cada deploy de Vercel deja la base
  * de datos lista: el prerender de las páginas ya consulta las tablas.
@@ -12,7 +13,13 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import path from "node:path";
 import { closeDatabase, getDb } from "../src/lib/db";
 import { databaseEnvNames, databaseUrl } from "../src/lib/db/url";
-import { countProducts, ensureAdminUser, seedDemoData } from "../src/lib/db/seed";
+import {
+  countProducts,
+  ensureAdminUser,
+  initialCatalogLoaded,
+  markInitialCatalogLoaded,
+  seedDemoData,
+} from "../src/lib/db/seed";
 
 loadEnvConfig(process.cwd());
 
@@ -50,19 +57,28 @@ async function runAdmin() {
   console.log(result === "created" ? `✓ Administrador creado: ${email}` : "✓ Ya existe un administrador");
 }
 
-async function runSeed({ onlyIfEnabled }: { onlyIfEnabled: boolean }) {
-  const seedEnabled = ["true", "1", "si", "sí"].includes(process.env.SEED_DEMO_DATA?.trim().toLowerCase() ?? "");
-  if (onlyIfEnabled && !seedEnabled) {
-    console.log("› SEED_DEMO_DATA no está activado: se omite el catálogo inicial");
-    return;
+async function runSeed({ automatic }: { automatic: boolean }) {
+  const db = getDb();
+  if (automatic) {
+    // Por defecto se carga; SEED_DEMO_DATA=false permite partir con la tienda vacía.
+    if (["false", "0", "no"].includes(process.env.SEED_DEMO_DATA?.trim().toLowerCase() ?? "")) {
+      console.log("› SEED_DEMO_DATA=false: se omite el catálogo inicial");
+      return;
+    }
+    if (await initialCatalogLoaded(db)) {
+      console.log("› El catálogo inicial ya se cargó antes: no se vuelve a cargar");
+      return;
+    }
   }
-  const total = await countProducts(getDb());
+  const total = await countProducts(db);
   if (total > 0) {
     console.log(`› La tienda ya tiene ${total} productos: no se carga el catálogo inicial`);
+    await markInitialCatalogLoaded(db);
     return;
   }
   console.log("› Cargando catálogo inicial…");
-  await seedDemoData(getDb());
+  await seedDemoData(db);
+  await markInitialCatalogLoaded(db);
   console.log("✓ Catálogo inicial cargado");
 }
 
@@ -71,11 +87,11 @@ async function main() {
   if (command === "migrate") {
     await runMigrations();
   } else if (command === "seed") {
-    await runSeed({ onlyIfEnabled: false });
+    await runSeed({ automatic: false });
   } else if (command === "setup") {
     await runMigrations();
     await runAdmin();
-    await runSeed({ onlyIfEnabled: true });
+    await runSeed({ automatic: true });
   } else {
     throw new Error(`Comando desconocido: ${command}`);
   }
