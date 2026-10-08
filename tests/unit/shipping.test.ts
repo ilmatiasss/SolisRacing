@@ -20,7 +20,8 @@ describe("regiones y comunas", () => {
 
 describe("cálculo de despacho", () => {
   it("cobra la tarifa de la región", () => {
-    expect(quoteShipping(shipping, "shipping", "RM", 50000)).toEqual({ ok: true, cost: 4990, free: false });
+    expect(quoteShipping(shipping, "shipping", "AN", 50000)).toEqual({ ok: true, cost: 3990, free: false });
+    expect(quoteShipping(shipping, "shipping", "RM", 50000)).toEqual({ ok: true, cost: 7990, free: false });
     expect(quoteShipping(shipping, "shipping", "MA", 50000)).toEqual({ ok: true, cost: 14990, free: false });
   });
 
@@ -45,7 +46,7 @@ describe("cálculo de despacho", () => {
   it("sin despacho gratis cuando el umbral es 0", () => {
     expect(quoteShipping({ ...shipping, freeShippingThreshold: 0 }, "shipping", "RM", 10_000_000)).toEqual({
       ok: true,
-      cost: 4990,
+      cost: 7990,
       free: false,
     });
   });

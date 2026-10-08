@@ -54,7 +54,7 @@ export default async function SettingsPage() {
             <Field label="Teléfono" htmlFor="phone">
               <Input id="phone" name="phone" defaultValue={s.phone} />
             </Field>
-            <Field label="Dirección del taller" htmlFor="address">
+            <Field label="Dirección de la tienda" htmlFor="address">
               <Input id="address" name="address" defaultValue={s.address} />
             </Field>
             <Field label="Ciudad / comuna" htmlFor="city">
@@ -128,7 +128,7 @@ export default async function SettingsPage() {
         <Card title="Entregas y despachos">
           <div className="space-y-6">
             <div className="space-y-3">
-              <Checkbox name="shipping.pickupEnabled" defaultChecked={s.shipping.pickupEnabled} label="Retiro en taller (gratis)" />
+              <Checkbox name="shipping.pickupEnabled" defaultChecked={s.shipping.pickupEnabled} label="Retiro en tienda (gratis)" />
               <div className="grid gap-4 md:grid-cols-2">
                 <Field label="Dirección de retiro" htmlFor="pickupAddress">
                   <Input id="pickupAddress" name="shipping.pickupAddress" defaultValue={s.shipping.pickupAddress} />

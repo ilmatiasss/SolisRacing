@@ -8,24 +8,24 @@ test("la portada muestra el buscador por auto y filtra repuestos compatibles", a
   await expect(page.getByRole("heading", { name: /Más potencia/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Encuentra repuestos compatibles" })).toBeVisible();
 
-  await page.locator("#finder-make").selectOption("subaru");
-  await page.locator("#finder-model").selectOption("wrx");
-  await page.locator("#finder-year").selectOption("2018");
+  await page.locator("#finder-make").selectOption("honda");
+  await page.locator("#finder-model").selectOption("civic");
+  await page.locator("#finder-year").selectOption("1998");
   await page.getByRole("button", { name: "Buscar repuestos" }).click();
-  await expect(page).toHaveURL(/\/productos\?auto=subaru&modelo=wrx&anio=2018/);
-  await expect(page.getByRole("heading", { name: "Repuestos para Subaru WRX 2018" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Coilovers BC Racing BR Series" })).toBeVisible();
+  await expect(page).toHaveURL(/\/productos\?auto=honda&modelo=civic&anio=1998/);
+  await expect(page.getByRole("heading", { name: "Repuestos para Honda Civic 1998" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Arnés de motor Honda serie B/D con VTEC (OBD1)" })).toBeVisible();
   // Una pieza solo compatible con otro auto no aparece.
-  await expect(page.getByRole("link", { name: "Escape catback acero inoxidable Magnaflow" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Arnés FuelTech para Mitsubishi 4G63" })).toHaveCount(0);
 });
 
 test("el buscador encuentra productos aunque se escriba sin tildes", async ({ page }) => {
-  await page.goto("/productos?q=valvula");
-  await expect(page.getByRole("link", { name: "Válvula blow-off Turbosmart Kompact" })).toBeVisible();
+  await page.goto("/productos?q=presion");
+  await expect(page.getByRole("link", { name: "Kit reloj de presión de aceite 52 mm con pod" })).toBeVisible();
 });
 
 test("compra con Webpay aprobada: descuenta stock y vacía el carrito", async ({ page }) => {
-  await addProductToCart(page, "pastillas-de-freno-ebc-yellowstuff-delanteras", 2);
+  await addProductToCart(page, "sensor-de-presion-fueltech-ps-10b", 2);
   await fillCheckout(page, { payment: "webpay" });
   await expect(page.getByText("Webpay está en modo de prueba")).toBeVisible();
   // 2 × $119.990 supera el mínimo para despacho gratis.
@@ -43,7 +43,7 @@ test("compra con Webpay aprobada: descuenta stock y vacía el carrito", async ({
 });
 
 test("pago rechazado: cancela el pedido, devuelve el stock y conserva el carrito", async ({ page }) => {
-  await addProductToCart(page, "turbo-garrett-g25-550");
+  await addProductToCart(page, "fueltech-ft450-con-arnes");
   await fillCheckout(page, { payment: "webpay", delivery: "pickup" });
   await page.getByRole("button", { name: /Pagar .* con Webpay/ }).click();
   await page.waitForURL(/\/pago\/simulado\/pagar/);
@@ -52,27 +52,27 @@ test("pago rechazado: cancela el pedido, devuelve el stock y conserva el carrito
   await page.waitForURL(/pago=rechazado/);
   await expect(page.getByText("El pago fue rechazado", { exact: true })).toBeVisible();
   const cart = await page.evaluate(() => localStorage.getItem("solis-racing-cart-v1"));
-  expect(cart).toContain("turbo-garrett-g25-550");
+  expect(cart).toContain("fueltech-ft450-con-arnes");
 
-  // El turbo (única unidad) vuelve a estar disponible.
-  await page.goto("/productos/turbo-garrett-g25-550");
+  // La FT450 (única unidad) vuelve a estar disponible.
+  await page.goto("/productos/fueltech-ft450-con-arnes");
   await expect(visible(page.getByText("¡Última unidad!"))).toBeVisible();
 });
 
 test("pago anulado en Webpay también cancela el pedido", async ({ page }) => {
-  await addProductToCart(page, "turbo-garrett-g25-550");
+  await addProductToCart(page, "fueltech-ft450-con-arnes");
   await fillCheckout(page, { payment: "webpay", delivery: "pickup" });
   await page.getByRole("button", { name: /Pagar .* con Webpay/ }).click();
   await page.waitForURL(/\/pago\/simulado\/pagar/);
   await page.getByRole("button", { name: "Anular y volver al comercio" }).click();
   await page.waitForURL(/pago=anulado/);
   await expect(page.getByText("Pago anulado", { exact: true })).toBeVisible();
-  await page.goto("/productos/turbo-garrett-g25-550");
+  await page.goto("/productos/fueltech-ft450-con-arnes");
   await expect(visible(page.getByText("¡Última unidad!"))).toBeVisible();
 });
 
 test("compra por transferencia con factura, despacho pagado y seguimiento", async ({ page }) => {
-  await addProductToCart(page, "aceite-motul-300v-5w-40-5-litros");
+  await addProductToCart(page, "sensor-map-bosch-3-bar");
   await fillCheckout(page, { payment: "transfer" });
   await page.locator("label:has(input[name=documentType][value=factura])").click();
   await page.locator("#companyName").fill("Taller Rojas SpA");
@@ -84,8 +84,8 @@ test("compra por transferencia con factura, despacho pagado y seguimiento", asyn
   await expect(page.getByText("¡Pedido recibido! Falta tu transferencia")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Datos para transferir" })).toBeVisible();
   await expect(page.getByText("Factura a Taller Rojas SpA (76.086.428-5)")).toBeVisible();
-  // $89.990 + despacho a Valparaíso ($6.990)
-  await expect(visible(page.getByText("$96.980")).first()).toBeVisible();
+  // $89.990 + despacho a Valparaíso ($7.990)
+  await expect(visible(page.getByText("$97.980")).first()).toBeVisible();
   const orderNumber = (await page.getByRole("heading", { level: 1 }).innerText()).trim();
 
   await page.goto("/seguimiento");
@@ -97,7 +97,7 @@ test("compra por transferencia con factura, despacho pagado y seguimiento", asyn
 });
 
 test("el seguimiento no muestra pedidos con un correo distinto", async ({ page }) => {
-  const orderNumber = await placeTransferOrder(page, "refrigerante-motul-inugel-optimal-1-litro");
+  const orderNumber = await placeTransferOrder(page, "fitting-recto-an6-aluminio-anodizado");
   await page.goto("/seguimiento");
   await page.locator("#number").fill(orderNumber);
   await page.locator("#email").fill("otra-persona@example.com");

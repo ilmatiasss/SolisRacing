@@ -3,7 +3,7 @@
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { LogoMark } from "@/components/logo";
+import { LogoBadge } from "@/components/logo";
 import { Drawer } from "@/components/ui/drawer";
 import { SidebarNav, type NavCounts } from "./sidebar-nav";
 
@@ -32,7 +32,7 @@ export function MobileAdminNav({ counts }: { counts: NavCounts }) {
         theme="admin"
         title={
           <span className="flex items-center gap-2 not-italic">
-            <LogoMark className="h-5 w-auto" /> Panel
+            <LogoBadge size={26} /> Panel
           </span>
         }
       >

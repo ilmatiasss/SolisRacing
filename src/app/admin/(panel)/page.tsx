@@ -25,7 +25,6 @@ export default async function DashboardPage() {
   const env = webpayEnvironment();
   const pending = [
     !settings.email && "el correo de la tienda (ahí llegan los avisos de pedidos y solicitudes)",
-    settings.address === DEFAULT_SETTINGS.address && "la dirección del taller",
     settings.payments.transferAccountNumber === DEFAULT_SETTINGS.payments.transferAccountNumber &&
       "los datos bancarios para transferencias",
   ].filter((item): item is string => Boolean(item));

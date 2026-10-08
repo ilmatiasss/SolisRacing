@@ -178,7 +178,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
               <li className="flex gap-3">
                 <Store className="size-5 shrink-0 text-brand-500" />
                 <span>
-                  Retiro gratis en taller: <span className="text-muted">{settings.shipping.pickupAddress}</span>
+                  Retiro gratis en tienda: <span className="text-muted">{settings.shipping.pickupAddress}</span>
                 </span>
               </li>
             )}
@@ -187,7 +187,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
               <span>
                 ¿Necesitas instalación o seteo?{" "}
                 <Link href="/servicios" className="text-brand-400 hover:underline">
-                  Agenda en nuestro taller
+                  Cotiza con nosotros
                 </Link>
               </span>
             </li>

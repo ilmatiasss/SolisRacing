@@ -49,15 +49,17 @@ export default async function HomePage() {
         <div className="absolute inset-y-0 right-[2%] hidden w-10 -skew-x-[20deg] bg-brand-600/20 lg:block" aria-hidden="true" />
         <Container className="relative grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <div>
-            <Eyebrow>Performance · Tuning · Seteos</Eyebrow>
+            <Eyebrow>Performance · Electrónica · Seteos</Eyebrow>
             <h1 className="mt-5 font-display text-5xl leading-[0.92] font-extrabold tracking-tight uppercase italic sm:text-6xl lg:text-7xl">
               Más potencia.
               <br />
-              <span className="text-brand-600">Mejor manejo.</span>
+              <span className="bg-linear-to-r from-brand-500 via-orange-500 to-amber-400 bg-clip-text pr-3 text-transparent">
+                Más control.
+              </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-zinc-300">
-              Partes y accesorios de performance para tu auto, con despacho a todo Chile. Y cuando quieras llevarlo
-              al siguiente nivel, lo seteamos en nuestro taller.
+              FuelTech, sistemas de combustible, sensores, fittings y relojería para tu proyecto. Tienda física en
+              Antofagasta, despachos a todo Chile y asesoría para elegir bien cada pieza.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/productos" className={buttonClasses({ size: "lg" })}>
@@ -79,8 +81,8 @@ export default async function HomePage() {
                 <dd className="mt-1 font-display text-xl font-bold italic">Webpay</dd>
               </div>
               <div>
-                <dt className="text-xs tracking-wide text-muted uppercase">Taller</dt>
-                <dd className="mt-1 font-display text-xl font-bold italic">Dinamómetro</dd>
+                <dt className="text-xs tracking-wide text-muted uppercase">Tienda física</dt>
+                <dd className="mt-1 font-display text-xl font-bold italic">Antofagasta</dd>
               </div>
             </dl>
           </div>
@@ -158,9 +160,9 @@ export default async function HomePage() {
           <div className="absolute -bottom-32 -left-32 size-96 rounded-full bg-brand-600/15 blur-3xl" aria-hidden="true" />
           <Container className="relative py-16 sm:py-20">
             <SectionHeading
-              eyebrow="Taller"
-              title="Seteos y servicios"
-              description="Reprogramación de ECU, seteo en dinamómetro y puesta a punto de suspensión. Medimos antes y después."
+              eyebrow="Servicios"
+              title="Seteos e instalaciones"
+              description="Instalación y programación de FuelTech, arneses eléctricos a medida y sistemas de combustible para tu proyecto."
               action={{ href: "/servicios", label: "Ver todos los servicios" }}
             />
             <div className="grid gap-4 md:grid-cols-3">
@@ -205,10 +207,10 @@ export default async function HomePage() {
       <Container className={onSale.length > 0 ? "pb-4" : "py-16 sm:py-20"}>
         <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Truck, title: "Despacho a todo Chile", text: "Enviamos por courier o retira en nuestro taller." },
+            { icon: Truck, title: "Despacho a todo Chile", text: "Enviamos por courier o retira en nuestra tienda de Antofagasta." },
             { icon: ShieldCheck, title: "Pago 100 % seguro", text: "Débito, crédito y prepago con Webpay, o transferencia." },
             { icon: Headset, title: "Asesoría experta", text: "Te ayudamos a elegir la pieza correcta para tu auto." },
-            { icon: Wrench, title: "Instalación y seteo", text: "Instalamos y seteamos lo que compras con nosotros." },
+            { icon: Wrench, title: "Instalación y seteo", text: "Coordinamos la instalación y el seteo de lo que compras." },
           ].map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex gap-4 bg-surface p-6">
               <Icon className="size-6 shrink-0 text-brand-500" />
@@ -233,7 +235,7 @@ export default async function HomePage() {
                 </span>
                 <div>
                   <h2 className="font-display text-3xl font-extrabold uppercase italic">Síguenos en Instagram</h2>
-                  <p className="mt-1 text-zinc-300">Proyectos, instalaciones, novedades y ofertas del taller.</p>
+                  <p className="mt-1 text-zinc-300">Proyectos, instalaciones, productos nuevos y ofertas.</p>
                 </div>
               </div>
               <a

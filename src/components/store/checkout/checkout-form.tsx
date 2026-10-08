@@ -295,7 +295,7 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
                   checked={deliveryMethod === "pickup"}
                   onChange={() => setDeliveryMethod("pickup")}
                   icon={<Store className="size-5" />}
-                  title="Retiro en taller"
+                  title="Retiro en tienda"
                   description="Sin costo"
                 />
               )}

@@ -13,25 +13,25 @@ import { formatCLP, whatsappLink } from "@/lib/format";
 export const metadata: Metadata = {
   title: "Servicios y seteos",
   description:
-    "Reprogramación de ECU Stage 1, 2 y 3, seteo en dinamómetro, alineación y puesta a punto de suspensión, instalación de partes de performance.",
+    "Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Seteos en Antofagasta.",
   alternates: { canonical: "/servicios" },
 };
 
 const STEPS = [
-  { title: "Diagnóstico", text: "Revisamos el auto y medimos potencia y torque de partida en el dinamómetro." },
-  { title: "Plan", text: "Definimos juntos las mejoras según tu uso: calle, track day o competencia." },
-  { title: "Instalación y seteo", text: "Instalamos las piezas y ajustamos el mapa con data logs reales." },
-  { title: "Entrega", text: "Medición final y gráfico comparativo antes / después." },
+  { title: "Asesoría", text: "Conversamos tu proyecto y elegimos las piezas correctas para tu motor y tu uso." },
+  { title: "Cotización", text: "Te enviamos un presupuesto claro con piezas y mano de obra." },
+  { title: "Instalación", text: "ECU, arnés, sensores y combustible instalados con terminaciones profesionales." },
+  { title: "Seteo y entrega", text: "Ajustamos el mapa, revisamos todo funcionando y te entregamos el auto." },
 ];
 
 const FAQ = [
   {
-    q: "¿La reprogramación es reversible?",
-    a: "Sí. Siempre respaldamos el mapa original de tu ECU y podemos volver a cargarlo cuando lo necesites.",
+    q: "¿Trabajan con FuelTech?",
+    a: "Sí. Te asesoramos para elegir el equipo y los sensores adecuados, y coordinamos la instalación y el seteo.",
   },
   {
-    q: "¿Cuánto demora un seteo?",
-    a: "Un Stage 1 toma entre 3 y 4 horas. Los proyectos Stage 2 o 3 pueden tomar un día o más según las piezas instaladas.",
+    q: "¿Hacen arneses a medida?",
+    a: "Sí. Armamos arneses eléctricos según tu motor y tu ECU, con conectores y terminales de calidad.",
   },
   {
     q: "¿Necesito comprar las piezas con ustedes?",
@@ -45,9 +45,9 @@ export default async function ServicesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Taller"
+        eyebrow="Servicios"
         title="Servicios y seteos"
-        description="Reprogramación de ECU, seteo en dinamómetro, suspensión e instalación de partes de performance. Medimos antes y después para que veas la diferencia."
+        description="Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Te acompañamos desde la elección de piezas hasta el seteo final."
       >
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#agendar" className={buttonClasses({ size: "lg" })}>
@@ -150,7 +150,7 @@ export default async function ServicesPage() {
             ))}
           </div>
           <div className="mt-6 rounded-2xl border border-line bg-surface p-5 text-sm">
-            <p className="font-semibold">Horario del taller</p>
+            <p className="font-semibold">Horario de atención</p>
             <p className="mt-1 whitespace-pre-line text-muted">{settings.openingHours}</p>
             <p className="mt-3 text-muted">
               {settings.address}, {settings.city}

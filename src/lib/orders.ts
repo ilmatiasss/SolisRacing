@@ -331,7 +331,7 @@ export async function changeOrderStatus(
     const defaultMessages: Partial<Record<OrderStatus, string>> = {
       processing: "Estamos preparando tu pedido.",
       shipped: pickup
-        ? "Tu pedido está listo para retiro en el taller."
+        ? "Tu pedido está listo para retiro en la tienda."
         : updated.trackingNumber
           ? `Pedido enviado por ${updated.trackingCourier ?? "courier"}. N° de seguimiento: ${updated.trackingNumber}.`
           : "Pedido enviado.",

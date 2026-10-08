@@ -9,7 +9,7 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   cancelled: "Cancelado",
 };
 
-/** Etiqueta para clientes de retiro en taller ("Listo para retiro" en vez de "Enviado"). */
+/** Etiqueta para clientes de retiro en tienda ("Listo para retiro" en vez de "Enviado"). */
 export function orderStatusLabel(status: OrderStatus, isPickup: boolean): string {
   if (isPickup && status === "shipped") return "Listo para retiro";
   if (isPickup && status === "delivered") return "Retirado";

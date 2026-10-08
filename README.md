@@ -10,7 +10,7 @@ Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www
 - Catálogo con búsqueda sin tildes, filtros por categoría, marca, auto, ofertas y stock, y orden por precio o novedad.
 - Ficha de producto con galería, precio con oferta, stock, especificaciones, tabla de compatibilidad, productos relacionados y consulta por WhatsApp.
 - Carrito que se guarda en el navegador y se actualiza con los precios y el stock reales.
-- Checkout chileno: región y comuna (16 regiones, 346 comunas), boleta o factura con validación de RUT, despacho a domicilio (tarifa por región y despacho gratis desde un monto), envío por pagar o retiro en taller.
+- Checkout chileno: región y comuna (16 regiones, 346 comunas), boleta o factura con validación de RUT, despacho a domicilio (tarifa por región y despacho gratis desde un monto), envío por pagar o retiro en tienda.
 - Pago con **Webpay Plus** (débito, crédito y prepago) o **transferencia bancaria**.
 - Página del pedido con comprobante de pago, datos para transferir e historial; seguimiento con número de pedido + correo.
 - Página de **servicios y seteos** con formulario para agendar hora, contacto, despachos y devoluciones, términos y privacidad.
@@ -49,7 +49,7 @@ Next.js 16 (App Router, Cache Components), React 19, TypeScript, Tailwind CSS 4,
    | `AUTH_SECRET` | Texto aleatorio largo (por ejemplo, el resultado de `openssl rand -base64 32`) |
    | `NEXT_PUBLIC_SITE_URL` | La URL de tu tienda, ej. `https://www.tudominio.cl` |
    | `WEBPAY_ENVIRONMENT` | `integration` mientras pruebas, `production` para cobrar |
-   | `SEED_DEMO_DATA` | `true` si quieres partir con el catálogo de ejemplo, `false` para partir vacío |
+   | `SEED_DEMO_DATA` | `true` si quieres partir con el catálogo de ejemplo (armado con las líneas de su Instagram, precios referenciales), `false` para partir vacío |
 
 5. **Deploy**. En cada publicación, Vercel ejecuta `npm run vercel-build`, que aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga los datos de ejemplo (si corresponde) antes de compilar.
 6. Entra a `https://tu-dominio/admin` con `ADMIN_EMAIL` y `ADMIN_PASSWORD`, completa **Configuración** (correo, dirección, datos bancarios, tarifas; el WhatsApp y el Instagram ya vienen con los de Solis Racing Parts) y carga tus productos.
@@ -127,9 +127,9 @@ e2e/, tests/unit/    Pruebas
 
 ## Antes de lanzar
 
-- Reemplaza el logo provisorio (`src/components/logo.tsx` y `src/app/icon.svg`) por el oficial.
+- El logo está recortado de la foto de perfil de Instagram: cuando tengas el archivo original en buena resolución, reemplaza `src/assets/logo-solis-racing-parts.png`, `src/app/icon.png`, `src/app/apple-icon.png` y la imagen para compartir `src/app/opengraph-image.jpg`.
 - Borra o edita los productos y servicios de ejemplo, y sube fotos reales (idealmente con fondo blanco).
-- Completa la configuración de la tienda: correo (viene vacío y ahí llegan los avisos de pedidos), dirección del taller, razón social, RUT, datos bancarios y tarifas de despacho. El resumen del panel te recuerda lo que falta.
+- Completa la configuración de la tienda: correo (viene vacío y ahí llegan los avisos de pedidos), confirma dirección y horario (vienen de Instagram: Ausonia 244, Antofagasta), razón social, RUT, datos bancarios y tarifas de despacho. El resumen del panel te recuerda lo que falta.
 - Revisa con un asesor los textos de **términos, privacidad y despachos y devoluciones** (son una base general y deben ajustarse a tu empresa).
 - Activa Webpay en producción y configura el correo SMTP.
 

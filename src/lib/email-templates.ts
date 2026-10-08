@@ -96,7 +96,7 @@ function itemsTable(order: EmailOrder) {
         : "Gratis"
       : order.deliveryMethod === "shipping_collect"
         ? "Por pagar al recibir"
-        : "Retiro en taller";
+        : "Retiro en tienda";
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0">
     ${rows}
     <tr><td style="padding:8px 0;font-size:14px;color:#71717a">Subtotal</td><td style="padding:8px 0;font-size:14px;text-align:right">${formatCLP(order.subtotal)}</td></tr>
@@ -107,7 +107,7 @@ function itemsTable(order: EmailOrder) {
 
 function deliveryText(order: EmailOrder, settings: StoreSettings) {
   if (order.deliveryMethod === "pickup") {
-    return `Retiro en taller: ${settings.shipping.pickupAddress}`;
+    return `Retiro en tienda: ${settings.shipping.pickupAddress}`;
   }
   const region = getRegion(order.shippingRegion)?.name ?? order.shippingRegion ?? "";
   const address = [order.shippingAddress, order.shippingAddress2].filter(Boolean).join(", ");
@@ -175,7 +175,7 @@ export function orderStatusEmail(order: EmailOrder, settings: StoreSettings): Em
       }
       break;
     case "delivered":
-      message = `Tu pedido <strong>${number}</strong> fue entregado. ¡Gracias por confiar en nosotros! Si necesitas instalación o seteo, agenda en nuestro taller.`;
+      message = `Tu pedido <strong>${number}</strong> fue entregado. ¡Gracias por confiar en nosotros! Si necesitas instalación o seteo, escríbenos y lo coordinamos.`;
       break;
     case "cancelled":
       message = `Tu pedido <strong>${number}</strong> fue cancelado.${order.cancelReason ? ` Motivo: ${e(order.cancelReason)}.` : ""} Si tienes dudas, contáctanos.`;

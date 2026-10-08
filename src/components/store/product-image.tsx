@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DynamicIcon } from "@/components/icons";
-import { LogoMark } from "@/components/logo";
+import { LogoBadge } from "@/components/logo";
 import { cn } from "@/lib/cn";
 
 /**
@@ -50,7 +50,7 @@ export function ProductImage({
       <div className="bg-speedlines absolute inset-0" />
       <div className="absolute -right-6 -bottom-6 size-32 rounded-full bg-brand-600/20 blur-2xl" />
       <DynamicIcon name={icon} className="relative size-1/3 text-zinc-300/80" strokeWidth={1.25} />
-      <LogoMark className="absolute bottom-3 left-3 h-3 w-auto opacity-60" />
+      <LogoBadge size={22} className="absolute bottom-3 left-3 opacity-70" />
     </div>
   );
 }

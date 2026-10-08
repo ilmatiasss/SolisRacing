@@ -9,7 +9,7 @@ import { whatsappLink } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: "Escríbenos por WhatsApp, correo o visítanos en el taller. Te ayudamos a elegir las piezas correctas para tu auto.",
+  description: "Escríbenos por WhatsApp, correo o visítanos en la tienda. Te ayudamos a elegir las piezas correctas para tu auto.",
   alternates: { canonical: "/contacto" },
 };
 
@@ -27,7 +27,7 @@ export default async function ContactPage() {
     { icon: Mail, title: "Correo", value: settings.email, href: `mailto:${settings.email}` },
     {
       icon: MapPin,
-      title: "Taller",
+      title: "Tienda",
       value: [settings.address, settings.city].filter(Boolean).join(", "),
       href:
         settings.mapsUrl ||
@@ -77,7 +77,7 @@ export default async function ContactPage() {
           <h2 id="form-titulo" className="font-display text-3xl font-extrabold uppercase italic">
             Envíanos un mensaje
           </h2>
-          <p className="mt-1 mb-6 text-sm text-muted">Respondemos de lunes a sábado.</p>
+          <p className="mt-1 mb-6 text-sm text-muted">Te respondemos lo antes posible, también por WhatsApp.</p>
           <InquiryForm kind="contact" />
         </section>
       </Container>

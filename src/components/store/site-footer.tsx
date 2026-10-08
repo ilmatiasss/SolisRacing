@@ -24,7 +24,7 @@ export async function SiteFooter() {
 
   return (
     <footer className="mt-24 border-t border-line bg-zinc-950">
-      <div className="h-1 bg-linear-to-r from-brand-700 via-brand-500 to-brand-700" />
+      <div className="h-1 bg-linear-to-r from-brand-700 via-orange-500 to-brand-700" />
       <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logo />

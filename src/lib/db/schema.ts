@@ -31,7 +31,7 @@ export const orderStatusEnum = pgEnum("order_status", [
 
 export const paymentMethodEnum = pgEnum("payment_method", ["webpay", "transfer"]);
 
-/** pickup = retiro en taller, shipping = despacho pagado, shipping_collect = envío por pagar. */
+/** pickup = retiro en tienda, shipping = despacho pagado, shipping_collect = envío por pagar. */
 export const deliveryMethodEnum = pgEnum("delivery_method", [
   "pickup",
   "shipping",

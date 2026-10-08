@@ -25,7 +25,7 @@ import { whatsappLink } from "@/lib/format";
 export const metadata: Metadata = {
   title: "Catálogo de repuestos y accesorios",
   description:
-    "Filtros, escapes, turbos, suspensiones, frenos, electrónica y más. Busca por marca, modelo y año de tu auto.",
+    "FuelTech y electrónica, sistemas de combustible, sensores, fittings, relojería y más. Busca por marca, modelo y año de tu auto.",
   alternates: { canonical: "/productos" },
 };
 

@@ -16,11 +16,11 @@ test("el panel exige iniciar sesión", async ({ page }) => {
 test("crear un producto con compatibilidad lo publica en la tienda", async ({ page }) => {
   await loginAsAdmin(page);
   await page.goto("/admin/productos/nuevo");
-  await page.locator("#name").fill("Intake de prueba para Swift Sport");
+  await page.locator("#name").fill("Sensor de prueba para Swift Sport");
   await page.locator("#price").fill("$199.990");
   await page.locator("#compareAtPrice").fill("$229.990");
   await page.locator("#stock").fill("4");
-  await page.locator("#categoryId").selectOption({ label: "Admisión" });
+  await page.locator("#categoryId").selectOption({ label: "Sensores" });
   await page.getByRole("button", { name: "Agregar auto compatible" }).click();
   await page.getByLabel("Marca del auto").selectOption({ label: "Suzuki" });
   await page.getByLabel("Modelo", { exact: true }).selectOption({ label: "Swift Sport" });
@@ -30,13 +30,13 @@ test("crear un producto con compatibilidad lo publica en la tienda", async ({ pa
   await expect(page.getByText("Producto creado.")).toBeVisible();
 
   await page.goto("/productos?auto=suzuki&modelo=swift-sport&anio=2021");
-  await expect(page.getByRole("link", { name: "Intake de prueba para Swift Sport" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Sensor de prueba para Swift Sport" })).toBeVisible();
   await page.goto("/productos?oferta=1");
-  await expect(page.getByRole("link", { name: "Intake de prueba para Swift Sport" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Sensor de prueba para Swift Sport" })).toBeVisible();
 });
 
 test("marcar una transferencia como pagada y despacharla", async ({ page }) => {
-  const orderNumber = await placeTransferOrder(page, "liquido-de-frenos-motul-rbf-600-500-ml");
+  const orderNumber = await placeTransferOrder(page, "tecalan-1-8-para-relojes-por-metro");
   await loginAsAdmin(page);
   await page.goto(`/admin/pedidos/${orderNumber.replace("SR-", "")}`);
 

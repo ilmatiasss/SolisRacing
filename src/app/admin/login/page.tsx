@@ -9,7 +9,7 @@ export default function LoginPage() {
     <div className="flex min-h-dvh items-center justify-center bg-zinc-950 bg-speedlines p-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex justify-center">
-          <Logo />
+          <Logo eager />
         </div>
         <div className="rounded-2xl bg-surface p-6 shadow-2xl sm:p-8">
           <h1 className="text-xl font-bold">Panel de administración</h1>

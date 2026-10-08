@@ -47,20 +47,21 @@ export type StoreSettings = {
   shipping: ShippingSettings;
 };
 
+/** Tarifas referenciales con origen en Antofagasta: ajústalas en el panel según tu courier. */
 export const DEFAULT_SHIPPING_RATES: Record<RegionCode, number> = {
-  AP: 10990,
-  TA: 10990,
-  AN: 9990,
-  AT: 8990,
-  CO: 7990,
-  VS: 6990,
-  RM: 4990,
-  LI: 6990,
-  ML: 7990,
-  NB: 7990,
-  BI: 7990,
-  AR: 8990,
-  LR: 8990,
+  AP: 6990,
+  TA: 5990,
+  AN: 3990,
+  AT: 5990,
+  CO: 6990,
+  VS: 7990,
+  RM: 7990,
+  LI: 8990,
+  ML: 8990,
+  NB: 8990,
+  BI: 8990,
+  AR: 9990,
+  LR: 9990,
   LL: 9990,
   AI: 14990,
   MA: 14990,
@@ -68,16 +69,16 @@ export const DEFAULT_SHIPPING_RATES: Record<RegionCode, number> = {
 
 export const DEFAULT_SETTINGS: StoreSettings = {
   storeName: "Solis Racing Parts",
-  tagline: "Partes de performance y seteos para tu auto",
-  announcement: "Despachos a todo Chile · Paga con Webpay o transferencia",
+  tagline: "Tienda física de autopartes de performance en Antofagasta: FuelTech, combustible, sensores, fittings y relojería. Despachos a todo Chile.",
+  announcement: "Tienda física en Antofagasta · Despachos a todo Chile",
   // Sin correo por defecto: se configura en el panel (Configuración).
   email: "",
   phone: "+56 9 7147 4939",
   whatsapp: "+56 9 7147 4939",
-  address: "Av. Ejemplo 1234",
-  city: "Santiago, Chile",
+  address: "Ausonia 244",
+  city: "Antofagasta",
   mapsUrl: "",
-  openingHours: "Lunes a viernes: 9:30 a 18:30\nSábado: 10:00 a 14:00",
+  openingHours: "Mañana: 9:30 a 13:30\nTarde: 15:00 a 18:30",
   instagram: "https://www.instagram.com/solis_racingparts/",
   facebook: "",
   tiktok: "",
@@ -98,7 +99,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   },
   shipping: {
     pickupEnabled: true,
-    pickupAddress: "Av. Ejemplo 1234, Santiago",
+    pickupAddress: "Ausonia 244, Antofagasta",
     pickupInstructions: "Te avisaremos por correo o WhatsApp cuando tu pedido esté listo para retiro.",
     shippingEnabled: true,
     rates: DEFAULT_SHIPPING_RATES,
@@ -106,7 +107,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     shippingNote: "Despacho en 2 a 5 días hábiles mediante courier.",
     collectEnabled: true,
     collectNote:
-      "Ideal para piezas grandes (escapes, suspensiones, llantas). Pagas el envío al recibir.",
+      "Ideal para piezas grandes o pesadas (bidones de combustible, kits completos). Pagas el envío al recibir.",
   },
 };
 

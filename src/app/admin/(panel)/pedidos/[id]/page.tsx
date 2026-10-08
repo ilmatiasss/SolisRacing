@@ -173,7 +173,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
               <div className="space-y-2 text-sm">
                 <p className="font-semibold">{DELIVERY_METHOD_LABELS[order.deliveryMethod]}</p>
                 {pickup ? (
-                  <p className="text-muted">El cliente retira en el taller.</p>
+                  <p className="text-muted">El cliente retira en la tienda.</p>
                 ) : (
                   <p>
                     {order.shippingAddress}

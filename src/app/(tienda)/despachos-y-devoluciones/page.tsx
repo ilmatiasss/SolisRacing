@@ -26,7 +26,7 @@ export default async function ShippingPolicyPage() {
         {sh.collectEnabled && <p>Envío por pagar: {sh.collectNote}</p>}
         {sh.pickupEnabled && (
           <p>
-            Retiro en taller sin costo en {sh.pickupAddress}. {sh.pickupInstructions}
+            Retiro en tienda sin costo en {sh.pickupAddress}. {sh.pickupInstructions}
           </p>
         )}
       </section>
@@ -70,7 +70,7 @@ export default async function ShippingPolicyPage() {
         <h2>Cómo solicitar un cambio o devolución</h2>
         <p>
           Escríbenos {s.email && <>a {s.email} o </>}por WhatsApp al {s.whatsapp} indicando tu número de pedido y el motivo. Te
-          responderemos con las instrucciones para el envío o la entrega en el taller.
+          responderemos con las instrucciones para el envío o la entrega en la tienda.
         </p>
       </section>
     </LegalPage>

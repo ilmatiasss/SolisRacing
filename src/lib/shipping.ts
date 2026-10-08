@@ -7,7 +7,7 @@ export type ShippingQuote =
   | { ok: false; error: string };
 
 export const DELIVERY_METHOD_LABELS: Record<DeliveryMethod, string> = {
-  pickup: "Retiro en taller",
+  pickup: "Retiro en tienda",
   shipping: "Despacho a domicilio",
   shipping_collect: "Envío por pagar",
 };
@@ -28,7 +28,7 @@ export function quoteShipping(
   if (!isDeliveryMethodEnabled(settings, method)) {
     return { ok: false, error: "Ese método de entrega no está disponible." };
   }
-  // Retiro en taller y envío por pagar no suman costo al pedido.
+  // Retiro en tienda y envío por pagar no suman costo al pedido.
   if (method !== "shipping") return { ok: true, cost: 0, free: false };
 
   if (!regionCode || !isRegionCode(regionCode)) {
