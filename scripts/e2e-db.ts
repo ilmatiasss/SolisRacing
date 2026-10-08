@@ -4,10 +4,13 @@
  * Por seguridad, solo funciona si el nombre de la base de datos contiene "test".
  */
 import { loadEnvConfig } from "@next/env";
+import { eq } from "drizzle-orm";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import path from "node:path";
 import { Client } from "pg";
-import { closeDatabase, getDb } from "../src/lib/db";
+import { closeDatabase, getDb, type Database } from "../src/lib/db";
+import { categories, productFitments, products, vehicleModels } from "../src/lib/db/schema";
+import { rebuildProductSearchText } from "../src/lib/db/search-text";
 import { ensureAdminUser, seedDemoData } from "../src/lib/db/seed";
 
 loadEnvConfig(process.cwd());
@@ -40,7 +43,46 @@ async function main() {
     password: process.env.ADMIN_PASSWORD ?? "clave-de-prueba",
   });
   await seedDemoData(getDb());
+  await addTestFixtures(getDb());
   console.log(`✓ Base de datos de pruebas lista: ${database}`);
+}
+
+/** Datos solo para las pruebas: el catálogo inicial no trae piezas con compatibilidad por auto. */
+async function addTestFixtures(db: Database) {
+  // Una sola unidad para comprobar que un pago fallido devuelve el stock.
+  await db.update(products).set({ stock: 1 }).where(eq(products.slug, "fueltech-ft550"));
+
+  const [category] = await db.select({ id: categories.id }).from(categories).where(eq(categories.slug, "varios"));
+  const models = await db.select({ id: vehicleModels.id, slug: vehicleModels.slug }).from(vehicleModels);
+  const modelId = (slug: string) => {
+    const model = models.find((row) => row.slug === slug);
+    if (!model) throw new Error(`Falta el modelo ${slug} en los datos iniciales`);
+    return model.id;
+  };
+  const fixtures = [
+    { name: "Pieza de prueba para Honda Civic", model: "civic", yearFrom: 1992, yearTo: 2000 },
+    { name: "Pieza de prueba para Lancer Evolution", model: "lancer-evolution", yearFrom: 1996, yearTo: 2007 },
+  ];
+  for (const [index, fixture] of fixtures.entries()) {
+    const [product] = await db
+      .insert(products)
+      .values({
+        name: fixture.name,
+        slug: `pieza-de-prueba-${index + 1}`,
+        categoryId: category?.id ?? null,
+        price: 10000,
+        stock: 5,
+        status: "active",
+      })
+      .returning({ id: products.id });
+    await db.insert(productFitments).values({
+      productId: product.id,
+      modelId: modelId(fixture.model),
+      yearFrom: fixture.yearFrom,
+      yearTo: fixture.yearTo,
+    });
+  }
+  await rebuildProductSearchText(db);
 }
 
 main()

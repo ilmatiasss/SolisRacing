@@ -58,8 +58,8 @@ export default async function HomePage() {
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-zinc-300">
-              FuelTech, sistemas de combustible, sensores, fittings y relojería para tu proyecto. Tienda física en
-              Antofagasta, despachos a todo Chile y asesoría para elegir bien cada pieza.
+              FuelTech, sistemas de combustible, sensores, fittings, relojería y lubricantes Red Line y VP para tu
+              proyecto. Tienda física en Antofagasta, despachos a todo Chile y asesoría para elegir bien cada pieza.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/productos" className={buttonClasses({ size: "lg" })}>

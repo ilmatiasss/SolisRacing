@@ -1,8 +1,8 @@
 /**
  * Tareas de base de datos:
  *   npm run db:migrate  → aplica las migraciones pendientes
- *   npm run db:seed     → carga el catálogo de ejemplo si no hay productos
- *   npm run db:setup    → migraciones + usuario administrador + datos de ejemplo (si SEED_DEMO_DATA=true)
+ *   npm run db:seed     → carga el catálogo inicial si no hay productos
+ *   npm run db:setup    → migraciones + usuario administrador + catálogo inicial (si SEED_DEMO_DATA=true)
  *
  * `db:setup` se ejecuta automáticamente en cada deploy de Vercel (script `vercel-build`).
  */
@@ -41,17 +41,17 @@ async function runAdmin() {
 
 async function runSeed({ onlyIfEnabled }: { onlyIfEnabled: boolean }) {
   if (onlyIfEnabled && process.env.SEED_DEMO_DATA !== "true") {
-    console.log("› SEED_DEMO_DATA no está activado: se omite el catálogo de ejemplo");
+    console.log("› SEED_DEMO_DATA no está activado: se omite el catálogo inicial");
     return;
   }
   const total = await countProducts(getDb());
   if (total > 0) {
-    console.log(`› La tienda ya tiene ${total} productos: no se cargan datos de ejemplo`);
+    console.log(`› La tienda ya tiene ${total} productos: no se carga el catálogo inicial`);
     return;
   }
-  console.log("› Cargando catálogo de ejemplo…");
+  console.log("› Cargando catálogo inicial…");
   await seedDemoData(getDb());
-  console.log("✓ Catálogo de ejemplo cargado");
+  console.log("✓ Catálogo inicial cargado");
 }
 
 async function main() {

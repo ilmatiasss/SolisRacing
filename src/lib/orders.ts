@@ -91,7 +91,8 @@ export async function createOrder(input: CreateOrderInput) {
   const issues: StockIssue[] = [];
   for (const [productId, quantity] of quantities) {
     const product = byId.get(productId);
-    if (!product || product.status !== "active") {
+    // Un producto sin precio (por ejemplo, un borrador "a consultar") nunca se vende por $0.
+    if (!product || product.status !== "active" || product.price <= 0) {
       issues.push({ productId, name: product?.name ?? "Producto no disponible", requested: quantity, available: 0 });
     } else if (product.stock < quantity) {
       issues.push({ productId, name: product.name, requested: quantity, available: product.stock });

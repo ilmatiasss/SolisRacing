@@ -88,6 +88,9 @@ const productSchema = z
     images: jsonArray(z.object({ url: z.string().min(1).max(1000), alt: z.string().trim().max(200).optional().nullable() })),
   })
   .superRefine((data, ctx) => {
+    if (data.status === "active" && !(data.price && data.price > 0)) {
+      ctx.addIssue({ code: "custom", path: ["price"], message: "Para publicar el producto, ingresa un precio mayor a $0." });
+    }
     if (data.compareAtPrice !== null && data.price !== null && data.compareAtPrice <= data.price) {
       ctx.addIssue({
         code: "custom",

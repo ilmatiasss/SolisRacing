@@ -36,7 +36,7 @@ test("crear un producto con compatibilidad lo publica en la tienda", async ({ pa
 });
 
 test("marcar una transferencia como pagada y despacharla", async ({ page }) => {
-  const orderNumber = await placeTransferOrder(page, "tecalan-1-8-para-relojes-por-metro");
+  const orderNumber = await placeTransferOrder(page, "pod-para-reloj-de-52-mm");
   await loginAsAdmin(page);
   await page.goto(`/admin/pedidos/${orderNumber.replace("SR-", "")}`);
 
@@ -61,4 +61,17 @@ test("los cambios de configuración se reflejan en la tienda", async ({ page }) 
   await expect(page.getByText("Configuración guardada")).toBeVisible();
   await page.goto("/");
   await expect(page.getByText("Envío gratis a todo Chile este fin de semana")).toBeVisible();
+});
+
+test("un borrador sin precio no se puede publicar", async ({ page }) => {
+  await loginAsAdmin(page);
+  await page.goto("/admin/productos?q=Fitting ORB");
+  await page.getByRole("link", { name: "Fitting ORB" }).click();
+  await page.waitForURL(/\/admin\/productos\/\d+/);
+  await page.locator("#status").selectOption("active");
+  await page.locator("#price").fill("0");
+  await page.getByRole("button", { name: "Guardar cambios" }).click();
+  await expect(page.getByText("Para publicar el producto, ingresa un precio mayor a $0.")).toBeVisible();
+  await page.goto("/productos?q=fitting orb");
+  await expect(page.getByRole("link", { name: "Fitting ORB" })).toHaveCount(0);
 });

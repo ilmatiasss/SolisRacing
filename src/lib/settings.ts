@@ -69,7 +69,7 @@ export const DEFAULT_SHIPPING_RATES: Record<RegionCode, number> = {
 
 export const DEFAULT_SETTINGS: StoreSettings = {
   storeName: "Solis Racing Parts",
-  tagline: "Tienda física de autopartes de performance en Antofagasta: FuelTech, combustible, sensores, fittings y relojería. Despachos a todo Chile.",
+  tagline: "Tienda física de autopartes de performance en Antofagasta: FuelTech, combustible, sensores, fittings, relojería y lubricantes Red Line y VP. Despachos a todo Chile.",
   announcement: "Tienda física en Antofagasta · Despachos a todo Chile",
   // Sin correo por defecto: se configura en el panel (Configuración).
   email: "",

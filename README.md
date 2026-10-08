@@ -49,9 +49,9 @@ Next.js 16 (App Router, Cache Components), React 19, TypeScript, Tailwind CSS 4,
    | `AUTH_SECRET` | Texto aleatorio largo (por ejemplo, el resultado de `openssl rand -base64 32`) |
    | `NEXT_PUBLIC_SITE_URL` | La URL de tu tienda, ej. `https://www.tudominio.cl` |
    | `WEBPAY_ENVIRONMENT` | `integration` mientras pruebas, `production` para cobrar |
-   | `SEED_DEMO_DATA` | `true` si quieres partir con el catálogo de ejemplo (armado con las líneas de su Instagram, precios referenciales), `false` para partir vacío |
+   | `SEED_DEMO_DATA` | `true` para cargar el catálogo inicial (productos y precios de su catálogo de WhatsApp, con stock provisorio de 5 unidades), `false` para partir vacío |
 
-5. **Deploy**. En cada publicación, Vercel ejecuta `npm run vercel-build`, que aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga los datos de ejemplo (si corresponde) antes de compilar.
+5. **Deploy**. En cada publicación, Vercel ejecuta `npm run vercel-build`, que aplica las migraciones de la base de datos, crea el usuario administrador (si no existe) y carga el catálogo inicial (si corresponde) antes de compilar.
 6. Entra a `https://tu-dominio/admin` con `ADMIN_EMAIL` y `ADMIN_PASSWORD`, completa **Configuración** (correo, dirección, datos bancarios, tarifas; el WhatsApp y el Instagram ya vienen con los de Solis Racing Parts) y carga tus productos.
 7. **Dominio propio**: en *Settings → Domains* agrega tu dominio (un `.cl` se compra en [NIC Chile](https://www.nic.cl)).
 
@@ -87,7 +87,7 @@ Requisitos: Node.js 20.9 o superior y PostgreSQL 16.
 ```bash
 npm install
 cp .env.example .env          # completa DATABASE_URL y el resto
-npm run db:setup              # migraciones + administrador + catálogo de ejemplo
+npm run db:setup              # migraciones + administrador + catálogo inicial
 npm run dev                   # http://localhost:3000 (panel en /admin)
 ```
 
@@ -104,7 +104,7 @@ Para probar pagos sin conexión a Transbank, usa `WEBPAY_ENVIRONMENT=mock`: el c
 | `npm run test:e2e` | Pruebas de punta a punta: compras con Webpay simulado, transferencias y panel. Usan una base de datos de pruebas que se reinicia (`E2E_DATABASE_URL`, por defecto `solisracing_test`) |
 | `npm run db:generate` | Genera una migración después de cambiar `src/lib/db/schema.ts` |
 | `npm run db:migrate` | Aplica migraciones pendientes |
-| `npm run db:seed` | Carga el catálogo de ejemplo si no hay productos |
+| `npm run db:seed` | Carga el catálogo inicial si no hay productos |
 | `npm run db:studio` | Explorador visual de la base de datos |
 
 ## Estructura
@@ -117,7 +117,7 @@ src/
   components/        Componentes de la tienda (store/), del panel (admin/) y base (ui/)
   lib/data/          Consultas a la base de datos (las públicas se cachean)
   lib/actions/       Acciones del servidor (checkout, panel, formularios)
-  lib/db/            Esquema, datos de ejemplo y conexión
+  lib/db/            Esquema, catálogo inicial y conexión
   lib/orders.ts      Pedidos: reserva y devolución de stock, pagos, estados
   lib/payments/      Integración con Webpay Plus
 drizzle/             Migraciones SQL
@@ -128,7 +128,7 @@ e2e/, tests/unit/    Pruebas
 ## Antes de lanzar
 
 - El logo está recortado de la foto de perfil de Instagram: cuando tengas el archivo original en buena resolución, reemplaza `src/assets/logo-solis-racing-parts.png`, `src/app/icon.png`, `src/app/apple-icon.png` y la imagen para compartir `src/app/opengraph-image.jpg`.
-- Borra o edita los productos y servicios de ejemplo, y sube fotos reales (idealmente con fondo blanco).
+- Revisa el catálogo inicial: ajusta el stock real (viene en 5 unidades por producto), ponle precio y publica los borradores sin precio (Fitting ORB y abrazaderas dobles), sube las fotos (idealmente con fondo blanco) y revisa los textos de los servicios.
 - Completa la configuración de la tienda: correo (viene vacío y ahí llegan los avisos de pedidos), confirma dirección y horario (vienen de Instagram: Ausonia 244, Antofagasta), razón social, RUT, datos bancarios y tarifas de despacho. El resumen del panel te recuerda lo que falta.
 - Revisa con un asesor los textos de **términos, privacidad y despachos y devoluciones** (son una base general y deben ajustarse a tu empresa).
 - Activa Webpay en producción y configura el correo SMTP.
