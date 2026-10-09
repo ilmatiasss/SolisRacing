@@ -11,24 +11,46 @@ export function NeonSign({ children, delay = 2.4, className }: { children: strin
   return (
     <span className={cn("neon-sign", className)} style={{ "--neon-delay": `${delay}s` } as CSSProperties}>
       <span className="neon-sign__tube">{children}</span>
+      {/* Dos capas con una animación cada una (encendido y titileo): así las anima la GPU. */}
       <span className="neon-sign__light" aria-hidden="true">
-        {children}
+        <span className="neon-sign__glow">{children}</span>
       </span>
     </span>
   );
 }
 
-/** Texto con "falla de señal" (capas roja y cian desplazadas) al cargar y cada 7 segundos. */
+// Franjas del glitch: posición (top/alto en % del texto), desplazamiento, color y opacidad fijos.
+// Cada franja recorta con overflow (no clip-path, que obliga a animar en el procesador)
+// y el CSS solo la prende y apaga, una tras otra (paso 1 a 4).
+const GLITCH_SLICES = [
+  { step: 1, color: "#ff2a2a", opacity: 0.9, top: 8, height: 22, shift: "-7px -1px" },
+  { step: 2, color: "#ff2a2a", opacity: 0.9, top: 62, height: 26, shift: "6px 1px" },
+  { step: 3, color: "#ff2a2a", opacity: 0.9, top: 34, height: 22, shift: "-4px 0" },
+  { step: 4, color: "#ff2a2a", opacity: 0.9, top: 80, height: 16, shift: "5px -1px" },
+  { step: 1, color: "#22d3ee", opacity: 0.8, top: 55, height: 20, shift: "6px 1px" },
+  { step: 2, color: "#22d3ee", opacity: 0.8, top: 15, height: 20, shift: "-5px 0" },
+  { step: 3, color: "#22d3ee", opacity: 0.8, top: 72, height: 20, shift: "4px -1px" },
+  { step: 4, color: "#22d3ee", opacity: 0.8, top: 28, height: 20, shift: "-6px 1px" },
+];
+
+/** Texto con "falla de señal" (franjas roja y cian desplazadas) al cargar y cada 7 segundos. */
 export function GlitchText({ children, className }: { children: string; className?: string }) {
   return (
     <span className={cn("glitch", className)}>
       {children}
-      <span className="glitch__layer glitch__layer--a" aria-hidden="true">
-        {children}
-      </span>
-      <span className="glitch__layer glitch__layer--b" aria-hidden="true">
-        {children}
-      </span>
+      {GLITCH_SLICES.map((slice) => (
+        <span
+          key={`${slice.color}-${slice.top}`}
+          className={`glitch__slice glitch__slice--${slice.step}`}
+          style={{ color: slice.color, top: `${slice.top}%`, height: `${slice.height}%`, translate: slice.shift }}
+          aria-hidden="true"
+        >
+          {/* El texto completo sube lo mismo que baja la franja: solo se ve esa banda. */}
+          <span className="glitch__text" style={{ translate: `0 -${slice.top}%`, opacity: slice.opacity }}>
+            {children}
+          </span>
+        </span>
+      ))}
     </span>
   );
 }

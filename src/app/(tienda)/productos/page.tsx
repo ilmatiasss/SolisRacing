@@ -85,7 +85,7 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
             : "Repuestos y accesorios de performance con despacho a todo Chile.")
         }
       >
-        <div className="mt-8 max-w-4xl rounded-2xl border border-white/10 bg-zinc-950/70 p-4 backdrop-blur">
+        <div className="mt-8 max-w-4xl rounded-2xl border border-white/10 bg-zinc-950/90 p-4 md:bg-zinc-950/70 md:backdrop-blur">
           <p className="mb-3 flex items-center gap-2 text-sm font-semibold">
             <Car className="size-4 text-brand-500" />
             {vehicleLabel ? "Cambiar auto" : "Filtra por tu auto"}

@@ -57,19 +57,16 @@ export default async function HomePage() {
       {/* Portada */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="bg-speedlines absolute inset-y-0 -right-[300px] -left-[300px] animate-speedlines" />
+          <div className="bg-speedlines absolute inset-y-0 -right-[260px] left-0 animate-speedlines" />
         </div>
         <NeonFloor className="h-[32%] opacity-45 sm:h-[42%] sm:opacity-60" />
         <LightTrails />
         <HeroSpotlight />
         <div
-          className="absolute top-1/2 right-[-10%] size-[42rem] -translate-y-1/2 animate-glow rounded-full bg-brand-600/25 blur-[120px]"
+          className="glow-hero-a absolute top-1/2 right-[-10%] size-[42rem] -translate-y-1/2 animate-glow"
           aria-hidden="true"
         />
-        <div
-          className="absolute -top-48 left-[-15%] size-[30rem] animate-glow rounded-full bg-red-600/15 blur-[110px] [animation-delay:-3s]"
-          aria-hidden="true"
-        />
+        <div className="glow-hero-b absolute -top-48 left-[-15%] size-[30rem] animate-glow [animation-delay:-3s]" aria-hidden="true" />
         {/* Barras inclinadas de neón */}
         <div
           className="absolute inset-y-0 right-[8%] hidden w-40 -skew-x-[20deg] animate-neon-pulse border-l-2 border-red-500/70 bg-brand-600/10 shadow-[0_0_60px_rgba(255,0,0,0.3)] lg:block"
@@ -99,13 +96,17 @@ export default async function HomePage() {
               proyecto. Tienda física en Antofagasta, despachos a todo Chile y asesoría para elegir bien cada pieza.
             </p>
             <div className="mt-8 flex animate-rise flex-col gap-3 [animation-delay:460ms] sm:flex-row sm:flex-wrap">
-              <Link
-                href={catalog.length > 0 ? "#catalogo" : "/productos"}
-                className={buttonClasses({ size: "lg", className: "neon-cta group" })}
-              >
-                Ver catálogo
-                <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-              </Link>
+              <span className="relative flex">
+                <span aria-hidden="true" className="neon-cta-glow absolute inset-0 rounded-xl" />
+                <span aria-hidden="true" className="neon-cta-glow neon-cta-glow--peak absolute inset-0 rounded-xl" />
+                <Link
+                  href={catalog.length > 0 ? "#catalogo" : "/productos"}
+                  className={buttonClasses({ size: "lg", className: "neon-cta group w-full" })}
+                >
+                  Ver catálogo
+                  <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </span>
               <Link
                 href="/servicios"
                 className={buttonClasses({
@@ -128,7 +129,8 @@ export default async function HomePage() {
           {spotlight.length > 0 && (
             <div className="relative animate-rise [grid-area:show] [animation-delay:260ms]">
               <Tachometer animated className="pointer-events-none absolute -top-24 -right-16 hidden w-[26rem] opacity-60 lg:block" />
-              <div className="neon-beam relative rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-2xl shadow-black/50 backdrop-blur sm:p-7">
+              <div className="neon-beam relative rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-2xl shadow-black/50 sm:p-7">
+                <span aria-hidden="true" className="neon-beam__ring" />
                 <div className="mb-5 flex items-center justify-between gap-3">
                   <p className="flex items-center gap-2.5 font-display text-sm font-bold tracking-[0.2em] text-brand-500 uppercase">
                     <span className="relative flex size-2.5" aria-hidden="true">
@@ -155,6 +157,7 @@ export default async function HomePage() {
                     Despacho gratis en compras sobre {formatCLP(freeShipping)}
                   </p>
                 )}
+                <span aria-hidden="true" className="neon-halo absolute inset-0 animate-neon-pulse rounded-[inherit]" />
               </div>
             </div>
           )}
@@ -163,10 +166,10 @@ export default async function HomePage() {
       </section>
 
       {/* Bandas en movimiento */}
-      <section aria-label="Lo que ofrecemos" className="relative h-40 overflow-hidden sm:h-48">
+      <section aria-label="Lo que ofrecemos" className="cv-auto relative h-40 overflow-hidden sm:h-48">
         {shelves.length > 0 && (
           <div className="absolute top-[30%] -left-[5%] w-[110%] -translate-y-1/2 rotate-[2.5deg] bg-zinc-100 py-2.5 text-zinc-950 shadow-xl shadow-black/40 sm:top-1/2 sm:py-3">
-            <Marquee reverse seconds={55} repeat={3}>
+            <Marquee reverse repeat={3}>
               {shelves.map(({ category }) => (
                 <span
                   key={category.slug}
@@ -185,7 +188,7 @@ export default async function HomePage() {
             shelves.length > 0 ? "top-[70%]" : "top-1/2",
           )}
         >
-          <Marquee seconds={38} repeat={3}>
+          <Marquee repeat={3}>
             {PERKS.map((perk) => (
               <span
                 key={perk}
@@ -201,7 +204,7 @@ export default async function HomePage() {
 
       {/* Catálogo por categoría */}
       {catalog.length > 0 && (
-        <section id="catalogo" className="scroll-mt-32 pt-10 pb-16 sm:pb-20">
+        <section id="catalogo" className="cv-auto scroll-mt-32 pt-10 pb-16 sm:pb-20">
           <Container className="reveal">
             <SectionHeading
               eyebrow="Catálogo"
@@ -211,6 +214,7 @@ export default async function HomePage() {
             />
             <CatalogTabs
               label="Categorías del catálogo"
+              products={catalog}
               tabs={[
                 {
                   id: "destacados",
@@ -220,7 +224,9 @@ export default async function HomePage() {
                       Destacados
                     </>
                   ),
-                  panel: <Shelf products={spotlight} href="/productos" linkLabel="Ver todo el catálogo" />,
+                  productIds: spotlight.map((product) => product.id),
+                  href: "/productos",
+                  linkLabel: "Ver todo el catálogo",
                 },
                 ...shelves.map(({ category, products }) => ({
                   id: category.slug,
@@ -231,13 +237,9 @@ export default async function HomePage() {
                       <span className="text-xs opacity-60">{products.length}</span>
                     </>
                   ),
-                  panel: (
-                    <Shelf
-                      products={products.slice(0, 8)}
-                      href={`/productos?categoria=${category.slug}`}
-                      linkLabel={products.length > 8 ? `Ver los ${products.length} de ${category.name}` : `Ver ${category.name}`}
-                    />
-                  ),
+                  productIds: products.slice(0, 8).map((product) => product.id),
+                  href: `/productos?categoria=${category.slug}`,
+                  linkLabel: products.length > 8 ? `Ver los ${products.length} de ${category.name}` : `Ver ${category.name}`,
                 })),
               ]}
             />
@@ -247,9 +249,9 @@ export default async function HomePage() {
 
       {/* Servicios */}
       {services.length > 0 && (
-        <section className="relative overflow-hidden border-y border-line bg-zinc-950">
+        <section className="cv-auto relative overflow-hidden border-y border-line bg-zinc-950">
           <div className="bg-checkered absolute inset-0 opacity-40" aria-hidden="true" />
-          <div className="absolute -bottom-32 -left-32 size-96 animate-glow rounded-full bg-brand-600/15 blur-3xl" aria-hidden="true" />
+          <div className="glow-services absolute -bottom-32 -left-32 size-96 animate-glow" aria-hidden="true" />
           <Container className="reveal relative py-16 sm:py-20">
             <SectionHeading
               eyebrow="Servicios"
@@ -262,7 +264,7 @@ export default async function HomePage() {
                 <Link
                   key={service.slug}
                   href={`/servicios#${service.slug}`}
-                  className="group flex flex-col rounded-2xl border border-line bg-surface/80 p-6 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-brand-600/60 hover:shadow-xl hover:shadow-brand-950/40"
+                  className="group flex flex-col rounded-2xl border border-line bg-surface/95 p-6 transition duration-300 md:bg-surface/80 md:backdrop-blur hover:-translate-y-1 hover:border-brand-600/60 hover:shadow-xl hover:shadow-brand-950/40"
                 >
                   <div className="flex size-12 items-center justify-center rounded-xl bg-brand-600/15 text-brand-500 transition duration-500 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white">
                     <DynamicIcon name={service.icon} className="size-6" />
@@ -284,7 +286,7 @@ export default async function HomePage() {
 
       {/* Ofertas */}
       {onSale.length > 0 && (
-        <Container className="reveal py-16 sm:py-20">
+        <Container className="cv-auto reveal py-16 sm:py-20">
           <SectionHeading
             eyebrow="Ofertas"
             title="Precios en boxes"
@@ -296,7 +298,7 @@ export default async function HomePage() {
       )}
 
       {/* Beneficios */}
-      <Container className={onSale.length > 0 ? "reveal pb-4" : "reveal py-16 sm:py-20"}>
+      <Container className={onSale.length > 0 ? "cv-auto reveal pb-4" : "cv-auto reveal py-16 sm:py-20"}>
         <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: Truck, title: "Despacho a todo Chile", text: "Enviamos por courier o retira en nuestra tienda de Antofagasta." },
@@ -317,10 +319,10 @@ export default async function HomePage() {
 
       {/* Instagram */}
       {settings.instagram && (
-        <Container className="reveal pt-16">
+        <Container className="cv-auto reveal pt-16">
           <div className="relative overflow-hidden rounded-3xl border border-line bg-linear-to-br from-[#833ab4]/25 via-[#fd1d1d]/15 to-[#fcb045]/20 p-8 sm:p-10">
             <div className="bg-speedlines absolute inset-0" aria-hidden="true" />
-            <div className="absolute -top-20 -right-20 size-64 animate-glow rounded-full bg-[#fd1d1d]/20 blur-3xl" aria-hidden="true" />
+            <div className="glow-instagram absolute -top-20 -right-20 size-64 animate-glow" aria-hidden="true" />
             <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-5">
                 <span className="flex size-16 shrink-0 animate-float items-center justify-center rounded-2xl bg-white/10">
@@ -346,12 +348,11 @@ export default async function HomePage() {
 
       {/* Marcas */}
       {brands.length > 0 && (
-        <section aria-labelledby="marcas-titulo" className="pt-16">
+        <section aria-labelledby="marcas-titulo" className="cv-auto pt-16">
           <p id="marcas-titulo" className="text-center text-xs font-bold tracking-[0.25em] text-muted uppercase">
             Marcas que trabajamos
           </p>
           <Marquee
-            seconds={30}
             repeat={4}
             className="mt-6 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
           >
@@ -390,7 +391,8 @@ function SpotlightSlide({ product, eager }: { product: ProductCardData; eager: b
       className="group/slide grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] items-center gap-4 sm:gap-6"
     >
       <div className="relative">
-        <div className="absolute inset-4 rounded-full bg-brand-600/30 blur-2xl" aria-hidden="true" />
+        {/* Equivale al círculo desenfocado de antes (inset-4 con blur de 40px), sin filtro. */}
+        <div className="glow-slide absolute -inset-[104px]" aria-hidden="true" />
         <ProductImage
           src={product.imageUrl}
           alt={product.imageAlt ?? product.name}
@@ -416,20 +418,6 @@ function SpotlightSlide({ product, eager }: { product: ProductCardData; eager: b
         </span>
       </div>
     </Link>
-  );
-}
-
-function Shelf({ products, href, linkLabel }: { products: ProductCardData[]; href: string; linkLabel: string }) {
-  return (
-    <>
-      <ProductGrid products={products} animate />
-      <div className="mt-8 flex justify-center">
-        <Link href={href} className={buttonClasses({ variant: "outline", size: "lg", className: "group" })}>
-          {linkLabel}
-          <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
-    </>
   );
 }
 

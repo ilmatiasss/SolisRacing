@@ -60,7 +60,7 @@ export function PageHeader({
     <div className="relative overflow-hidden border-b border-line bg-zinc-950">
       <div className="bg-speedlines absolute inset-0" aria-hidden="true" />
       <div
-        className="absolute -top-24 right-0 size-72 rounded-full bg-brand-600/15 blur-3xl"
+        className="glow-page-header absolute -top-72 -right-48 size-[42rem]"
         aria-hidden="true"
       />
       <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">

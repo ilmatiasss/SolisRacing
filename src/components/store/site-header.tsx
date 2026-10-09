@@ -21,7 +21,11 @@ export async function SiteHeader() {
     <>
       {settings.announcement && (
         <div className="relative z-50 bg-brand-600 text-white shadow-[0_0_24px_rgba(255,30,30,0.5)]">
-          <Marquee seconds={30} repeat={4} className="h-9 items-center text-xs font-semibold tracking-wide sm:text-sm">
+          <Marquee
+            repeat={4}
+            mobileRepeat={2}
+            className="h-9 items-center text-xs font-semibold tracking-wide sm:text-sm"
+          >
             <p className="flex items-center gap-6 px-6 whitespace-nowrap [text-shadow:0_0_10px_rgba(255,255,255,0.45)]">
               {settings.announcement}
               <Zap className="size-3.5 fill-current text-signal-400" aria-hidden="true" />
@@ -29,7 +33,7 @@ export async function SiteHeader() {
           </Marquee>
         </div>
       )}
-      <header className="sticky top-0 z-40 border-b border-white/8 bg-zinc-950/85 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-white/8 bg-zinc-950/97 md:bg-zinc-950/85 md:backdrop-blur-md">
         <Container className="flex h-16 items-center gap-2 lg:gap-6">
           <MobileMenu categories={menuCategories} />
           <Link href="/" aria-label="Solis Racing Parts, ir al inicio" className="shrink-0">

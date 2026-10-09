@@ -1,15 +1,31 @@
 "use client";
 
-import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { buttonClasses } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import type { ProductCardData } from "@/lib/data/catalog";
+import { ProductGrid } from "./product-card";
 
-type Tab = { id: string; label: ReactNode; panel: ReactNode };
+type Tab = {
+  id: string;
+  label: ReactNode;
+  /** Productos de la pestaña (ids de `products`, en orden). */
+  productIds: number[];
+  href: string;
+  linkLabel: string;
+};
 
-/** Pestañas accesibles (flechas, Inicio y Fin) para recorrer el catálogo por categoría en la portada. */
-export function CatalogTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
+/**
+ * Pestañas accesibles (flechas, Inicio y Fin) para recorrer el catálogo por categoría en la portada.
+ * Recibe la lista de productos una sola vez y arma cada pestaña al vuelo, así la página pesa poco.
+ */
+export function CatalogTabs({ tabs, products, label }: { tabs: Tab[]; products: ProductCardData[]; label: string }) {
   const [active, setActive] = useState(0);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const baseId = useId();
+  const byId = useMemo(() => new Map(products.map((product) => [product.id, product])), [products]);
 
   const select = (index: number, focus = false) => {
     const next = (index + tabs.length) % tabs.length;
@@ -29,6 +45,9 @@ export function CatalogTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
 
   const current = tabs[active];
   if (!current) return null;
+  const shelf = current.productIds
+    .map((id) => byId.get(id))
+    .filter((product): product is ProductCardData => Boolean(product));
 
   return (
     <div>
@@ -72,7 +91,13 @@ export function CatalogTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
         aria-labelledby={`${baseId}-tab-${current.id}`}
         className="mt-6"
       >
-        {current.panel}
+        <ProductGrid products={shelf} animate />
+        <div className="mt-8 flex justify-center">
+          <Link href={current.href} className={buttonClasses({ variant: "outline", size: "lg", className: "group" })}>
+            {current.linkLabel}
+            <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
       </div>
     </div>
   );

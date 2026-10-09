@@ -49,7 +49,7 @@ export function ProductImage({
       )}
     >
       <div className="bg-speedlines absolute inset-0" />
-      <div className="absolute -right-6 -bottom-6 size-32 rounded-full bg-brand-600/20 blur-2xl" />
+      <div className="glow-placeholder absolute -right-36 -bottom-36 size-92" />
       <DynamicIcon name={icon} className="relative size-1/3 text-zinc-300/80" strokeWidth={1.25} />
       <LogoBadge size={22} className="absolute bottom-3 left-3 opacity-70" />
     </div>

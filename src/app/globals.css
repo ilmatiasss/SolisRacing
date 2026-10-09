@@ -34,19 +34,27 @@
   --color-signal-400: #ffd60a;
   --color-signal-500: #f5c400;
 
-  /* Animaciones (las desactiva "reducir movimiento" del sistema, ver al final). */
-  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
-  --animate-rise: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  --animate-card-in: card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  --animate-shine-text: shine-text 5s linear infinite;
-  --animate-glow: glow 6s ease-in-out infinite;
-  --animate-speedlines: speedlines 2.4s linear infinite;
-  --animate-needle: needle-rev 2.2s cubic-bezier(0.3, 0.7, 0.2, 1) 0.4s both, needle-life 6s ease-in-out 2.6s infinite;
-  --animate-redline: redline 6s ease-in-out 2.6s infinite;
-  --animate-neon-pulse: neon-pulse 3s ease-in-out infinite;
+  /*
+   * Animaciones (las desactiva "reducir movimiento" del sistema, ver al final).
+   * - Las de entrada usan `backwards`: al terminar dejan de aplicarse (el estilo final es el normal
+   *   del elemento) y el navegador suelta su capa en la GPU.
+   * - Las infinitas repiten varios ciclos idénticos en cada vuelta. React escucha `animationiteration`
+   *   en todo el documento, así que en cada fin de vuelta el navegador despierta al hilo principal
+   *   (estilos, layout y pintado) aunque la animación corra en la GPU. Se ven igual y lo despiertan
+   *   varias veces menos.
+   */
+  --animate-marquee: marquee 40s linear infinite; /* la duración real la pone .marquee-track */
+  --animate-rise: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-card-in: card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-glow: glow 24s ease-in-out infinite; /* 4 ciclos de 6 s */
+  --animate-speedlines: speedlines 24s linear infinite; /* 10 ciclos de 2,4 s */
+  --animate-needle:
+    needle-rev 2.2s cubic-bezier(0.3, 0.7, 0.2, 1) 0.4s both, needle-life 24s ease-in-out 2.6s infinite; /* 4 ciclos de 6 s */
+  --animate-redline: redline 24s ease-in-out 2.6s infinite; /* 4 ciclos de 6 s */
+  --animate-neon-pulse: neon-pulse 24s ease-in-out infinite; /* 8 ciclos de 3 s */
   --animate-progress: progress var(--progress-duration, 4s) linear both;
-  --animate-ping-slow: ping-slow 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
-  --animate-float: float 6s ease-in-out infinite;
+  --animate-ping-slow: ping-slow 19.2s cubic-bezier(0, 0, 0.2, 1) infinite; /* 8 ciclos de 2,4 s */
+  --animate-float: float 24s ease-in-out infinite; /* 4 ciclos de 6 s */
 
   @keyframes marquee {
     from {
@@ -76,26 +84,53 @@
       transform: none;
     }
   }
-  @keyframes shine-text {
-    to {
-      background-position: 200% center;
-    }
-  }
   @keyframes glow {
     0%,
+    25%,
+    50%,
+    75%,
     100% {
       opacity: 0.7;
       transform: translate(0, 0) scale(1);
     }
-    50% {
+    12.5%,
+    37.5%,
+    62.5%,
+    87.5% {
       opacity: 1;
       transform: translate(-4%, 3%) scale(1.08);
     }
   }
-  /* Las líneas van a 115°: 10 períodos de 23px equivalen a 253.78px en horizontal (bucle sin saltos). */
+  /*
+   * Las líneas van a 115°: 10 períodos de 23px equivalen a 253.78px en horizontal (bucle sin saltos).
+   * Cada ciclo vuelve a 0 con un salto instantáneo (`step-start` en el tramo de 0,001%), igual que
+   * el fin de vuelta de antes.
+   */
   @keyframes speedlines {
-    to {
+    0%,
+    10.001%,
+    20.001%,
+    30.001%,
+    40.001%,
+    50.001%,
+    60.001%,
+    70.001%,
+    80.001%,
+    90.001% {
+      transform: translateX(0);
+    }
+    10%,
+    20%,
+    30%,
+    40%,
+    50%,
+    60%,
+    70%,
+    80%,
+    90%,
+    100% {
       transform: translateX(-253.78px);
+      animation-timing-function: step-start;
     }
   }
   @keyframes needle-rev {
@@ -112,49 +147,99 @@
       transform: rotate(0deg);
     }
   }
-  /* Ralentí con un "acelerón" hasta la zona roja cada 6 segundos. */
+  /* Ralentí con un "acelerón" hasta la zona roja cada 6 segundos (4 ciclos por vuelta). */
   @keyframes needle-life {
     0%,
+    25%,
+    50%,
+    75%,
     100% {
       transform: rotate(0deg);
     }
-    20% {
+    5%,
+    30%,
+    55%,
+    80% {
       transform: rotate(4deg);
     }
-    40% {
+    10%,
+    35%,
+    60%,
+    85% {
       transform: rotate(-3deg);
     }
-    60% {
+    15%,
+    40%,
+    65%,
+    90% {
       transform: rotate(2deg);
     }
-    72% {
+    18%,
+    43%,
+    68%,
+    93% {
       transform: rotate(36deg);
     }
-    78% {
+    19.5%,
+    44.5%,
+    69.5%,
+    94.5% {
       transform: rotate(30deg);
     }
-    88% {
+    22%,
+    47%,
+    72%,
+    97% {
       transform: rotate(-5deg);
     }
   }
   @keyframes redline {
     0%,
-    66%,
-    92%,
+    16.5%,
+    23%,
+    25%,
+    41.5%,
+    48%,
+    50%,
+    66.5%,
+    73%,
+    75%,
+    91.5%,
+    98%,
     100% {
       opacity: 0.55;
     }
-    72%,
-    82% {
+    18%,
+    20.5%,
+    43%,
+    45.5%,
+    68%,
+    70.5%,
+    93%,
+    95.5% {
       opacity: 1;
     }
   }
   @keyframes neon-pulse {
     0%,
+    12.5%,
+    25%,
+    37.5%,
+    50%,
+    62.5%,
+    75%,
+    87.5%,
     100% {
       opacity: 0.55;
     }
-    50% {
+    6.25%,
+    18.75%,
+    31.25%,
+    43.75%,
+    56.25%,
+    68.75%,
+    81.25%,
+    93.75% {
       opacity: 1;
     }
   }
@@ -166,19 +251,55 @@
       transform: scaleX(1);
     }
   }
+  /* Cada ciclo: crece y se desvanece en el 75% del tiempo, espera y vuelve al inicio de golpe. */
   @keyframes ping-slow {
+    0%,
+    12.501%,
+    25.001%,
+    37.501%,
+    50.001%,
+    62.501%,
+    75.001%,
+    87.501% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    9.375%,
+    21.875%,
+    34.375%,
+    46.875%,
+    59.375%,
+    71.875%,
+    84.375%,
+    96.875% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+    12.5%,
+    25%,
+    37.5%,
+    50%,
+    62.5%,
     75%,
+    87.5%,
     100% {
       transform: scale(1.6);
       opacity: 0;
+      animation-timing-function: step-start;
     }
   }
   @keyframes float {
     0%,
+    25%,
+    50%,
+    75%,
     100% {
       transform: translateY(0);
     }
-    50% {
+    12.5%,
+    37.5%,
+    62.5%,
+    87.5% {
       transform: translateY(-10px);
     }
   }
@@ -282,6 +403,10 @@ body:has(.theme-admin) {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  animation: neon-on 1.5s steps(1, end) var(--neon-delay, 2.4s) backwards;
+}
+.neon-sign__glow {
+  display: block;
   color: #fff1ee;
   text-shadow:
     0 0 2px #fff,
@@ -289,9 +414,7 @@ body:has(.theme-admin) {
     0 0 16px #ff2a2a,
     0 0 30px #ff0000,
     0 0 52px rgb(255 0 0 / 0.6);
-  animation:
-    neon-on 1.5s steps(1, end) var(--neon-delay, 2.4s) both,
-    neon-buzz 8s steps(1, end) calc(var(--neon-delay, 2.4s) + 1.5s) infinite;
+  animation: neon-buzz 8s steps(1, end) calc(var(--neon-delay, 2.4s) + 1.5s) infinite;
 }
 @keyframes neon-on {
   0% {
@@ -339,78 +462,74 @@ body:has(.theme-admin) {
   }
 }
 
-/* Texto con falla de señal (glitch) al cargar y cada 7 segundos. */
+/* Texto con falla de señal (glitch) al cargar y cada 7 segundos. Cada franja tiene un recorte y
+ * un desplazamiento fijos (ver GlitchText) y solo se prende y apaga con opacidad (lo anima la GPU). */
 .glitch {
   position: relative;
   display: inline-block;
 }
-.glitch__layer {
+.glitch__slice {
   position: absolute;
-  inset: 0;
+  inset-inline: 0;
+  overflow: hidden;
   pointer-events: none;
   opacity: 0;
 }
-.glitch__layer--a {
-  color: #ff2a2a;
-  animation: glitch-a 7s steps(1, end) 0.15s infinite;
+.glitch__text {
+  display: block;
+  white-space: nowrap;
 }
-.glitch__layer--b {
-  color: #22d3ee;
-  animation: glitch-b 7s steps(1, end) 0.15s infinite;
+/* Cada regla lleva la animación completa: un `animation:` sin nombre se minifica a `none`. */
+.glitch__slice--1 {
+  animation: glitch-1 7s steps(1, end) 0.15s infinite;
 }
-@keyframes glitch-a {
+.glitch__slice--2 {
+  animation: glitch-2 7s steps(1, end) 0.15s infinite;
+}
+.glitch__slice--3 {
+  animation: glitch-3 7s steps(1, end) 0.15s infinite;
+}
+.glitch__slice--4 {
+  animation: glitch-4 7s steps(1, end) 0.15s infinite;
+}
+/* Cuatro cortes seguidos de 105 ms cada uno; la opacidad de cada color va en .glitch__text. */
+@keyframes glitch-1 {
   0% {
-    opacity: 0.9;
-    clip-path: inset(8% 0 70% 0);
-    transform: translate(-7px, -1px);
+    opacity: 1;
   }
   1.5% {
-    clip-path: inset(62% 0 12% 0);
-    transform: translate(6px, 1px);
-  }
-  3% {
-    clip-path: inset(34% 0 44% 0);
-    transform: translate(-4px, 0);
-  }
-  4.5% {
-    clip-path: inset(80% 0 4% 0);
-    transform: translate(5px, -1px);
-  }
-  6%,
-  100% {
     opacity: 0;
-    clip-path: inset(50% 0 50% 0);
-    transform: none;
   }
 }
-@keyframes glitch-b {
-  0% {
-    opacity: 0.8;
-    clip-path: inset(55% 0 25% 0);
-    transform: translate(6px, 1px);
-  }
+@keyframes glitch-2 {
   1.5% {
-    clip-path: inset(15% 0 65% 0);
-    transform: translate(-5px, 0);
+    opacity: 1;
   }
   3% {
-    clip-path: inset(72% 0 8% 0);
-    transform: translate(4px, -1px);
+    opacity: 0;
+  }
+}
+@keyframes glitch-3 {
+  3% {
+    opacity: 1;
   }
   4.5% {
-    clip-path: inset(28% 0 52% 0);
-    transform: translate(-6px, 1px);
-  }
-  6%,
-  100% {
     opacity: 0;
-    clip-path: inset(50% 0 50% 0);
-    transform: none;
+  }
+}
+@keyframes glitch-4 {
+  4.5% {
+    opacity: 1;
+  }
+  6% {
+    opacity: 0;
   }
 }
 
-/* Luces de partida (como en la F1): se encienden de a una y se apagan juntas cada 8 s. */
+/* Luces de partida (como en la F1): se encienden de a una y se apagan juntas cada 8 s.
+ * La luz encendida es una capa encima que solo cambia de opacidad (lo anima la GPU). */
 .start-light {
+  position: relative;
   display: block;
   width: 0.7rem;
   height: 0.7rem;
@@ -418,69 +537,71 @@ body:has(.theme-admin) {
   background: #2a0b0b;
   box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
 }
-.start-light:nth-child(1) {
+.start-light::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #ff2a2a;
+  box-shadow:
+    0 0 6px #ff2a2a,
+    0 0 16px #ff0000,
+    inset 0 0 2px #fff;
+  opacity: 0;
+}
+.start-light:nth-child(1)::after {
   animation: start-light-1 8s steps(1, end) infinite;
 }
-.start-light:nth-child(2) {
+.start-light:nth-child(2)::after {
   animation: start-light-2 8s steps(1, end) infinite;
 }
-.start-light:nth-child(3) {
+.start-light:nth-child(3)::after {
   animation: start-light-3 8s steps(1, end) infinite;
 }
-.start-light:nth-child(4) {
+.start-light:nth-child(4)::after {
   animation: start-light-4 8s steps(1, end) infinite;
 }
-.start-light:nth-child(5) {
+.start-light:nth-child(5)::after {
   animation: start-light-5 8s steps(1, end) infinite;
 }
 @keyframes start-light-1 {
   5% {
-    background: #ff2a2a;
-    box-shadow: 0 0 6px #ff2a2a, 0 0 16px #ff0000, inset 0 0 2px #fff;
+    opacity: 1;
   }
   30% {
-    background: #2a0b0b;
-    box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
+    opacity: 0;
   }
 }
 @keyframes start-light-2 {
   8.75% {
-    background: #ff2a2a;
-    box-shadow: 0 0 6px #ff2a2a, 0 0 16px #ff0000, inset 0 0 2px #fff;
+    opacity: 1;
   }
   30% {
-    background: #2a0b0b;
-    box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
+    opacity: 0;
   }
 }
 @keyframes start-light-3 {
   12.5% {
-    background: #ff2a2a;
-    box-shadow: 0 0 6px #ff2a2a, 0 0 16px #ff0000, inset 0 0 2px #fff;
+    opacity: 1;
   }
   30% {
-    background: #2a0b0b;
-    box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
+    opacity: 0;
   }
 }
 @keyframes start-light-4 {
   16.25% {
-    background: #ff2a2a;
-    box-shadow: 0 0 6px #ff2a2a, 0 0 16px #ff0000, inset 0 0 2px #fff;
+    opacity: 1;
   }
   30% {
-    background: #2a0b0b;
-    box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
+    opacity: 0;
   }
 }
 @keyframes start-light-5 {
   20% {
-    background: #ff2a2a;
-    box-shadow: 0 0 6px #ff2a2a, 0 0 16px #ff0000, inset 0 0 2px #fff;
+    opacity: 1;
   }
   30% {
-    background: #2a0b0b;
-    box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
+    opacity: 0;
   }
 }
 
@@ -493,14 +614,30 @@ body:has(.theme-admin) {
   background: linear-gradient(90deg, transparent, rgb(255 42 42 / 0.2) 35%, #ff2a2a 85%, #ffe1db);
   box-shadow: 0 0 10px 1px rgb(255 30 30 / 0.55);
   transform: translateX(-110%);
-  animation: light-trail var(--trail-duration, 3s) cubic-bezier(0.45, 0, 0.6, 1) var(--trail-delay, 0s) infinite;
+  /* Una vuelta = 8 pasadas iguales (ver los tokens de animación al inicio). */
+  animation: light-trail calc(var(--trail-duration, 3s) * 8) cubic-bezier(0.45, 0, 0.6, 1) var(--trail-delay, 0s) infinite;
 }
 @keyframes light-trail {
-  from {
+  0%,
+  12.501%,
+  25.001%,
+  37.501%,
+  50.001%,
+  62.501%,
+  75.001%,
+  87.501% {
     transform: translateX(-110%);
   }
-  to {
+  12.5%,
+  25%,
+  37.5%,
+  50%,
+  62.5%,
+  75%,
+  87.5%,
+  100% {
     transform: translateX(110vw);
+    animation-timing-function: step-start;
   }
 }
 
@@ -511,31 +648,61 @@ body:has(.theme-admin) {
   overflow: hidden;
   mask-image: linear-gradient(to top, #000 15%, transparent 95%);
 }
+/*
+ * Con perspectiva de 380px y el plano inclinado 72°, lo que está a más de 400px de su borde superior
+ * queda detrás del observador, y hacia abajo el plano se ve cada vez más angosto que el contenedor:
+ * con ese tamaño basta (la capa que se dibuja en la GPU es ~4 veces más chica).
+ */
 .neon-floor__plane {
   position: absolute;
   top: 0;
-  left: -50%;
-  right: -50%;
-  height: 220%;
+  left: 0;
+  right: 0;
+  height: 400px;
   transform-origin: 50% 0;
   transform: rotateX(72deg);
 }
 .neon-floor__grid {
   position: absolute;
-  inset: -64px 0 0 0;
+  inset: -128px 0 0 0;
   background-image:
     linear-gradient(rgb(255 45 45 / 0.8) 2px, transparent 2px),
     linear-gradient(90deg, rgb(255 45 45 / 0.8) 2px, transparent 2px);
   background-size: 64px 64px;
-  animation: neon-floor 0.85s linear infinite;
+  /* Las líneas verticales quedan donde estaban cuando el plano medía el doble de ancho. */
+  background-position: calc(-50% - 32px) 0;
+  animation: neon-floor 17s linear infinite;
 }
+/* Avanza dos celdas por ciclo (1,7 s) y vuelve de golpe: 10 ciclos por vuelta. */
 @keyframes neon-floor {
-  to {
-    transform: translateY(64px);
+  0%,
+  10.001%,
+  20.001%,
+  30.001%,
+  40.001%,
+  50.001%,
+  60.001%,
+  70.001%,
+  80.001%,
+  90.001% {
+    transform: translateY(0);
+  }
+  10%,
+  20%,
+  30%,
+  40%,
+  50%,
+  60%,
+  70%,
+  80%,
+  90%,
+  100% {
+    transform: translateY(128px);
+    animation-timing-function: step-start;
   }
 }
 
-/* Línea con un destello que va y vuelve (tipo escáner). */
+/* Línea con un destello que va y vuelve (tipo escáner). Solo `transform`: lo anima la GPU. */
 .scanner {
   position: absolute;
   top: 50%;
@@ -546,70 +713,293 @@ body:has(.theme-admin) {
   border-radius: 9999px;
   background: linear-gradient(90deg, transparent, #ff2a2a 40%, #ffd5ce 50%, #ff2a2a 60%, transparent);
   box-shadow: 0 0 16px 3px rgb(255 30 30 / 0.7);
-  animation: scanner 2.6s ease-in-out infinite alternate;
+  animation: scanner 20.8s ease-in-out infinite;
 }
+/*
+ * El destello mide 22% del ancho: recorrer hasta el 78% equivale a 3,545 veces su propio ancho.
+ * Cada vuelta son 4 idas y vueltas de 2,6 s cada tramo.
+ */
 @keyframes scanner {
-  to {
-    left: 78%;
+  0%,
+  25%,
+  50%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  12.5%,
+  37.5%,
+  62.5%,
+  87.5% {
+    transform: translateX(354.5%);
   }
 }
 
-/* Borde con un haz de luz que gira, más un halo rojo que respira. */
-@property --beam-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
+/*
+ * Borde con un haz de luz que gira: un anillo de 2px por dentro del borde exterior de la tarjeta.
+ * Antes se animaba el ángulo del degradado, que obliga a redibujar en cada cuadro; ahora un cuadrado
+ * con degradado cónico gira (solo `transform`, lo anima la GPU) dentro de .neon-beam__ring, que lo
+ * recorta al contorno de la tarjeta, y un panel opaco (::after) lo tapa desde 2px hacia adentro.
+ * El halo rojo (.neon-halo) va encima, como antes.
+ */
 .neon-beam {
   position: relative;
+  isolation: isolate;
 }
-.neon-beam::before {
+.neon-beam__ring {
+  position: absolute;
+  z-index: -2;
+  inset: -1px; /* sobre el borde de 1px: el contorno exterior de la tarjeta */
+  border-radius: 1.5rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+.neon-beam__ring::before {
   content: "";
   position: absolute;
-  inset: -1px;
-  padding: 2px;
-  border-radius: inherit;
-  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  width: 180%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
   background: conic-gradient(
-    from var(--beam-angle),
     transparent 0deg 240deg,
     rgb(255 42 42 / 0.9) 295deg,
     #ffd0c8 325deg,
     rgb(255 42 42 / 0.9) 345deg,
     transparent 360deg
   );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: beam 3.5s linear infinite;
+  animation: beam-spin 21s linear infinite;
 }
 .neon-beam::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  z-index: -1;
+  inset: 1px;
+  border-radius: calc(1.5rem - 2px);
+  pointer-events: none;
+  background: #0c080a; /* el zinc-950/90 de antes sobre el fondo rojizo de la portada */
+}
+/* 6 giros de 3,5 s por vuelta. */
+@keyframes beam-spin {
+  to {
+    transform: rotate(6turn);
+  }
+}
+/* Halo rojo que respira alrededor de la tarjeta (late con opacidad, ver animate-neon-pulse). */
+.neon-halo {
   pointer-events: none;
   box-shadow:
     0 0 40px rgb(255 30 30 / 0.3),
     0 0 90px rgb(255 30 30 / 0.15);
-  animation: neon-pulse 3s ease-in-out infinite;
 }
-@keyframes beam {
-  to {
-    --beam-angle: 360deg;
-  }
+
+/*
+ * Resplandores. Antes eran círculos de color con `filter: blur()`, que la GPU del celular vuelve a
+ * desenfocar en cada cuadro mientras la portada se mueve. Ahora son degradados radiales con la misma
+ * caída que un círculo desenfocado (calculada: difieren en 1 o 2 niveles de color). Los animados
+ * conservan la caja del círculo original, así `glow` los mueve y escala igual, y el degradado se
+ * extiende 3 sigmas hacia afuera con ::before.
+ */
+.glow-hero-a::before,
+.glow-hero-b::before,
+.glow-services::before,
+.glow-instagram::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.glow-hero-a::before {
+  inset: -360px;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(225 6 0 / 0.245) 0,
+    rgb(225 6 0 / 0.243) 55px,
+    rgb(225 6 0 / 0.237) 104px,
+    rgb(225 6 0 / 0.226) 147px,
+    rgb(225 6 0 / 0.21) 187px,
+    rgb(225 6 0 / 0.193) 219px,
+    rgb(225 6 0 / 0.171) 253px,
+    rgb(225 6 0 / 0.09) 357px,
+    rgb(225 6 0 / 0.063) 396px,
+    rgb(225 6 0 / 0.041) 435px,
+    rgb(225 6 0 / 0.024) 473px,
+    rgb(225 6 0 / 0.013) 515px,
+    rgb(225 6 0 / 0.006) 561px,
+    rgb(225 6 0 / 0.002) 616px,
+    transparent 696px
+  );
+}
+.glow-hero-b::before {
+  inset: -330px;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(228 0 20 / 0.136) 0,
+    rgb(228 0 20 / 0.131) 59px,
+    rgb(228 0 20 / 0.116) 118px,
+    rgb(228 0 20 / 0.096) 169px,
+    rgb(228 0 20 / 0.039) 287px,
+    rgb(228 0 20 / 0.026) 322px,
+    rgb(228 0 20 / 0.016) 357px,
+    rgb(228 0 20 / 0.008) 396px,
+    rgb(228 0 20 / 0.003) 440px,
+    transparent 570px
+  );
+}
+.glow-services::before {
+  inset: -192px;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(225 6 0 / 0.148) 0,
+    rgb(225 6 0 / 0.144) 63px,
+    rgb(225 6 0 / 0.137) 88px,
+    rgb(225 6 0 / 0.128) 110px,
+    rgb(225 6 0 / 0.104) 147px,
+    rgb(225 6 0 / 0.037) 225px,
+    rgb(225 6 0 / 0.024) 246px,
+    rgb(225 6 0 / 0.014) 267px,
+    rgb(225 6 0 / 0.007) 289px,
+    rgb(225 6 0 / 0.003) 313px,
+    transparent 384px
+  );
+}
+.glow-instagram::before {
+  inset: -192px;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(253 29 29 / 0.173) 0,
+    rgb(253 29 29 / 0.167) 30px,
+    rgb(253 29 29 / 0.149) 61px,
+    rgb(253 29 29 / 0.124) 88px,
+    rgb(253 29 29 / 0.051) 155px,
+    rgb(253 29 29 / 0.034) 176px,
+    rgb(253 29 29 / 0.021) 196px,
+    rgb(253 29 29 / 0.011) 219px,
+    rgb(253 29 29 / 0.005) 244px,
+    transparent 320px
+  );
+}
+.glow-page-header {
+  pointer-events: none;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(225 6 0 / 0.138) 0,
+    rgb(225 6 0 / 0.133) 36px,
+    rgb(225 6 0 / 0.118) 72px,
+    rgb(225 6 0 / 0.097) 102px,
+    rgb(225 6 0 / 0.039) 172px,
+    rgb(225 6 0 / 0.025) 192px,
+    rgb(225 6 0 / 0.016) 213px,
+    rgb(225 6 0 / 0.008) 235px,
+    rgb(225 6 0 / 0.003) 261px,
+    transparent 336px
+  );
+}
+.glow-placeholder {
+  pointer-events: none;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(225 6 0 / 0.144) 0,
+    rgb(225 6 0 / 0.14) 14px,
+    rgb(225 6 0 / 0.126) 29px,
+    rgb(225 6 0 / 0.107) 43px,
+    rgb(225 6 0 / 0.046) 82px,
+    rgb(225 6 0 / 0.03) 94px,
+    rgb(225 6 0 / 0.019) 107px,
+    rgb(225 6 0 / 0.01) 121px,
+    rgb(225 6 0 / 0.004) 137px,
+    transparent 184px
+  );
+}
+.glow-slide {
+  pointer-events: none;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(225 6 0 / 0.203) calc(100% - 180px),
+    rgb(225 6 0 / 0.201) calc(100% - 173px),
+    rgb(225 6 0 / 0.196) calc(100% - 166px),
+    rgb(225 6 0 / 0.178) calc(100% - 152px),
+    rgb(225 6 0 / 0.151) calc(100% - 139px),
+    rgb(225 6 0 / 0.09) calc(100% - 113px),
+    rgb(225 6 0 / 0.065) calc(100% - 101px),
+    rgb(225 6 0 / 0.043) calc(100% - 89px),
+    rgb(225 6 0 / 0.026) calc(100% - 76px),
+    rgb(225 6 0 / 0.014) calc(100% - 62px),
+    rgb(225 6 0 / 0.006) calc(100% - 47px),
+    rgb(225 6 0 / 0.002) calc(100% - 28px),
+    transparent 100%
+  );
 }
 
 /* Botón principal con halo que late y un brillo que lo cruza. */
 .neon-cta {
   position: relative;
   overflow: hidden;
+}
+/*
+ * Halo del botón: cada 2,4 s pasa del reposo al máximo y vuelve. Antes se animaba el box-shadow
+ * (se redibuja en cada cuadro); ahora dos capas, reposo y máximo, se turnan solo con opacidad.
+ */
+.neon-cta-glow {
+  pointer-events: none;
   box-shadow:
     0 0 0 1px rgb(255 90 80 / 0.4),
     0 0 14px rgb(255 30 30 / 0.45);
-  animation: cta-glow 2.4s ease-in-out infinite;
+  animation: cta-glow-rest 19.2s ease-in-out infinite; /* 8 ciclos de 2,4 s */
+}
+.neon-cta-glow--peak {
+  opacity: 0;
+  box-shadow:
+    0 0 0 1px rgb(255 120 110 / 0.7),
+    0 0 26px rgb(255 30 30 / 0.75),
+    0 0 52px rgb(255 30 30 / 0.35);
+  animation-name: cta-glow-peak;
+}
+@keyframes cta-glow-rest {
+  0%,
+  12.5%,
+  25%,
+  37.5%,
+  50%,
+  62.5%,
+  75%,
+  87.5%,
+  100% {
+    opacity: 1;
+  }
+  6.25%,
+  18.75%,
+  31.25%,
+  43.75%,
+  56.25%,
+  68.75%,
+  81.25%,
+  93.75% {
+    opacity: 0;
+  }
+}
+@keyframes cta-glow-peak {
+  0%,
+  12.5%,
+  25%,
+  37.5%,
+  50%,
+  62.5%,
+  75%,
+  87.5%,
+  100% {
+    opacity: 0;
+  }
+  6.25%,
+  18.75%,
+  31.25%,
+  43.75%,
+  56.25%,
+  68.75%,
+  81.25%,
+  93.75% {
+    opacity: 1;
+  }
 }
 .neon-cta::after {
   content: "";
@@ -618,39 +1008,42 @@ body:has(.theme-admin) {
   pointer-events: none;
   background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
   transform: translateX(-120%);
-  animation: cta-shine 3.6s ease-in-out 1.2s infinite;
+  animation: cta-shine 18s ease-in-out 1.2s infinite;
 }
-@keyframes cta-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px rgb(255 90 80 / 0.4),
-      0 0 14px rgb(255 30 30 / 0.45);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px rgb(255 120 110 / 0.7),
-      0 0 26px rgb(255 30 30 / 0.75),
-      0 0 52px rgb(255 30 30 / 0.35);
-  }
-}
+/* Cada 3,6 s cruza el botón en 1,26 s, espera y vuelve de golpe al inicio (5 pasadas por vuelta). */
 @keyframes cta-shine {
-  0% {
+  0%,
+  20.001%,
+  40.001%,
+  60.001%,
+  80.001% {
     transform: translateX(-120%);
   }
-  35%,
+  7%,
+  27%,
+  47%,
+  67%,
+  87% {
+    transform: translateX(120%);
+  }
+  20%,
+  40%,
+  60%,
+  80%,
   100% {
     transform: translateX(120%);
+    animation-timing-function: step-start;
   }
 }
 
-/* Texto con degradado en movimiento (el color base queda como respaldo). */
-.text-shine {
-  background-image: linear-gradient(100deg, #ff3020 0%, #f97316 30%, #fbbf24 50%, #f97316 70%, #ff3020 100%);
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+/* Duración de las bandas (ver Marquee): las variables se leen en el propio elemento. */
+.marquee-track {
+  animation-duration: var(--marquee-duration);
+}
+@media (width < 40rem) {
+  .marquee-track {
+    animation-duration: var(--marquee-mobile-duration);
+  }
 }
 
 /* Contador animado: <span class="count-up" style="--to: 36">; el número real va en texto oculto. */
@@ -675,11 +1068,22 @@ body:has(.theme-admin) {
   }
 }
 
+/* Secciones bajo el pliegue: no se calculan ni dibujan (ni corren sus animaciones) hasta acercarse. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* Diapositivas ocultas del carrusel: su imagen flotante se pausa. */
+[data-active="false"] .animate-float {
+  animation-play-state: paused;
+}
+
 /* Aparece al entrar en pantalla, sin JavaScript (solo navegadores con animaciones por scroll). */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .reveal {
-      animation: reveal linear both;
+      animation: reveal linear backwards;
       animation-timeline: view();
       /* Distancia fija: aunque la sección sea muy alta, termina de aparecer al entrar 240px. */
       animation-range: entry 0% entry 240px;
@@ -707,8 +1111,9 @@ body:has(.theme-admin) {
     scroll-behavior: auto !important;
   }
   .neon-sign__light,
-  .glitch__layer,
-  .start-light,
+  .neon-sign__glow,
+  .glitch__slice,
+  .start-light::after,
   .light-trail,
   .neon-floor__grid,
   .scanner {
