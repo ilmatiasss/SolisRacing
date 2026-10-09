@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
+  async redirects() {
+    // La galería de Instagram partió como "Proyectos" y pasó a ser "Quiénes somos".
+    return [{ source: "/proyectos", destination: "/nosotros", permanent: true }];
+  },
   async headers() {
     return [
       {

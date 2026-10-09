@@ -42,7 +42,7 @@ export async function SiteHeader() {
           <Suspense fallback={<HeaderNavLinks />}>
             <ActiveHeaderNav />
           </Suspense>
-          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
             <Form action="/productos" className="relative hidden md:block">
               <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-zinc-500" />
               <input
@@ -50,7 +50,7 @@ export async function SiteHeader() {
                 type="search"
                 placeholder="Buscar repuestos…"
                 aria-label="Buscar en la tienda"
-                className="h-10 w-56 rounded-xl border border-white/10 bg-white/5 pr-3 pl-9 text-sm text-white placeholder:text-zinc-500 focus:w-72 focus:border-brand-600 focus:outline-none xl:w-64"
+                className="h-10 w-56 rounded-xl border border-white/10 bg-white/5 pr-3 pl-9 text-sm text-white placeholder:text-zinc-500 focus:w-72 focus:border-brand-600 focus:outline-none lg:w-44 lg:focus:w-52 xl:w-64 xl:focus:w-72"
               />
             </Form>
             <Link

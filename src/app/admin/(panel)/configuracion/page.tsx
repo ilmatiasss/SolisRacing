@@ -81,19 +81,19 @@ export default async function SettingsPage() {
           </div>
         </Card>
 
-        <Card title="Proyectos (galería de Instagram)">
+        <Card title="Videos de Instagram (Quiénes somos)">
           <Field
             label="Publicaciones"
-            htmlFor="projectPosts"
+            htmlFor="instagramPosts"
             optional
-            hint="Una por línea: link de la publicación o reel | título | auto. Ej: https://www.instagram.com/p/ABC123/ | Seteo FuelTech FT550 | Honda Civic 1998. Se muestran en la portada y en /proyectos."
+            hint="Uno por línea: link de la publicación o reel | título | etiqueta. Ej: https://www.instagram.com/reel/ABC123/ | Seteo FuelTech FT550 | Honda Civic 1998. Se muestran en la portada y en /nosotros."
           >
             <Textarea
-              id="projectPosts"
-              name="projectPosts"
+              id="instagramPosts"
+              name="instagramPosts"
               rows={6}
-              defaultValue={s.projectPosts}
-              placeholder="https://www.instagram.com/p/… | Título | Auto"
+              defaultValue={s.instagramPosts}
+              placeholder="https://www.instagram.com/reel/… | Título | Etiqueta"
               className="font-mono text-xs"
             />
           </Field>

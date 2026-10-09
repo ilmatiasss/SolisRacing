@@ -9,7 +9,7 @@ import { GlitchText, LightTrails, NeonFloor, NeonSign, ScannerLine, StartLights 
 import { Price } from "@/components/store/price";
 import { ProductGrid } from "@/components/store/product-card";
 import { ProductImage } from "@/components/store/product-image";
-import { ProjectGallery } from "@/components/store/project-gallery";
+import { InstagramGallery } from "@/components/store/instagram-gallery";
 import { Rotator } from "@/components/store/rotator";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
 import { Tachometer } from "@/components/store/tachometer";
@@ -28,7 +28,7 @@ import {
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, whatsappLink } from "@/lib/format";
-import { parseProjectPosts } from "@/lib/instagram";
+import { parseInstagramPosts } from "@/lib/instagram";
 
 const PERKS = [
   "Despachos a todo Chile",
@@ -53,7 +53,7 @@ export default async function HomePage() {
     .map((category) => ({ category, products: catalog.filter((product) => product.categorySlug === category.slug) }))
     .filter((shelf) => shelf.products.length > 0);
   const freeShipping = settings.shipping.freeShippingThreshold;
-  const projectPosts = parseProjectPosts(settings.projectPosts);
+  const instagramPosts = parseInstagramPosts(settings.instagramPosts);
 
   return (
     <>
@@ -317,16 +317,16 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Proyectos (publicaciones de Instagram cargadas en el panel) */}
-      {projectPosts.length > 0 && (
+      {/* Quiénes somos (videos de Instagram cargados en el panel) */}
+      {instagramPosts.length > 0 && (
         <Container className="cv-auto reveal pt-16 sm:pt-20">
           <SectionHeading
-            eyebrow="Proyectos"
-            title="Autos que pasaron por el taller"
-            description="Instalaciones y seteos reales, directo desde nuestro Instagram."
-            action={{ href: "/proyectos", label: "Ver todos los proyectos" }}
+            eyebrow="Quiénes somos"
+            title="Conoce Solis Racing Parts"
+            description="Lo que hacemos día a día en la tienda y el taller, directo desde nuestro Instagram."
+            action={{ href: "/nosotros", label: "Conócenos" }}
           />
-          <ProjectGallery posts={projectPosts.slice(0, 3)} />
+          <InstagramGallery posts={instagramPosts.slice(0, 3)} />
         </Container>
       )}
 

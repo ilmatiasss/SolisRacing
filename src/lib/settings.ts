@@ -41,8 +41,8 @@ export type StoreSettings = {
   facebook: string;
   tiktok: string;
   youtube: string;
-  /** Galería de proyectos: una publicación de Instagram por línea, `link | título | auto` (ver lib/instagram). */
-  projectPosts: string;
+  /** Videos de Instagram de «Quiénes somos»: uno por línea, `link | título | etiqueta` (ver lib/instagram). */
+  instagramPosts: string;
   legalName: string;
   legalRut: string;
   payments: PaymentSettings;
@@ -85,7 +85,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   facebook: "",
   tiktok: "",
   youtube: "",
-  projectPosts: [
+  instagramPosts: [
     "https://www.instagram.com/reel/DcCqz8MR37D/",
     "https://www.instagram.com/reel/DbGiiSDxISO/",
     "https://www.instagram.com/reel/DbJhGT2OKmF/",

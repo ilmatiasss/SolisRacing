@@ -77,18 +77,19 @@ test("un borrador sin precio no se puede publicar", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Fitting ORB" })).toHaveCount(0);
 });
 
-test("los proyectos de Instagram del panel aparecen en la tienda", async ({ page }) => {
+test("los videos de Instagram del panel aparecen en Quiénes somos", async ({ page }) => {
   await loginAsAdmin(page);
   await page.goto("/admin/configuracion");
-  await page.locator("#projectPosts").fill("https://www.instagram.com/solis_racingparts/");
+  await page.locator("#instagramPosts").fill("https://www.instagram.com/solis_racingparts/");
   await page.getByRole("button", { name: "Guardar configuración" }).click();
   await expect(page.getByText("no es un link de publicación de Instagram")).toBeVisible();
   await page
-    .locator("#projectPosts")
+    .locator("#instagramPosts")
     .fill("https://www.instagram.com/p/C0ProyectoE2E/ | Seteo FuelTech | Nissan Skyline R34");
   await page.getByRole("button", { name: "Guardar configuración" }).click();
   await expect(page.getByText("Configuración guardada")).toBeVisible();
   await page.goto("/proyectos");
+  await expect(page).toHaveURL(/\/nosotros$/);
   await expect(page.getByText("Nissan Skyline R34", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /Seteo FuelTech/ }).first()).toHaveAttribute(
     "href",

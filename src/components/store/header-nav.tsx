@@ -6,6 +6,7 @@ export const MAIN_NAV = [
   { href: "/productos?oferta=1", label: "Ofertas", match: false },
   { href: "/servicios", label: "Servicios y seteos" },
   { href: "/seguimiento", label: "Seguimiento" },
+  { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ] as const;
 
@@ -30,7 +31,7 @@ export function HeaderNavLinks({ activePath }: { activePath?: string }) {
             href={item.href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "rounded-lg px-3 py-2 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5 hover:text-white",
+              "rounded-lg px-2.5 py-2 text-sm font-medium whitespace-nowrap text-zinc-300 transition-colors hover:bg-white/5 hover:text-white xl:px-3",
               active && "text-white",
               item.label === "Ofertas" && "text-signal-400 hover:text-signal-300",
             )}

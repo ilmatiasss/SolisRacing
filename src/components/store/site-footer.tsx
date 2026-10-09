@@ -60,7 +60,7 @@ export async function SiteFooter() {
 
         <FooterColumn title="Ayuda" className="lg:col-span-2">
           <FooterLink href="/servicios">Servicios y seteos</FooterLink>
-          {settings.projectPosts.trim() && <FooterLink href="/proyectos">Proyectos</FooterLink>}
+          <FooterLink href="/nosotros">Quiénes somos</FooterLink>
           <FooterLink href="/seguimiento">Seguimiento de pedidos</FooterLink>
           <FooterLink href="/despachos-y-devoluciones">Despachos y devoluciones</FooterLink>
           <FooterLink href="/terminos">Términos y condiciones</FooterLink>

@@ -1,9 +1,10 @@
-/** Publicación de Instagram que se muestra en la galería de proyectos. */
-export type ProjectPost = {
+/** Publicación o reel de Instagram que se muestra en «Quiénes somos» y en la portada. */
+export type InstagramPostItem = {
   /** Link canónico de la publicación (https://www.instagram.com/p/…/ o /reel/…/). */
   url: string;
   title: string;
-  vehicle: string;
+  /** Etiqueta corta sobre el título: un auto, una marca o el tipo de trabajo. */
+  tag: string;
 };
 
 const POST_URL = /^https?:\/\/(?:www\.)?instagram\.com\/(?:[\w.]+\/)?(p|reel|tv)\/([\w-]+)/i;
@@ -17,21 +18,21 @@ export function instagramPostUrl(raw: string): string | null {
 }
 
 /**
- * Lee la lista de proyectos del panel: una publicación por línea, con el formato
- * `link | título | auto` (título y auto son opcionales). Las líneas que no son un link válido se ignoran.
+ * Lee la lista de videos del panel: una publicación por línea, con el formato
+ * `link | título | etiqueta` (título y etiqueta son opcionales). Las líneas que no son un link válido se ignoran.
  */
-export function parseProjectPosts(text: string): ProjectPost[] {
-  const posts: ProjectPost[] = [];
+export function parseInstagramPosts(text: string): InstagramPostItem[] {
+  const posts: InstagramPostItem[] = [];
   for (const line of text.split("\n")) {
-    const [link = "", title = "", vehicle = ""] = line.split("|").map((part) => part.trim());
+    const [link = "", title = "", tag = ""] = line.split("|").map((part) => part.trim());
     const url = instagramPostUrl(link);
-    if (url && !posts.some((post) => post.url === url)) posts.push({ url, title, vehicle });
+    if (url && !posts.some((post) => post.url === url)) posts.push({ url, title, tag });
   }
   return posts;
 }
 
 /** Líneas con contenido que no son un link de publicación de Instagram (para avisar en el panel). */
-export function invalidProjectLines(text: string): string[] {
+export function invalidInstagramLines(text: string): string[] {
   return text
     .split("\n")
     .map((line) => line.trim())
