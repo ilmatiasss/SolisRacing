@@ -85,7 +85,12 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   facebook: "",
   tiktok: "",
   youtube: "",
-  projectPosts: "",
+  projectPosts: [
+    "https://www.instagram.com/reel/DcCqz8MR37D/",
+    "https://www.instagram.com/reel/DbGiiSDxISO/",
+    "https://www.instagram.com/reel/DbJhGT2OKmF/",
+    "https://www.instagram.com/reel/DcckYUPRPH0/",
+  ].join("\n"),
   legalName: "Solis Racing Parts",
   legalRut: "",
   payments: {
