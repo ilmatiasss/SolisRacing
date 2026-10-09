@@ -5,7 +5,7 @@ import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
 import { CatalogTabs } from "@/components/store/catalog-tabs";
 import { HeroSpotlight } from "@/components/store/hero-spotlight";
 import { Marquee } from "@/components/store/marquee";
-import { GlitchText, LightTrails, NeonFloor, NeonSign, ScannerLine, StartLights } from "@/components/store/neon";
+import { DragTree, GlitchText, LightTrails, NeonFloor, NeonSign, ScannerLine } from "@/components/store/neon";
 import { Price } from "@/components/store/price";
 import { ProductGrid } from "@/components/store/product-card";
 import { ProductImage } from "@/components/store/product-image";
@@ -83,7 +83,7 @@ export default async function HomePage() {
         <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20 lg:[grid-template-areas:'text_show'_'stats_show']">
           <div className="[grid-area:text]">
             <div className="flex animate-rise flex-wrap items-center gap-x-4 gap-y-3">
-              <StartLights />
+              <DragTree />
               <Eyebrow className="tracking-[0.12em] sm:tracking-[0.2em]">Performance · Electrónica · Seteos</Eyebrow>
             </div>
             <h1 className="mt-5 font-display text-5xl leading-[0.92] font-extrabold tracking-tight uppercase italic sm:text-6xl lg:text-7xl">

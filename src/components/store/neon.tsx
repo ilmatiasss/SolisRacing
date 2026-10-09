@@ -55,13 +55,20 @@ export function GlitchText({ children, className }: { children: string; classNam
   );
 }
 
-/** Cinco luces de partida que se encienden de a una y se apagan juntas ("lights out"). */
-export function StartLights({ className }: { className?: string }) {
+/** Árbol de drag: pre-stage y stage, tres ámbar que bajan y la verde (ver globals.css). */
+export function DragTree({ className }: { className?: string }) {
   return (
-    <span className={cn("flex items-center gap-1.5", className)} aria-hidden="true">
-      {Array.from({ length: 5 }, (_, index) => (
-        <span key={index} className="start-light" />
-      ))}
+    <span
+      className={cn("flex items-center gap-1.5 rounded-full border border-white/10 bg-black/50 px-2 py-1", className)}
+      aria-hidden="true"
+    >
+      <span className="drag-light drag-light--stage drag-light--prestage" />
+      <span className="drag-light drag-light--stage drag-light--staged" />
+      <span className="mx-0.5 h-3 w-px bg-white/15" />
+      <span className="drag-light drag-light--amber drag-light--amber-1" />
+      <span className="drag-light drag-light--amber drag-light--amber-2" />
+      <span className="drag-light drag-light--amber drag-light--amber-3" />
+      <span className="drag-light drag-light--green" />
     </span>
   );
 }

@@ -443,7 +443,7 @@ body:has(.theme-admin) {
     opacity: 1;
   }
 }
-/* Parpadeo ocasional; el de 81% coincide con el "apagado" de las luces de partida. */
+/* Parpadeo ocasional; el de 81% coincide con la luz verde del árbol de drag. */
 @keyframes neon-buzz {
   0%,
   41.5%,
@@ -526,81 +526,122 @@ body:has(.theme-admin) {
   }
 }
 
-/* Luces de partida (como en la F1): se encienden de a una y se apagan juntas cada 8 s.
- * La luz encendida es una capa encima que solo cambia de opacidad (lo anima la GPU). */
-.start-light {
+/* Árbol de drag ("christmas tree"): cada 8 s se encienden pre-stage y stage, bajan las tres
+ * ámbar, se enciende la verde y se apaga todo. Cada luz encendida es una capa encima que solo
+ * cambia de opacidad (lo anima la GPU); cada regla lleva su animación completa. */
+.drag-light {
   position: relative;
   display: block;
   width: 0.7rem;
   height: 0.7rem;
   border-radius: 9999px;
-  background: #2a0b0b;
-  box-shadow: inset 0 0 0 1px rgb(255 70 60 / 0.3);
 }
-.start-light::after {
+.drag-light::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: #ff2a2a;
-  box-shadow:
-    0 0 6px #ff2a2a,
-    0 0 16px #ff0000,
-    inset 0 0 2px #fff;
   opacity: 0;
 }
-.start-light:nth-child(1)::after {
-  animation: start-light-1 8s steps(1, end) infinite;
+.drag-light--stage {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: #29251a;
+  box-shadow: inset 0 0 0 1px rgb(255 236 180 / 0.25);
 }
-.start-light:nth-child(2)::after {
-  animation: start-light-2 8s steps(1, end) infinite;
+.drag-light--stage::after {
+  background: #fff4d1;
+  box-shadow:
+    0 0 5px #ffe8a3,
+    0 0 12px rgb(255 214 120 / 0.7),
+    inset 0 0 2px #fff;
 }
-.start-light:nth-child(3)::after {
-  animation: start-light-3 8s steps(1, end) infinite;
+.drag-light--amber {
+  background: #2b1d05;
+  box-shadow: inset 0 0 0 1px rgb(255 179 0 / 0.3);
 }
-.start-light:nth-child(4)::after {
-  animation: start-light-4 8s steps(1, end) infinite;
+.drag-light--amber::after {
+  background: #ffb300;
+  box-shadow:
+    0 0 6px #ffb300,
+    0 0 16px #ff8a00,
+    inset 0 0 2px #fff;
 }
-.start-light:nth-child(5)::after {
-  animation: start-light-5 8s steps(1, end) infinite;
+.drag-light--green {
+  background: #082410;
+  box-shadow: inset 0 0 0 1px rgb(43 255 110 / 0.3);
 }
-@keyframes start-light-1 {
+.drag-light--green::after {
+  background: #2bff6e;
+  box-shadow:
+    0 0 6px #2bff6e,
+    0 0 16px #00d14a,
+    inset 0 0 2px #fff;
+}
+.drag-light--prestage::after {
+  animation: drag-prestage 8s steps(1, end) infinite;
+}
+.drag-light--staged::after {
+  animation: drag-stage 8s steps(1, end) infinite;
+}
+.drag-light--amber-1::after {
+  animation: drag-amber-1 8s steps(1, end) infinite;
+}
+.drag-light--amber-2::after {
+  animation: drag-amber-2 8s steps(1, end) infinite;
+}
+.drag-light--amber-3::after {
+  animation: drag-amber-3 8s steps(1, end) infinite;
+}
+.drag-light--green::after {
+  animation: drag-green 8s steps(1, end) infinite;
+}
+@keyframes drag-prestage {
   5% {
     opacity: 1;
   }
-  30% {
+  55% {
     opacity: 0;
   }
 }
-@keyframes start-light-2 {
-  8.75% {
+@keyframes drag-stage {
+  10% {
     opacity: 1;
   }
-  30% {
+  55% {
     opacity: 0;
   }
 }
-@keyframes start-light-3 {
-  12.5% {
+/* Las ámbar bajan cada 0,4 s, como en un árbol "sportsman"; la verde sale a los 2,4 s. */
+@keyframes drag-amber-1 {
+  15% {
     opacity: 1;
   }
-  30% {
+  20% {
     opacity: 0;
   }
 }
-@keyframes start-light-4 {
-  16.25% {
-    opacity: 1;
-  }
-  30% {
-    opacity: 0;
-  }
-}
-@keyframes start-light-5 {
+@keyframes drag-amber-2 {
   20% {
     opacity: 1;
   }
+  25% {
+    opacity: 0;
+  }
+}
+@keyframes drag-amber-3 {
+  25% {
+    opacity: 1;
+  }
   30% {
+    opacity: 0;
+  }
+}
+@keyframes drag-green {
+  30% {
+    opacity: 1;
+  }
+  55% {
     opacity: 0;
   }
 }
@@ -1113,7 +1154,7 @@ body:has(.theme-admin) {
   .neon-sign__light,
   .neon-sign__glow,
   .glitch__slice,
-  .start-light::after,
+  .drag-light::after,
   .light-trail,
   .neon-floor__grid,
   .scanner {
