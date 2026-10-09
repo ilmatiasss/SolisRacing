@@ -50,6 +50,7 @@ export async function SiteFooter() {
         <FooterColumn title="Tienda" className="lg:col-span-2">
           <FooterLink href="/productos">Catálogo completo</FooterLink>
           <FooterLink href="/productos?oferta=1">Ofertas</FooterLink>
+          <FooterLink href="/pedido-especial">Pedido especial de repuestos</FooterLink>
           {categories.slice(0, 5).map((category) => (
             <FooterLink key={category.slug} href={`/productos?categoria=${category.slug}`}>
               {category.name}
@@ -59,6 +60,7 @@ export async function SiteFooter() {
 
         <FooterColumn title="Ayuda" className="lg:col-span-2">
           <FooterLink href="/servicios">Servicios y seteos</FooterLink>
+          {settings.projectPosts.trim() && <FooterLink href="/proyectos">Proyectos</FooterLink>}
           <FooterLink href="/seguimiento">Seguimiento de pedidos</FooterLink>
           <FooterLink href="/despachos-y-devoluciones">Despachos y devoluciones</FooterLink>
           <FooterLink href="/terminos">Términos y condiciones</FooterLink>

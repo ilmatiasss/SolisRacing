@@ -23,7 +23,7 @@ const optionalText = (max: number) =>
     .transform((value) => value || null);
 
 const inquirySchema = z.object({
-  kind: z.enum(["service", "contact"]),
+  kind: z.enum(["service", "contact", "part"]),
   serviceId: z.coerce.number().int().positive().optional().catch(undefined),
   name: z.string().trim().min(2, { error: "Ingresa tu nombre" }).max(100),
   email: z.email({ error: "Ingresa un correo válido" }).max(200),
@@ -57,6 +57,13 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
   const data = parsed.data;
   if (data.kind === "contact" && !data.message) {
     return { error: "Revisa los campos marcados.", fieldErrors: { message: ["Escribe tu mensaje"] } };
+  }
+  if (data.kind === "part") {
+    const fieldErrors: Record<string, string[]> = {};
+    if (!data.message) fieldErrors.message = ["Cuéntanos qué repuesto buscas"];
+    if (!data.vehicle) fieldErrors.vehicle = ["Indica tu auto"];
+    if (!data.phone) fieldErrors.phone = ["Déjanos un teléfono o WhatsApp"];
+    if (Object.keys(fieldErrors).length > 0) return { error: "Revisa los campos marcados.", fieldErrors };
   }
 
   let serviceName: string | null = null;

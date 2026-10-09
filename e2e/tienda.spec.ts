@@ -136,3 +136,18 @@ test("la solicitud de servicio se envía", async ({ page }) => {
   await page.getByRole("button", { name: "Solicitar hora" }).click();
   await expect(page.getByText("¡Mensaje enviado!")).toBeVisible();
 });
+
+test("el pedido especial de un repuesto pide auto y teléfono, y se envía", async ({ page }) => {
+  await page.goto("/pedido-especial");
+  await page.locator("#part-name").fill("Camila Rojas");
+  await page.locator("#part-email").fill("camila@example.com");
+  await page.locator("#part-message").fill("Bomba de combustible Walbro 450 lph");
+  await page.getByRole("button", { name: "Pedir cotización" }).click();
+  await expect(page.getByText("Indica tu auto")).toBeVisible();
+  await expect(page.getByText("Déjanos un teléfono o WhatsApp")).toBeVisible();
+  await expect(page.locator("#part-message")).toHaveValue("Bomba de combustible Walbro 450 lph");
+  await page.locator("#part-phone").fill("+56 9 4444 5555");
+  await page.locator("#part-vehicle").fill("Mitsubishi Lancer Evo IX 2006");
+  await page.getByRole("button", { name: "Pedir cotización" }).click();
+  await expect(page.getByText("¡Mensaje enviado!")).toBeVisible();
+});

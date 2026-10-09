@@ -81,6 +81,24 @@ export default async function SettingsPage() {
           </div>
         </Card>
 
+        <Card title="Proyectos (galería de Instagram)">
+          <Field
+            label="Publicaciones"
+            htmlFor="projectPosts"
+            optional
+            hint="Una por línea: link de la publicación o reel | título | auto. Ej: https://www.instagram.com/p/ABC123/ | Seteo FuelTech FT550 | Honda Civic 1998. Se muestran en la portada y en /proyectos."
+          >
+            <Textarea
+              id="projectPosts"
+              name="projectPosts"
+              rows={6}
+              defaultValue={s.projectPosts}
+              placeholder="https://www.instagram.com/p/… | Título | Auto"
+              className="font-mono text-xs"
+            />
+          </Field>
+        </Card>
+
         <Card title="Medios de pago">
           <div className="space-y-5">
             <Checkbox

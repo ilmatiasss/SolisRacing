@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/auth";
 import { REGIONS } from "@/lib/chile";
 import { readStoreSettings, saveStoreSettings, SETTINGS_TAG } from "@/lib/data/settings";
 import { parseCLP } from "@/lib/format";
+import { invalidProjectLines } from "@/lib/instagram";
 import { isValidRut, formatRut } from "@/lib/rut";
 import type { StoreSettings } from "@/lib/settings";
 
@@ -60,6 +61,10 @@ export async function saveSettings(_prev: SettingsState, formData: FormData): Pr
   for (const field of ["instagram", "facebook", "tiktok", "youtube", "mapsUrl"] as const) {
     const check = urlOrEmpty.safeParse(settings[field]);
     if (!check.success) return { error: `${field}: ${check.error.issues[0]?.message}` };
+  }
+  const badProject = invalidProjectLines(settings.projectPosts)[0];
+  if (badProject) {
+    return { error: `Proyectos: «${badProject.slice(0, 60)}» no es un link de publicación de Instagram.` };
   }
   for (const field of ["legalRut", "payments.transferRut"] as const) {
     const value = field === "legalRut" ? settings.legalRut : settings.payments.transferRut;

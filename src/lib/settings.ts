@@ -41,6 +41,8 @@ export type StoreSettings = {
   facebook: string;
   tiktok: string;
   youtube: string;
+  /** Galería de proyectos: una publicación de Instagram por línea, `link | título | auto` (ver lib/instagram). */
+  projectPosts: string;
   legalName: string;
   legalRut: string;
   payments: PaymentSettings;
@@ -83,6 +85,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   facebook: "",
   tiktok: "",
   youtube: "",
+  projectPosts: "",
   legalName: "Solis Racing Parts",
   legalRut: "",
   payments: {

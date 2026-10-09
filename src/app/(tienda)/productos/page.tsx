@@ -162,6 +162,9 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
                 <Link href="/productos" className={buttonClasses({ variant: "outline" })}>
                   Ver todo el catálogo
                 </Link>
+                <Link href="/pedido-especial" className={buttonClasses({ variant: "outline" })}>
+                  Pedido especial
+                </Link>
                 <a
                   href={whatsappLink(
                     settings.whatsapp,

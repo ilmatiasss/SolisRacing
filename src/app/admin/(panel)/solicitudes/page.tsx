@@ -37,7 +37,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
     <>
       <AdminPageHeader
         title="Solicitudes"
-        description="Pedidos de hora para servicios y mensajes del formulario de contacto."
+        description="Pedidos de hora para servicios, pedidos especiales de repuestos y mensajes de contacto."
       />
       <div className="mb-4 flex gap-1 overflow-x-auto">
         {[undefined, ...(Object.keys(INQUIRY_STATUS_LABELS) as InquiryStatus[])].map((value) => (
@@ -65,7 +65,11 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone={INQUIRY_STATUS_TONES[inquiry.status]}>{INQUIRY_STATUS_LABELS[inquiry.status]}</Badge>
                   <span className="font-semibold">
-                    {inquiry.kind === "service" ? inquiry.serviceName ?? "Servicio" : "Mensaje de contacto"}
+                    {inquiry.kind === "service"
+                      ? inquiry.serviceName ?? "Servicio"
+                      : inquiry.kind === "part"
+                        ? "Pedido especial de repuesto"
+                        : "Mensaje de contacto"}
                   </span>
                   <span className="text-xs text-muted">· {formatDateTime(inquiry.createdAt)}</span>
                 </div>

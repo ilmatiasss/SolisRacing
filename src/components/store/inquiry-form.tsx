@@ -13,7 +13,7 @@ export function InquiryForm({
   services = [],
   defaultServiceId,
 }: {
-  kind: "service" | "contact";
+  kind: "service" | "contact" | "part";
   services?: ServiceOption[];
   defaultServiceId?: number;
 }) {
@@ -28,7 +28,9 @@ export function InquiryForm({
         <p className="mt-2 text-sm text-zinc-300">
           {kind === "service"
             ? "Te contactaremos a la brevedad para confirmar la hora y el presupuesto."
-            : "Te responderemos lo antes posible."}
+            : kind === "part"
+              ? "Buscamos tu repuesto y te avisamos precio y plazo por WhatsApp o correo."
+              : "Te responderemos lo antes posible."}
         </p>
       </div>
     );
@@ -77,10 +79,22 @@ export function InquiryForm({
         />
       </Field>
       <Field label="Teléfono / WhatsApp" htmlFor={`${kind}-phone`} optional={kind === "contact"} error={errors.phone}>
-        <Input id={`${kind}-phone`} name="phone" type="tel" autoComplete="tel" placeholder="+56 9 …" />
+        <Input
+          id={`${kind}-phone`}
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          placeholder="+56 9 …"
+          aria-invalid={!!errors.phone}
+        />
       </Field>
-      <Field label="Auto (marca, modelo y año)" htmlFor={`${kind}-vehicle`} optional error={errors.vehicle}>
-        <Input id={`${kind}-vehicle`} name="vehicle" placeholder="Ej: Subaru WRX 2018" />
+      <Field
+        label="Auto (marca, modelo y año)"
+        htmlFor={`${kind}-vehicle`}
+        optional={kind !== "part"}
+        error={errors.vehicle}
+      >
+        <Input id={`${kind}-vehicle`} name="vehicle" placeholder="Ej: Subaru WRX 2018" aria-invalid={!!errors.vehicle} />
       </Field>
       {kind === "service" && (
         <Field label="Fecha preferida" htmlFor="preferredDate" optional error={errors.preferredDate}>
@@ -88,7 +102,9 @@ export function InquiryForm({
         </Field>
       )}
       <Field
-        label={kind === "service" ? "Cuéntanos de tu auto y lo que buscas" : "Mensaje"}
+        label={
+          kind === "service" ? "Cuéntanos de tu auto y lo que buscas" : kind === "part" ? "¿Qué repuesto buscas?" : "Mensaje"
+        }
         htmlFor={`${kind}-message`}
         optional={kind === "service"}
         error={errors.message}
@@ -101,7 +117,9 @@ export function InquiryForm({
           placeholder={
             kind === "service"
               ? "Modificaciones instaladas, uso (calle, pista), objetivos de potencia…"
-              : "¿En qué te podemos ayudar?"
+              : kind === "part"
+                ? "Nombre de la pieza, marca, número de parte, medida o lo que sepas. Si tienes foto, la puedes enviar después por WhatsApp."
+                : "¿En qué te podemos ayudar?"
           }
           aria-invalid={!!errors.message}
         />
@@ -114,7 +132,7 @@ export function InquiryForm({
       <div className="sm:col-span-2">
         <Button type="submit" size="lg" disabled={pending} className="w-full sm:w-auto">
           <Send className="size-4.5" />
-          {pending ? "Enviando…" : kind === "service" ? "Solicitar hora" : "Enviar mensaje"}
+          {pending ? "Enviando…" : kind === "service" ? "Solicitar hora" : kind === "part" ? "Pedir cotización" : "Enviar mensaje"}
         </Button>
       </div>
     </form>

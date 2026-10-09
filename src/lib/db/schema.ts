@@ -40,7 +40,8 @@ export const deliveryMethodEnum = pgEnum("delivery_method", [
 
 export const documentTypeEnum = pgEnum("document_type", ["boleta", "factura"]);
 
-export const inquiryKindEnum = pgEnum("inquiry_kind", ["service", "contact"]);
+/** service = pedir hora, contact = mensaje, part = pedido especial de un repuesto que no está en el catálogo. */
+export const inquiryKindEnum = pgEnum("inquiry_kind", ["service", "contact", "part"]);
 
 export const inquiryStatusEnum = pgEnum("inquiry_status", [
   "new",

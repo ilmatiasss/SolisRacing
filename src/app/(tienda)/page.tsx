@@ -1,7 +1,7 @@
-import { ArrowRight, Gauge, Headset, ShieldCheck, Star, Truck, Wrench, Zap } from "lucide-react";
+import { ArrowRight, Gauge, Headset, PackageSearch, ShieldCheck, Star, Truck, Wrench, Zap } from "lucide-react";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { DynamicIcon, InstagramIcon } from "@/components/icons";
+import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
 import { CatalogTabs } from "@/components/store/catalog-tabs";
 import { HeroSpotlight } from "@/components/store/hero-spotlight";
 import { Marquee } from "@/components/store/marquee";
@@ -9,6 +9,7 @@ import { GlitchText, LightTrails, NeonFloor, NeonSign, ScannerLine, StartLights 
 import { Price } from "@/components/store/price";
 import { ProductGrid } from "@/components/store/product-card";
 import { ProductImage } from "@/components/store/product-image";
+import { ProjectGallery } from "@/components/store/project-gallery";
 import { Rotator } from "@/components/store/rotator";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
 import { Tachometer } from "@/components/store/tachometer";
@@ -26,7 +27,8 @@ import {
   type ProductCardData,
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
-import { formatCLP } from "@/lib/format";
+import { formatCLP, whatsappLink } from "@/lib/format";
+import { parseProjectPosts } from "@/lib/instagram";
 
 const PERKS = [
   "Despachos a todo Chile",
@@ -51,6 +53,7 @@ export default async function HomePage() {
     .map((category) => ({ category, products: catalog.filter((product) => product.categorySlug === category.slug) }))
     .filter((shelf) => shelf.products.length > 0);
   const freeShipping = settings.shipping.freeShippingThreshold;
+  const projectPosts = parseProjectPosts(settings.projectPosts);
 
   return (
     <>
@@ -247,6 +250,36 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Pedido especial */}
+      <Container className="cv-auto reveal pb-16">
+        <div className="flex flex-col gap-6 rounded-3xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="flex items-center gap-5">
+            <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-brand-600/15 text-brand-500">
+              <PackageSearch className="size-7" />
+            </span>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold uppercase italic sm:text-3xl">¿No encuentras tu repuesto?</h2>
+              <p className="mt-1 text-muted">Lo conseguimos por ti: dinos qué buscas y para qué auto, y te enviamos precio y plazo.</p>
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-3">
+            <Link href="/pedido-especial" className={buttonClasses({ size: "lg", className: "group" })}>
+              Pedir un repuesto
+              <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a
+              href={whatsappLink(settings.whatsapp, "Hola, busco un repuesto que no está en la web.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClasses({ variant: "outline", size: "lg" })}
+            >
+              <WhatsAppIcon className="size-5" />
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </Container>
+
       {/* Servicios */}
       {services.length > 0 && (
         <section className="cv-auto relative overflow-hidden border-y border-line bg-zinc-950">
@@ -282,6 +315,19 @@ export default async function HomePage() {
             </div>
           </Container>
         </section>
+      )}
+
+      {/* Proyectos (publicaciones de Instagram cargadas en el panel) */}
+      {projectPosts.length > 0 && (
+        <Container className="cv-auto reveal pt-16 sm:pt-20">
+          <SectionHeading
+            eyebrow="Proyectos"
+            title="Autos que pasaron por el taller"
+            description="Instalaciones y seteos reales, directo desde nuestro Instagram."
+            action={{ href: "/proyectos", label: "Ver todos los proyectos" }}
+          />
+          <ProjectGallery posts={projectPosts.slice(0, 3)} />
+        </Container>
       )}
 
       {/* Ofertas */}
