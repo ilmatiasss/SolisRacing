@@ -1,4 +1,4 @@
-import { ArrowRight, Gauge, Headset, PackageSearch, ShieldCheck, Star, Truck, Wrench, Zap } from "lucide-react";
+import { ArrowRight, Cable, Gauge, Headset, PackageSearch, ShieldCheck, Star, Truck, Wrench, Zap } from "lucide-react";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
@@ -110,17 +110,27 @@ export default async function HomePage() {
                   <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </span>
-              <Link
-                href="/servicios"
-                className={buttonClasses({
-                  size: "lg",
-                  variant: "outline",
-                  className: "hover:border-brand-500 hover:shadow-[0_0_24px_rgba(255,30,30,0.45)]",
-                })}
-              >
-                <Gauge className="size-5" />
-                Agendar un seteo
-              </Link>
+              {/* En el celular van lado a lado, a mitad de ancho cada uno. */}
+              <div className="grid grid-cols-2 gap-3 sm:flex">
+                {[
+                  { href: "/servicios", icon: Gauge, label: "Agendar seteo" },
+                  { href: "/cotizador-ramal", icon: Cable, label: "Ramal a medida" },
+                ].map(({ href, icon: Icon, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={buttonClasses({
+                      size: "lg",
+                      variant: "outline",
+                      className:
+                        "gap-2 px-3 text-sm whitespace-nowrap hover:border-brand-500 hover:shadow-[0_0_24px_rgba(255,30,30,0.45)] sm:gap-2.5 sm:px-6 sm:text-base",
+                    })}
+                  >
+                    <Icon className="size-5 shrink-0" />
+                    {label}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
           <dl className="grid max-w-lg animate-rise grid-cols-3 gap-6 self-start border-t border-white/10 pt-6 [grid-area:stats] [animation-delay:580ms]">
