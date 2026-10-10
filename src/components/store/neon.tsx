@@ -55,20 +55,30 @@ export function GlitchText({ children, className }: { children: string; classNam
   );
 }
 
-/** Árbol de drag: pre-stage y stage, tres ámbar que bajan y la verde (ver globals.css). */
+/** Árbol de drag de pie, con sus dos pistas: pre-stage y stage, tres ámbar que bajan, la verde y la roja (ver globals.css). */
+const DRAG_ROWS = [
+  "drag-light--stage drag-light--prestage",
+  "drag-light--stage drag-light--staged",
+  "drag-light--amber drag-light--amber-1",
+  "drag-light--amber drag-light--amber-2",
+  "drag-light--amber drag-light--amber-3",
+  "drag-light--green",
+  "drag-light--red",
+];
+
 export function DragTree({ className }: { className?: string }) {
   return (
-    <span
-      className={cn("flex items-center gap-1.5 rounded-full border border-white/10 bg-black/50 px-2 py-1", className)}
-      aria-hidden="true"
-    >
-      <span className="drag-light drag-light--stage drag-light--prestage" />
-      <span className="drag-light drag-light--stage drag-light--staged" />
-      <span className="mx-0.5 h-3 w-px bg-white/15" />
-      <span className="drag-light drag-light--amber drag-light--amber-1" />
-      <span className="drag-light drag-light--amber drag-light--amber-2" />
-      <span className="drag-light drag-light--amber drag-light--amber-3" />
-      <span className="drag-light drag-light--green" />
+    <span className={cn("flex flex-col items-center", className)} aria-hidden="true">
+      <span className="flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-black/60 px-1.5 py-2 shadow-lg shadow-black/50 sm:gap-2 sm:px-2 sm:py-2.5 lg:gap-2.5 lg:rounded-2xl lg:px-2.5 lg:py-3">
+        {DRAG_ROWS.map((row, index) => (
+          <span key={row} className={cn("flex gap-1.5 sm:gap-2 lg:gap-2.5", index === 2 && "mt-1 border-t border-white/10 pt-2.5")}>
+            <span className={cn("drag-light", row)} />
+            <span className={cn("drag-light", row)} />
+          </span>
+        ))}
+      </span>
+      {/* Poste */}
+      <span className="h-3 w-1 rounded-b-sm bg-linear-to-b from-zinc-600 to-zinc-800 sm:h-5 lg:h-6 lg:w-1.5" />
     </span>
   );
 }

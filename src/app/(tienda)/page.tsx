@@ -82,18 +82,18 @@ export default async function HomePage() {
 
         <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20 lg:[grid-template-areas:'text_show'_'stats_show']">
           <div className="[grid-area:text]">
-            <div className="flex animate-rise flex-wrap items-center gap-x-4 gap-y-3">
-              <Eyebrow className="tracking-[0.12em] sm:tracking-[0.2em]">Performance · Electrónica · Seteos</Eyebrow>
-              <DragTree className="max-sm:ml-auto" />
+            <Eyebrow className="animate-rise tracking-[0.12em] sm:tracking-[0.2em]">Performance · Electrónica · Seteos</Eyebrow>
+            <div className="mt-5 flex items-center justify-between gap-6 sm:justify-start sm:gap-10">
+              <h1 className="font-display text-5xl leading-[0.92] font-extrabold tracking-tight uppercase italic sm:text-6xl lg:text-7xl">
+                <span className="block animate-rise [animation-delay:100ms]">
+                  <GlitchText>Más potencia.</GlitchText>
+                </span>
+                <span className="block animate-rise [animation-delay:220ms]">
+                  <NeonSign className="pr-3">Más control.</NeonSign>
+                </span>
+              </h1>
+              <DragTree className="shrink-0 animate-rise [animation-delay:300ms]" />
             </div>
-            <h1 className="mt-5 font-display text-5xl leading-[0.92] font-extrabold tracking-tight uppercase italic sm:text-6xl lg:text-7xl">
-              <span className="block animate-rise [animation-delay:100ms]">
-                <GlitchText>Más potencia.</GlitchText>
-              </span>
-              <span className="block animate-rise [animation-delay:220ms]">
-                <NeonSign className="pr-3">Más control.</NeonSign>
-              </span>
-            </h1>
             <p className="mt-6 max-w-xl animate-rise text-base text-zinc-300 [animation-delay:340ms] sm:text-lg">
               FuelTech, sistemas de combustible, sensores, fittings, relojería y lubricantes Red Line y VP para tu
               proyecto. Tienda física en Antofagasta, despachos a todo Chile y asesoría para elegir bien cada pieza.
