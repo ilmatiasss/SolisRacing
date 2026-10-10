@@ -292,6 +292,16 @@ export default async function HomePage() {
               description="Instalación y programación de FuelTech, arneses eléctricos a medida y sistemas de combustible para tu proyecto."
               action={{ href: "/servicios", label: "Ver todos los servicios" }}
             />
+            <Link
+              href="/cotizador-ramal"
+              className="group mb-6 flex items-center justify-between gap-4 rounded-2xl border border-brand-600/40 bg-brand-600/10 px-5 py-4 transition-colors hover:border-brand-500"
+            >
+              <span>
+                <span className="block font-semibold">¿Ramal a medida para tu FuelTech?</span>
+                <span className="text-sm text-zinc-300">Cotízalo en línea y ve el valor aproximado al instante.</span>
+              </span>
+              <ArrowRight className="size-5 shrink-0 text-brand-500 transition-transform group-hover:translate-x-1" />
+            </Link>
             <div className="grid gap-4 md:grid-cols-3">
               {services.slice(0, 3).map((service) => (
                 <Link

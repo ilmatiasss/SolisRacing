@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/auth";
 import { REGIONS } from "@/lib/chile";
 import { readStoreSettings, saveStoreSettings, SETTINGS_TAG } from "@/lib/data/settings";
 import { parseCLP } from "@/lib/format";
+import { invalidPricedLines, parseAmount, parsePricedOptions } from "@/lib/harness";
 import { invalidInstagramLines } from "@/lib/instagram";
 import { isValidRut, formatRut } from "@/lib/rut";
 import type { StoreSettings } from "@/lib/settings";
@@ -61,6 +62,25 @@ export async function saveSettings(_prev: SettingsState, formData: FormData): Pr
   for (const field of ["instagram", "facebook", "tiktok", "youtube", "mapsUrl"] as const) {
     const check = urlOrEmpty.safeParse(settings[field]);
     if (!check.success) return { error: `${field}: ${check.error.issues[0]?.message}` };
+  }
+  const pricedLists = [
+    ["harnessEcus", "Computadoras"],
+    ["harnessSensors", "Sensores"],
+    ["harnessExtras", "Extras"],
+  ] as const;
+  for (const [field, label] of pricedLists) {
+    const bad = invalidPricedLines(settings[field])[0];
+    if (bad) return { error: `Cotizador de ramales, ${label}: «${bad.slice(0, 60)}» debe ser «nombre | precio».` };
+  }
+  if (parsePricedOptions(settings.harnessEcus).length === 0) {
+    return { error: "Cotizador de ramales: indica al menos una computadora con su precio." };
+  }
+  for (const [field, label] of [
+    ["harnessPerCylinder", "valor por cilindro"],
+    ["harnessOriginalSensorExtra", "recargo por sensor original"],
+    ["harnessMargin", "margen del rango"],
+  ] as const) {
+    if (parseAmount(settings[field]) === null) return { error: `Cotizador de ramales: revisa el ${label}.` };
   }
   if (!settings.serviceLocations.trim()) return { error: "Indica al menos un lugar de atención para la agenda." };
   const badPost = invalidInstagramLines(settings.instagramPosts)[0];

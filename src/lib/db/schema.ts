@@ -40,8 +40,11 @@ export const deliveryMethodEnum = pgEnum("delivery_method", [
 
 export const documentTypeEnum = pgEnum("document_type", ["boleta", "factura"]);
 
-/** service = pedir hora, contact = mensaje, part = pedido especial de un repuesto que no está en el catálogo. */
-export const inquiryKindEnum = pgEnum("inquiry_kind", ["service", "contact", "part"]);
+/**
+ * service = pedir hora, contact = mensaje, part = pedido especial de un repuesto que no está en el catálogo,
+ * harness = cotización de un ramal a medida (con el valor aproximado calculado).
+ */
+export const inquiryKindEnum = pgEnum("inquiry_kind", ["service", "contact", "part", "harness"]);
 
 export const inquiryStatusEnum = pgEnum("inquiry_status", [
   "new",

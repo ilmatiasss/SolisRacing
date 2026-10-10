@@ -1,5 +1,6 @@
-import { Clock, Gauge } from "lucide-react";
+import { ArrowRight, Cable, Clock, Gauge } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { DynamicIcon, WhatsAppIcon } from "@/components/icons";
 import { ScheduleButton } from "@/components/store/schedule-button";
 import { ServiceBooking } from "@/components/store/service-booking";
@@ -110,6 +111,26 @@ export default async function ServicesPage() {
             ))}
           </div>
         )}
+      </Container>
+
+      <Container className="pb-14">
+        <div className="flex flex-col gap-6 rounded-3xl border border-brand-600/40 bg-linear-to-br from-brand-950/60 to-surface p-6 shadow-[0_0_40px_rgba(255,30,30,0.12)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="flex items-center gap-5">
+            <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-brand-600/20 text-brand-400">
+              <Cable className="size-7" />
+            </span>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold uppercase italic sm:text-3xl">¿Necesitas un ramal a medida?</h2>
+              <p className="mt-1 text-zinc-300">
+                Elige tu motor, la FuelTech y los sensores, y ve al instante un valor aproximado.
+              </p>
+            </div>
+          </div>
+          <Link href="/cotizador-ramal" className={buttonClasses({ size: "lg", className: "group shrink-0" })}>
+            Cotizar mi ramal
+            <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
       </Container>
 
       <section className="border-y border-line bg-zinc-950">

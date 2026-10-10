@@ -214,7 +214,7 @@ export function newOrderAdminEmail(order: EmailOrder, settings: StoreSettings): 
 export function inquiryAdminEmail(
   inquiry: {
     id: number;
-    kind: "service" | "contact" | "part";
+    kind: "service" | "contact" | "part" | "harness";
     serviceName: string | null;
     name: string;
     email: string;
@@ -232,7 +232,9 @@ export function inquiryAdminEmail(
       ? `Solicitud de servicio: ${inquiry.serviceName ?? "Servicio"}`
       : inquiry.kind === "part"
         ? "Pedido especial de repuesto"
-        : "Nuevo mensaje de contacto";
+        : inquiry.kind === "harness"
+          ? "Cotización de ramal a medida"
+          : "Nuevo mensaje de contacto";
   const lines = [
     ["Nombre", inquiry.name],
     ["Correo", inquiry.email],

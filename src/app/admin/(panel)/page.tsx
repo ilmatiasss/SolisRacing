@@ -163,7 +163,7 @@ export default async function DashboardPage() {
                   <li key={inquiry.id} className="px-5 py-3 text-sm">
                     <p className="font-medium">{inquiry.name}</p>
                     <p className="text-xs text-muted">
-                      {inquiry.kind === "service" ? inquiry.serviceName ?? "Servicio" : inquiry.kind === "part" ? "Repuesto" : "Contacto"} ·{" "}
+                      {inquiry.kind === "service" ? inquiry.serviceName ?? "Servicio" : inquiry.kind === "part" ? "Repuesto" : inquiry.kind === "harness" ? "Ramal" : "Contacto"} ·{" "}
                       {formatDateTime(inquiry.createdAt)}
                     </p>
                   </li>

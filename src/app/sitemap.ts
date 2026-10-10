@@ -5,7 +5,7 @@ import { siteUrl } from "@/lib/site";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
   const { products, categories } = await getSitemapEntries();
-  const staticPages = ["", "/productos", "/servicios", "/nosotros", "/pedido-especial", "/contacto", "/seguimiento", "/despachos-y-devoluciones", "/terminos", "/privacidad"];
+  const staticPages = ["", "/productos", "/servicios", "/nosotros", "/pedido-especial", "/cotizador-ramal", "/contacto", "/seguimiento", "/despachos-y-devoluciones", "/terminos", "/privacidad"];
   return [
     ...staticPages.map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly" as const, priority: path === "" ? 1 : 0.6 })),
     ...categories.map((category) => ({

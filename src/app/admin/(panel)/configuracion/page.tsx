@@ -81,6 +81,42 @@ export default async function SettingsPage() {
           </div>
         </Card>
 
+        <Card title="Cotizador de ramales">
+          <p className="mb-4 text-sm text-muted">
+            El cliente arma su ramal en /cotizador-ramal y ve un valor aproximado: base de la computadora + cilindros +
+            sensores (+ recargo si son originales) + extras, con un rango de ± el margen. Listas: una opción por línea,
+            «nombre | precio».
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Computadoras (precio base del ramal)" htmlFor="harnessEcus">
+              <Textarea id="harnessEcus" name="harnessEcus" rows={4} defaultValue={s.harnessEcus} className="font-mono text-xs" />
+            </Field>
+            <Field label="Marcas de motor" htmlFor="harnessMakes" hint="Una por línea; el cliente también puede elegir «Otra».">
+              <Textarea id="harnessMakes" name="harnessMakes" rows={4} defaultValue={s.harnessMakes} className="font-mono text-xs" />
+            </Field>
+            <Field label="Sensores" htmlFor="harnessSensors" hint="Los primeros 6 vienen marcados por defecto.">
+              <Textarea id="harnessSensors" name="harnessSensors" rows={6} defaultValue={s.harnessSensors} className="font-mono text-xs" />
+            </Field>
+            <Field label="Extras" htmlFor="harnessExtras">
+              <Textarea id="harnessExtras" name="harnessExtras" rows={6} defaultValue={s.harnessExtras} className="font-mono text-xs" />
+            </Field>
+            <Field label="Valor por cilindro (inyector y bobina)" htmlFor="harnessPerCylinder">
+              <Input id="harnessPerCylinder" name="harnessPerCylinder" defaultValue={s.harnessPerCylinder} inputMode="numeric" />
+            </Field>
+            <Field label="Recargo por sensor original (conector OEM)" htmlFor="harnessOriginalSensorExtra">
+              <Input
+                id="harnessOriginalSensorExtra"
+                name="harnessOriginalSensorExtra"
+                defaultValue={s.harnessOriginalSensorExtra}
+                inputMode="numeric"
+              />
+            </Field>
+            <Field label="Margen del rango (%)" htmlFor="harnessMargin" hint="15 muestra desde 15 % menos hasta 15 % más.">
+              <Input id="harnessMargin" name="harnessMargin" defaultValue={s.harnessMargin} inputMode="numeric" />
+            </Field>
+          </div>
+        </Card>
+
         <Card title="Agenda de servicios">
           <Field
             label="Lugares de atención"

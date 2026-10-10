@@ -161,3 +161,19 @@ test("el pedido especial de un repuesto pide auto y teléfono, y se envía", asy
   await page.getByRole("button", { name: "Pedir cotización" }).click();
   await expect(page.getByText("¡Mensaje enviado!")).toBeVisible();
 });
+
+test("el cotizador de ramales muestra el valor aproximado y envía la cotización", async ({ page }) => {
+  await page.goto("/cotizador-ramal");
+  await page.locator("#harness-make").selectOption("Mitsubishi");
+  await page.locator("#harness-model").fill("Lancer Evo IX 4G63");
+  await page.getByRole("radio", { name: "FT550" }).click();
+  // FT550 + 4 cilindros + 6 sensores originales marcados por defecto = 230.000 + 48.000 + 48.000 + 24.000.
+  await expect(page.locator("#valor-ramal").getByText("$300.000 – $405.000")).toBeVisible();
+  await page.getByLabel("Acelerador electrónico").check();
+  await expect(page.locator("#valor-ramal").getByText("$330.000 – $450.000")).toBeVisible();
+  await page.locator("#harness-name").fill("Tomás Vera");
+  await page.locator("#harness-phone").fill("+56 9 7777 8888");
+  await page.locator("#harness-email").fill("tomas@example.com");
+  await page.getByRole("button", { name: "Pedir cotización formal" }).click();
+  await expect(page.getByText("¡Cotización enviada!")).toBeVisible();
+});

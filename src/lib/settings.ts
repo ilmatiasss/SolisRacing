@@ -1,4 +1,5 @@
 import type { RegionCode } from "./chile";
+import type { HarnessSettings } from "./harness";
 
 export type PaymentSettings = {
   webpayEnabled: boolean;
@@ -26,7 +27,7 @@ export type ShippingSettings = {
   collectNote: string;
 };
 
-export type StoreSettings = {
+export type StoreSettings = HarnessSettings & {
   storeName: string;
   tagline: string;
   announcement: string;
@@ -87,6 +88,45 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   facebook: "",
   tiktok: "",
   youtube: "",
+  // Cotizador de ramales: valores de ejemplo, la tienda los ajusta en el panel.
+  harnessMakes: [
+    "Honda",
+    "Toyota",
+    "Nissan",
+    "Mitsubishi",
+    "Subaru",
+    "Mazda",
+    "Suzuki",
+    "Hyundai",
+    "Kia",
+    "Chevrolet",
+    "Ford",
+    "Volkswagen",
+    "Peugeot",
+    "BMW",
+  ].join("\n"),
+  harnessEcus: "FT450 | 180000\nFT550 | 230000\nFT600 | 280000",
+  harnessSensors: [
+    "Rotación (CKP) | 10000",
+    "Fase (CMP) | 10000",
+    "Posición de mariposa (TPS) | 8000",
+    "Presión de admisión (MAP) | 8000",
+    "Temperatura de motor | 6000",
+    "Temperatura de aire | 6000",
+    "Sonda lambda wideband | 12000",
+    "Presión de combustible | 10000",
+    "Presión de aceite | 10000",
+    "Velocidad | 8000",
+  ].join("\n"),
+  harnessExtras: [
+    "Acelerador electrónico | 40000",
+    "Control de boost (solenoide) | 20000",
+    "Relés de bomba y electroventiladores | 15000",
+    "Botón de partida y corta corriente | 25000",
+  ].join("\n"),
+  harnessPerCylinder: "12000",
+  harnessOriginalSensorExtra: "4000",
+  harnessMargin: "15",
   serviceLocations: "Antofagasta | En la tienda, Ausonia 244\nRegión de Valparaíso | En visitas programadas a la Quinta Región",
   instagramPosts: [
     "https://www.instagram.com/reel/DcCqz8MR37D/",
