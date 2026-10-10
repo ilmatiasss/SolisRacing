@@ -41,6 +41,8 @@ export type StoreSettings = {
   facebook: string;
   tiktok: string;
   youtube: string;
+  /** Lugares donde se atienden servicios, uno por línea: `nombre | detalle` (ver lib/booking). */
+  serviceLocations: string;
   /** Videos de Instagram de «Quiénes somos»: uno por línea, `link | título | etiqueta` (ver lib/instagram). */
   instagramPosts: string;
   legalName: string;
@@ -85,6 +87,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   facebook: "",
   tiktok: "",
   youtube: "",
+  serviceLocations: "Antofagasta | En la tienda, Ausonia 244\nRegión de Valparaíso | En visitas programadas a la Quinta Región",
   instagramPosts: [
     "https://www.instagram.com/reel/DcCqz8MR37D/",
     "https://www.instagram.com/reel/DbGiiSDxISO/",

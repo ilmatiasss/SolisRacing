@@ -81,6 +81,16 @@ export default async function SettingsPage() {
           </div>
         </Card>
 
+        <Card title="Agenda de servicios">
+          <Field
+            label="Lugares de atención"
+            htmlFor="serviceLocations"
+            hint="Uno por línea: nombre | detalle. El cliente elige uno al agendar. Ej: Región de Valparaíso | En visitas programadas a la Quinta Región."
+          >
+            <Textarea id="serviceLocations" name="serviceLocations" rows={3} defaultValue={s.serviceLocations} />
+          </Field>
+        </Card>
+
         <Card title="Videos de Instagram (Quiénes somos)">
           <Field
             label="Publicaciones"

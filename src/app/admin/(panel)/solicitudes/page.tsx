@@ -1,4 +1,4 @@
-import { CalendarClock, Car, Mail, Phone, Trash2 } from "lucide-react";
+import { CalendarClock, Car, Mail, MapPin, Phone, Trash2 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ActionForm, ActionSubmit } from "@/components/admin/action-form";
@@ -98,9 +98,15 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
                       <Car className="size-4" /> {inquiry.vehicle}
                     </span>
                   )}
-                  {inquiry.preferredDate && (
+                  {inquiry.location && (
                     <span className="flex items-center gap-1.5">
-                      <CalendarClock className="size-4" /> Prefiere: {formatDate(`${inquiry.preferredDate}T12:00:00`)}
+                      <MapPin className="size-4" /> {inquiry.location}
+                    </span>
+                  )}
+                  {inquiry.preferredDate && (
+                    <span className="flex items-center gap-1.5 font-medium text-fg">
+                      <CalendarClock className="size-4" /> Pide: {formatDate(`${inquiry.preferredDate}T12:00:00`)}
+                      {inquiry.preferredTime && ` a las ${inquiry.preferredTime}`}
                     </span>
                   )}
                 </div>

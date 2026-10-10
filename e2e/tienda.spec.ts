@@ -127,14 +127,24 @@ test("el checkout valida los datos sin borrar lo escrito", async ({ page }) => {
   await expect(page.locator("#name")).toHaveValue("A");
 });
 
-test("la solicitud de servicio se envía", async ({ page }) => {
+test("la agenda de servicios pide lugar, día y hora, y se envía", async ({ page }) => {
   await page.goto("/servicios");
-  await page.locator("#service-name").fill("Diego Fuentes");
-  await page.locator("#service-email").fill("diego@example.com");
-  await page.locator("#service-phone").fill("+56 9 2222 3333");
-  await page.locator("#service-vehicle").fill("VW Golf GTI 2017");
+  await page.locator("#booking-name").fill("Diego Fuentes");
+  await page.locator("#booking-email").fill("diego@example.com");
+  await page.locator("#booking-phone").fill("+56 9 2222 3333");
   await page.getByRole("button", { name: "Solicitar hora" }).click();
-  await expect(page.getByText("¡Mensaje enviado!")).toBeVisible();
+  await expect(page.getByText("Elige un día disponible en el calendario")).toBeVisible();
+  await expect(page.getByText("Elige una hora", { exact: true })).toBeVisible();
+
+  await page.getByText("Región de Valparaíso", { exact: true }).click();
+  const days = page.locator("#agendar button[aria-pressed]:not([disabled])");
+  if ((await days.count()) === 0) await page.getByRole("button", { name: "Mes siguiente" }).click();
+  await days.first().click();
+  await page.getByText("16:00", { exact: true }).click();
+  await page.getByRole("button", { name: "Solicitar hora" }).click();
+  const confirmation = page.getByRole("status").filter({ hasText: "¡Solicitud enviada!" });
+  await expect(confirmation).toContainText("Región de Valparaíso");
+  await expect(confirmation).toContainText("a las 16:00");
 });
 
 test("el pedido especial de un repuesto pide auto y teléfono, y se envía", async ({ page }) => {

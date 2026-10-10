@@ -1,19 +1,20 @@
 import { Clock, Gauge } from "lucide-react";
 import type { Metadata } from "next";
 import { DynamicIcon, WhatsAppIcon } from "@/components/icons";
-import { InquiryForm } from "@/components/store/inquiry-form";
 import { ScheduleButton } from "@/components/store/schedule-button";
+import { ServiceBooking } from "@/components/store/service-booking";
 import { PageHeader, SectionHeading } from "@/components/store/section-heading";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { getActiveServices } from "@/lib/data/catalog";
+import { parseServiceLocations } from "@/lib/booking";
 import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, whatsappLink } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Servicios y seteos",
   description:
-    "Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Seteos en Antofagasta.",
+    "Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Seteos en Antofagasta y la Región de Valparaíso. Agenda tu hora en línea.",
   alternates: { canonical: "/servicios" },
 };
 
@@ -25,6 +26,10 @@ const STEPS = [
 ];
 
 const FAQ = [
+  {
+    q: "¿Atienden fuera de Antofagasta?",
+    a: "Sí. Además de la tienda en Antofagasta, atendemos en la Región de Valparaíso en visitas programadas. Elige el lugar al agendar.",
+  },
   {
     q: "¿Trabajan con FuelTech?",
     a: "Sí. Te asesoramos para elegir el equipo y los sensores adecuados, y coordinamos la instalación y el seteo.",
@@ -122,18 +127,30 @@ export default async function ServicesPage() {
         </Container>
       </section>
 
-      <Container className="grid gap-12 py-14 lg:grid-cols-[1.3fr_1fr]">
+      <Container className="py-14">
         <section id="agendar" className="scroll-mt-32" aria-labelledby="agendar-titulo">
-          <h2 id="agendar-titulo" className="font-display text-3xl font-extrabold uppercase italic">
+          <h2 id="agendar-titulo" className="font-display text-3xl font-extrabold uppercase italic sm:text-4xl">
             Agenda tu hora
           </h2>
-          <p className="mt-2 mb-6 text-muted">
-            Déjanos tus datos y te contactamos para confirmar el día y el presupuesto.
+          <p className="mt-2 mb-6 max-w-2xl text-muted">
+            Atendemos en Antofagasta y también en la Región de Valparaíso. Elige el lugar, el día y la hora, y te
+            confirmamos por WhatsApp.
           </p>
-          <div className="rounded-2xl border border-line bg-surface p-6">
-            <InquiryForm kind="service" services={services.map(({ id, name }) => ({ id, name }))} />
+          <div className="rounded-2xl border border-line bg-surface p-5 sm:p-8">
+            {services.length > 0 ? (
+              <ServiceBooking
+                services={services.map(({ id, name }) => ({ id, name }))}
+                locations={parseServiceLocations(settings.serviceLocations)}
+                whatsapp={settings.whatsapp}
+              />
+            ) : (
+              <p className="text-muted">Escríbenos por WhatsApp para agendar.</p>
+            )}
           </div>
         </section>
+      </Container>
+
+      <Container className="max-w-3xl pb-14">
         <section aria-labelledby="faq-titulo">
           <h2 id="faq-titulo" className="font-display text-3xl font-extrabold uppercase italic">
             Preguntas frecuentes

@@ -62,6 +62,7 @@ export async function saveSettings(_prev: SettingsState, formData: FormData): Pr
     const check = urlOrEmpty.safeParse(settings[field]);
     if (!check.success) return { error: `${field}: ${check.error.issues[0]?.message}` };
   }
+  if (!settings.serviceLocations.trim()) return { error: "Indica al menos un lugar de atención para la agenda." };
   const badPost = invalidInstagramLines(settings.instagramPosts)[0];
   if (badPost) {
     return { error: `Videos de Instagram: «${badPost.slice(0, 60)}» no es un link de publicación de Instagram.` };

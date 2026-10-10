@@ -221,6 +221,8 @@ export function inquiryAdminEmail(
     phone: string | null;
     vehicle: string | null;
     preferredDate: string | null;
+    preferredTime: string | null;
+    location: string | null;
     message: string | null;
   },
   settings: StoreSettings,
@@ -236,7 +238,9 @@ export function inquiryAdminEmail(
     ["Correo", inquiry.email],
     ["Teléfono", inquiry.phone],
     ["Vehículo", inquiry.vehicle],
-    ["Fecha preferida", inquiry.preferredDate],
+    ["Lugar", inquiry.location],
+    ["Fecha pedida", inquiry.preferredDate],
+    ["Hora pedida", inquiry.preferredTime],
     ["Mensaje", inquiry.message],
   ].filter((line): line is [string, string] => Boolean(line[1]));
   const adminUrl = `${siteUrl()}/admin/solicitudes`;

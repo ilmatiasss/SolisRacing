@@ -314,6 +314,9 @@ export const inquiries = pgTable(
     phone: text(),
     vehicle: text(),
     preferredDate: date({ mode: "string" }),
+    /** Hora pedida en la agenda (HH:MM) y lugar de atención (Antofagasta, Región de Valparaíso…). */
+    preferredTime: text(),
+    location: text(),
     message: text(),
     status: inquiryStatusEnum().default("new").notNull(),
     adminNotes: text(),

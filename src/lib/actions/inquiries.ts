@@ -5,6 +5,7 @@ import { after } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { inquiries, services } from "@/lib/db/schema";
+import { ALL_BOOKING_TIMES, isBookableDate, parseServiceLocations, todayInChile } from "@/lib/booking";
 import { readStoreSettings } from "@/lib/data/settings";
 import { sendEmail } from "@/lib/email";
 import { inquiryAdminEmail } from "@/lib/email-templates";
@@ -34,6 +35,8 @@ const inquirySchema = z.object({
     .trim()
     .regex(/^(\d{4}-\d{2}-\d{2})?$/, { error: "Fecha inválida" })
     .transform((value) => value || null),
+  preferredTime: optionalText(5),
+  location: optionalText(80),
   message: optionalText(2000),
 });
 
@@ -49,6 +52,8 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
     phone: formData.get("phone") ?? "",
     vehicle: formData.get("vehicle") ?? "",
     preferredDate: formData.get("preferredDate") ?? "",
+    preferredTime: formData.get("preferredTime") ?? "",
+    location: formData.get("location") ?? "",
     message: formData.get("message") ?? "",
   });
   if (!parsed.success) {
@@ -57,6 +62,19 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
   const data = parsed.data;
   if (data.kind === "contact" && !data.message) {
     return { error: "Revisa los campos marcados.", fieldErrors: { message: ["Escribe tu mensaje"] } };
+  }
+  if (data.kind === "service") {
+    // Agenda: lugar de los configurados, día disponible y hora ofrecida (se confirma por WhatsApp).
+    const settings = await readStoreSettings();
+    const fieldErrors: Record<string, string[]> = {};
+    const locations = parseServiceLocations(settings.serviceLocations).map((location) => location.name);
+    if (!data.location || !locations.includes(data.location)) fieldErrors.location = ["Elige dónde quieres atenderte"];
+    if (!data.preferredDate || !isBookableDate(data.preferredDate, todayInChile())) {
+      fieldErrors.preferredDate = ["Elige un día disponible en el calendario"];
+    }
+    if (!data.preferredTime || !ALL_BOOKING_TIMES.includes(data.preferredTime)) fieldErrors.preferredTime = ["Elige una hora"];
+    if (!data.phone) fieldErrors.phone = ["Déjanos un teléfono o WhatsApp para confirmar"];
+    if (Object.keys(fieldErrors).length > 0) return { error: "Revisa los campos marcados.", fieldErrors };
   }
   if (data.kind === "part") {
     const fieldErrors: Record<string, string[]> = {};
@@ -86,6 +104,8 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
       phone: data.phone,
       vehicle: data.vehicle,
       preferredDate: data.preferredDate,
+      preferredTime: data.kind === "service" ? data.preferredTime : null,
+      location: data.kind === "service" ? data.location : null,
       message: data.message,
     })
     .returning();

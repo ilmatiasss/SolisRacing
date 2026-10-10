@@ -30,7 +30,7 @@ export default async function AboutPage() {
     {
       icon: Wrench,
       title: "Seteos e instalación",
-      text: "Instalamos y programamos FuelTech, sistemas de combustible y arneses para tu proyecto.",
+      text: "Instalamos y programamos FuelTech, combustible y arneses, en Antofagasta y en visitas a la Región de Valparaíso.",
     },
     { icon: Truck, title: "Despachos a todo Chile", text: "Enviamos por courier o retiras en la tienda." },
   ];
@@ -40,7 +40,7 @@ export default async function AboutPage() {
       <PageHeader
         eyebrow="Quiénes somos"
         title="Conoce Solis Racing Parts"
-        description="Repuestos de performance, electrónica y seteos en Antofagasta. Esto es lo que hacemos día a día."
+        description="Repuestos de performance, electrónica y seteos en Antofagasta y la Región de Valparaíso. Esto es lo que hacemos día a día."
       />
       <Container className="py-14">
         <ul className="grid gap-4 md:grid-cols-3">
