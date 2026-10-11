@@ -177,3 +177,24 @@ test("el cotizador de ramales muestra el valor aproximado y envía la cotizació
   await page.getByRole("button", { name: "Pedir cotización formal" }).click();
   await expect(page.getByText("¡Cotización enviada!")).toBeVisible();
 });
+
+test("el aviso «Próximamente» solo lo ven los visitantes, no la vista previa", async ({ page }) => {
+  // En localhost (como en *.vercel.app) se ve la tienda completa.
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: /Más potencia/i })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Próximamente" })).toBeHidden();
+
+  // ?preview=0 muestra el aviso como lo ve un visitante del dominio público.
+  await page.goto("/?preview=0");
+  const aviso = page.getByRole("region", { name: "Próximamente" });
+  await expect(aviso).toBeVisible();
+  await expect(aviso.getByRole("heading", { name: /lo mejor del racing en Chile/i })).toBeVisible();
+  await expect(aviso.getByText("por Diego Solis")).toBeVisible();
+  await expect(aviso.getByRole("link", { name: "Instagram" })).toBeVisible();
+
+  // ?preview=1 vuelve a la tienda y queda guardado en el navegador.
+  await page.goto("/?preview=1");
+  await expect(aviso).toBeHidden();
+  await page.goto("/servicios");
+  await expect(aviso).toBeHidden();
+});

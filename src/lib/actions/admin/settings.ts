@@ -14,6 +14,7 @@ import type { StoreSettings } from "@/lib/settings";
 export type SettingsState = { ok?: boolean; error?: string; message?: string };
 
 const BOOLEAN_FIELDS = [
+  "comingSoon.enabled",
   "payments.webpayEnabled",
   "payments.transferEnabled",
   "shipping.pickupEnabled",
@@ -81,6 +82,9 @@ export async function saveSettings(_prev: SettingsState, formData: FormData): Pr
     ["harnessMargin", "margen del rango"],
   ] as const) {
     if (parseAmount(settings[field]) === null) return { error: `Cotizador de ramales: revisa el ${label}.` };
+  }
+  if (settings.comingSoon.enabled && !settings.comingSoon.title) {
+    return { error: "Escribe el mensaje del aviso «Próximamente» o desactívalo." };
   }
   if (!settings.serviceLocations.trim()) return { error: "Indica al menos un lugar de atención para la agenda." };
   const badPost = invalidInstagramLines(settings.instagramPosts)[0];

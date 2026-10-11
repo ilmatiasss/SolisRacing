@@ -27,6 +27,13 @@ export type ShippingSettings = {
   collectNote: string;
 };
 
+export type ComingSoonSettings = {
+  /** Muestra el aviso «Próximamente» sobre la tienda a los visitantes del dominio público. */
+  enabled: boolean;
+  title: string;
+  signature: string;
+};
+
 export type StoreSettings = HarnessSettings & {
   storeName: string;
   tagline: string;
@@ -48,6 +55,7 @@ export type StoreSettings = HarnessSettings & {
   instagramPosts: string;
   legalName: string;
   legalRut: string;
+  comingSoon: ComingSoonSettings;
   payments: PaymentSettings;
   shipping: ShippingSettings;
 };
@@ -136,6 +144,11 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   ].join("\n"),
   legalName: "Solis Racing Parts",
   legalRut: "",
+  comingSoon: {
+    enabled: true,
+    title: "Pronto, lo mejor del racing en Chile para tus proyectos",
+    signature: "por Diego Solis",
+  },
   payments: {
     webpayEnabled: true,
     transferEnabled: true,

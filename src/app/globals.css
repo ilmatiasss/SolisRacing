@@ -316,6 +316,26 @@
   color-scheme: dark;
 }
 
+/* Aviso «Próximamente»: la tienda queda de fondo (sin scroll ni animaciones) salvo en vista previa. */
+.coming-soon {
+  display: flex;
+}
+html[data-preview] .coming-soon {
+  display: none;
+}
+html[data-preview] .coming-soon-pill {
+  display: flex;
+}
+html:not([data-preview]) [data-coming-soon] {
+  height: 100dvh;
+  overflow: hidden;
+}
+html[data-settled]:not([data-preview]) [data-coming-soon] *,
+html[data-settled]:not([data-preview]) [data-coming-soon] *::before,
+html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
+  animation-play-state: paused !important;
+}
+
 .theme-admin {
   --bg: #f5f5f6;
   --surface: #ffffff;

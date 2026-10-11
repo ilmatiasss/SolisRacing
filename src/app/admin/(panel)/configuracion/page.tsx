@@ -145,6 +145,25 @@ export default async function SettingsPage() {
           </Field>
         </Card>
 
+        <Card title="Aviso «Próximamente»">
+          <div className="space-y-5">
+            <Checkbox
+              name="comingSoon.enabled"
+              defaultChecked={s.comingSoon.enabled}
+              label="Mostrar el aviso sobre la tienda"
+              description="Los visitantes del dominio público ven la tienda desenfocada con tu mensaje encima. En solis-racing.vercel.app y en tu computador sigues viendo la tienda completa; agrega ?preview=1 a cualquier dirección para verla también en el dominio público, o ?preview=0 para verla como visitante. Desactívalo el día del lanzamiento."
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Mensaje" htmlFor="comingSoonTitle" className="md:col-span-2">
+                <Input id="comingSoonTitle" name="comingSoon.title" defaultValue={s.comingSoon.title} />
+              </Field>
+              <Field label="Firma" htmlFor="comingSoonSignature" optional hint="Ej: por Diego Solis.">
+                <Input id="comingSoonSignature" name="comingSoon.signature" defaultValue={s.comingSoon.signature} />
+              </Field>
+            </div>
+          </div>
+        </Card>
+
         <Card title="Medios de pago">
           <div className="space-y-5">
             <Checkbox
