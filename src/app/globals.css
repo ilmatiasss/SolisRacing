@@ -346,20 +346,20 @@ html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
   position: relative;
   display: block;
   flex-shrink: 0;
-  /* El halo del original se desvanece hacia las esquinas del cuadrado. */
-  mask-image: radial-gradient(closest-side, #000 84%, transparent 100%);
 }
 .logo-anim--crop {
   overflow: hidden;
   border-radius: 9999px;
-  mask-image: none;
 }
 .logo-anim__art {
   position: absolute;
   inset: 0;
+  /* El halo del original se desvanece hacia las esquinas del cuadrado. */
+  mask-image: radial-gradient(closest-side, #000 84%, transparent 100%);
 }
 /* Recortado a la insignia redonda: círculo de radio 557 px con centro en (617, 616). */
 .logo-anim--crop .logo-anim__art {
+  mask-image: none;
   inset: auto;
   left: -5.386%;
   top: -5.296%;
@@ -425,6 +425,52 @@ html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
   mix-blend-mode: screen;
   opacity: 0;
   animation: logo-limiter 10s linear infinite;
+}
+/*
+ * Neón alrededor de la insignia: un tubo tenue que se aviva con la presión del turbo y dos
+ * luces (naranja y roja) que lo recorren. Centrado en el círculo de la insignia (49,2 %, 49,1 %).
+ * Las luces giran 6 vueltas por iteración de 24 s (una vuelta cada 4 s).
+ */
+.logo-neon {
+  position: absolute;
+  left: -0.8%;
+  top: -0.9%;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+.logo-neon svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* Tubo: siempre encendido, más intenso con la carga del turbo. */
+.logo-neon__tube {
+  opacity: 0.6;
+  animation: logo-neon-tube 10s linear infinite;
+}
+.logo-neon__lights {
+  animation: logo-neon-spin 24s linear infinite;
+}
+@keyframes logo-neon-spin {
+  to {
+    transform: rotate(6turn);
+  }
+}
+@keyframes logo-neon-tube {
+  0%,
+  10%,
+  88%,
+  100% {
+    opacity: 0.6;
+  }
+  45%,
+  70% {
+    opacity: 1;
+  }
 }
 @keyframes logo-spool {
   0% {
@@ -1551,6 +1597,8 @@ body:has(.theme-admin) {
   .logo-anim__wheel::after,
   .logo-anim__needle--live,
   .logo-anim__limiter,
+  .logo-neon__tube,
+  .logo-neon__lights,
   .light-trail,
   .neon-floor__grid,
   .scanner {

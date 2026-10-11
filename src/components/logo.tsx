@@ -20,11 +20,62 @@ export function LogoBadge({ size, className, eager }: { size: number; className?
   );
 }
 
+const NEON_R = 47.5;
+const NEON_C = 2 * Math.PI * NEON_R;
+const NEON_TAIL = 24;
+/** Cometas de neón: tramos con opacidad creciente hasta la cabeza (ángulos en grados, horario). */
+const NEON_COMETS = [
+  { head: 0, color: "#ff9a2e", core: "#fff1d0" },
+  { head: 180, color: "#ff3426", core: "#ffd8cf" },
+].flatMap(({ head, color, core }) =>
+  Array.from({ length: NEON_TAIL }, (_, index) => {
+    const step = 3; // grados por tramo
+    return {
+      angle: head - (NEON_TAIL - index) * step,
+      length: (step / 360) * NEON_C,
+      color,
+      core,
+      alpha: ((index + 1) / NEON_TAIL) ** 1.6,
+      head: index === NEON_TAIL - 1,
+    };
+  }),
+);
+
+/** Anillo de neón alrededor de la insignia: tubo tenue y dos luces que lo recorren (ver `.logo-neon`). */
+function NeonRing() {
+  const ring = { cx: 50, cy: 50, r: NEON_R, fill: "none" };
+  return (
+    <span className="logo-neon">
+      <svg viewBox="0 0 100 100" className="logo-neon__tube">
+        <circle {...ring} stroke="#ff4a1f" strokeWidth="4" strokeOpacity="0.14" />
+        <circle {...ring} stroke="#ff5a2a" strokeWidth="0.9" strokeOpacity="0.6" />
+      </svg>
+      <svg viewBox="0 0 100 100" className="logo-neon__lights">
+        {NEON_COMETS.map(({ angle, length, color, core, alpha, head }) => {
+          const dash = {
+            strokeDasharray: `${length + 0.15} ${NEON_C}`,
+            strokeLinecap: head ? ("round" as const) : undefined,
+            transform: `rotate(${angle} 50 50)`,
+          };
+          return (
+            <g key={`${color}-${angle}`} opacity={alpha}>
+              <circle {...ring} {...dash} stroke={color} strokeWidth="6" strokeOpacity="0.16" />
+              <circle {...ring} {...dash} stroke={color} strokeWidth="2.6" strokeOpacity="0.55" />
+              <circle {...ring} {...dash} stroke={core} strokeWidth="1.1" />
+            </g>
+          );
+        })}
+      </svg>
+    </span>
+  );
+}
+
 /**
  * Logo animado, armado en capas sobre el logo original: el fondo (sin la aguja), la rueda del
  * turbo, la aguja del velocímetro y su centro. El turbo gira como al tomar carga y, con `gauge`,
  * la aguja sube y rebota en el corte de inyección (ver `.logo-anim` en globals.css). Con `crop`
  * se recorta a la insignia redonda (encabezado); sin él muestra también el halo rojo del original.
+ * Con `neon`, dos luces de neón recorren el borde de la insignia.
  * `size` (px) solo sirve para elegir la resolución de las imágenes; el tamaño visible va en `className`.
  */
 export function AnimatedLogo({
@@ -33,18 +84,22 @@ export function AnimatedLogo({
   eager,
   gauge = false,
   crop = false,
+  neon = false,
 }: {
   size: number;
   className?: string;
   eager?: boolean;
   gauge?: boolean;
   crop?: boolean;
+  /** Luces de neón que recorren el borde de la insignia (aviso «Próximamente»). */
+  neon?: boolean;
 }) {
   const art = crop ? size * 1.126 : size;
   const px = (fraction: number) => `${Math.ceil(art * fraction)}px`;
   const loading = eager ? "eager" : undefined;
   return (
     <span aria-hidden="true" className={cn("logo-anim", crop && "logo-anim--crop", className)}>
+      {neon && <NeonRing />}
       <span className="logo-anim__art">
         <Image src={logoBase} alt="" fill sizes={px(1)} loading={loading} />
         <span className="logo-anim__wheel">

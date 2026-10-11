@@ -18,7 +18,7 @@ export function ComingSoonOverlay({ settings }: { settings: StoreSettings }) {
         className="theme-store coming-soon fixed inset-0 z-60 flex items-center justify-center overflow-y-auto bg-black/40 px-6 py-10 text-fg backdrop-blur-xl"
       >
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <AnimatedLogo size={256} eager gauge className="size-56 sm:size-64" />
+          <AnimatedLogo size={256} eager gauge neon className="size-56 sm:size-64" />
           <h2 className="mt-4 font-display text-4xl leading-[1.02] font-extrabold tracking-normal uppercase italic [text-shadow:0_0_28px_rgba(255,40,40,0.55)] sm:text-6xl">
             {title}
           </h2>
