@@ -6,7 +6,8 @@ test.describe.configure({ mode: "serial" });
 test("la portada muestra los destacados y el catálogo por categoría", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /Más potencia/i })).toBeVisible();
-  await expect(page.getByRole("region", { name: "Productos destacados" })).toBeVisible();
+  await expect(page.getByText(/Despacho gratis en compras sobre/)).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Destacados/ })).toHaveAttribute("aria-selected", "true");
 
   const tab = page.getByRole("tab", { name: /Red Line/ });
   await tab.click();

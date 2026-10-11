@@ -49,7 +49,6 @@
   --animate-glow: glow 24s ease-in-out infinite; /* 4 ciclos de 6 s */
   --animate-speedlines: speedlines 24s linear infinite; /* 10 ciclos de 2,4 s */
   --animate-neon-pulse: neon-pulse 24s ease-in-out infinite; /* 8 ciclos de 3 s */
-  --animate-progress: progress var(--progress-duration, 4s) linear both;
   --animate-ping-slow: ping-slow 19.2s cubic-bezier(0, 0, 0.2, 1) infinite; /* 8 ciclos de 2,4 s */
   --animate-float: float 24s ease-in-out infinite; /* 4 ciclos de 6 s */
 
@@ -151,14 +150,6 @@
     81.25%,
     93.75% {
       opacity: 1;
-    }
-  }
-  @keyframes progress {
-    from {
-      transform: scaleX(0);
-    }
-    to {
-      transform: scaleX(1);
     }
   }
   /* Cada ciclo: crece y se desvanece en el 75% del tiempo, espera y vuelve al inicio de golpe. */
@@ -1124,65 +1115,6 @@ body:has(.theme-admin) {
 }
 
 /*
- * Borde con un haz de luz que gira: un anillo de 2px por dentro del borde exterior de la tarjeta.
- * Antes se animaba el ángulo del degradado, que obliga a redibujar en cada cuadro; ahora un cuadrado
- * con degradado cónico gira (solo `transform`, lo anima la GPU) dentro de .neon-beam__ring, que lo
- * recorta al contorno de la tarjeta, y un panel opaco (::after) lo tapa desde 2px hacia adentro.
- * El halo rojo (.neon-halo) va encima, como antes.
- */
-.neon-beam {
-  position: relative;
-  isolation: isolate;
-}
-.neon-beam__ring {
-  position: absolute;
-  z-index: -2;
-  inset: -1px; /* sobre el borde de 1px: el contorno exterior de la tarjeta */
-  border-radius: 1.5rem;
-  overflow: hidden;
-  pointer-events: none;
-}
-.neon-beam__ring::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 180%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  background: conic-gradient(
-    transparent 0deg 240deg,
-    rgb(255 42 42 / 0.9) 295deg,
-    #ffd0c8 325deg,
-    rgb(255 42 42 / 0.9) 345deg,
-    transparent 360deg
-  );
-  animation: beam-spin 21s linear infinite;
-}
-.neon-beam::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 1px;
-  border-radius: calc(1.5rem - 2px);
-  pointer-events: none;
-  background: #0c080a; /* el zinc-950/90 de antes sobre el fondo rojizo de la portada */
-}
-/* 6 giros de 3,5 s por vuelta. */
-@keyframes beam-spin {
-  to {
-    transform: rotate(6turn);
-  }
-}
-/* Halo rojo que respira alrededor de la tarjeta (late con opacidad, ver animate-neon-pulse). */
-.neon-halo {
-  pointer-events: none;
-  box-shadow:
-    0 0 40px rgb(255 30 30 / 0.3),
-    0 0 90px rgb(255 30 30 / 0.15);
-}
-
-/*
  * Resplandores. Antes eran círculos de color con `filter: blur()`, que la GPU del celular vuelve a
  * desenfocar en cada cuadro mientras la portada se mueve. Ahora son degradados radiales con la misma
  * caída que un círculo desenfocado (calculada: difieren en 1 o 2 niveles de color). Los animados
@@ -1297,25 +1229,6 @@ body:has(.theme-admin) {
     rgb(225 6 0 / 0.01) 121px,
     rgb(225 6 0 / 0.004) 137px,
     transparent 184px
-  );
-}
-.glow-slide {
-  pointer-events: none;
-  background: radial-gradient(
-    circle closest-side,
-    rgb(225 6 0 / 0.203) calc(100% - 180px),
-    rgb(225 6 0 / 0.201) calc(100% - 173px),
-    rgb(225 6 0 / 0.196) calc(100% - 166px),
-    rgb(225 6 0 / 0.178) calc(100% - 152px),
-    rgb(225 6 0 / 0.151) calc(100% - 139px),
-    rgb(225 6 0 / 0.09) calc(100% - 113px),
-    rgb(225 6 0 / 0.065) calc(100% - 101px),
-    rgb(225 6 0 / 0.043) calc(100% - 89px),
-    rgb(225 6 0 / 0.026) calc(100% - 76px),
-    rgb(225 6 0 / 0.014) calc(100% - 62px),
-    rgb(225 6 0 / 0.006) calc(100% - 47px),
-    rgb(225 6 0 / 0.002) calc(100% - 28px),
-    transparent 100%
   );
 }
 

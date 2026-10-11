@@ -7,11 +7,8 @@ import { CatalogTabs } from "@/components/store/catalog-tabs";
 import { HeroSpotlight } from "@/components/store/hero-spotlight";
 import { Marquee } from "@/components/store/marquee";
 import { DragTree, GlitchText, LightTrails, NeonFloor, NeonSign, ScannerLine } from "@/components/store/neon";
-import { Price } from "@/components/store/price";
 import { ProductGrid } from "@/components/store/product-card";
-import { ProductImage } from "@/components/store/product-image";
 import { InstagramGallery } from "@/components/store/instagram-gallery";
-import { Rotator } from "@/components/store/rotator";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -24,7 +21,6 @@ import {
   getCategories,
   getFeaturedProducts,
   getOnSaleProducts,
-  type ProductCardData,
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, whatsappLink } from "@/lib/format";
@@ -80,10 +76,15 @@ export default async function HomePage() {
           aria-hidden="true"
         />
 
-        <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'logo'_'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-16 lg:[grid-template-areas:'text_logo'_'text_show'_'stats_show']">
+        <Container className="relative grid items-center gap-x-10 gap-y-8 py-10 [grid-template-areas:'logo'_'text'_'stats'] sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-20 lg:[grid-template-areas:'text_logo'_'stats_logo']">
           {/* Logo con el turbo, el velocímetro que rebota en el corte y las luces de neón. */}
-          <div className="flex animate-rise justify-center [grid-area:logo] max-lg:-mb-2 lg:-mb-6">
-            <AnimatedLogo size={224} eager gauge neon className="size-40 sm:size-48 lg:size-56" />
+          <div className="relative flex animate-rise justify-center [grid-area:logo] [animation-delay:200ms] max-lg:-mb-2 lg:self-start">
+            {/* Fondo oscuro para despegar el logo de los resplandores rojos de la portada. */}
+            <div
+              aria-hidden="true"
+              className="absolute top-1/2 left-1/2 size-[135%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(0_0_0/0.9),rgb(0_0_0/0.6)_55%,transparent)]"
+            />
+            <AnimatedLogo size={416} eager gauge neon className="relative size-44 sm:size-56 lg:size-[min(22rem,56vh)] xl:size-[min(26rem,56vh)]" />
           </div>
           <div className="[grid-area:text]">
             <Eyebrow className="animate-rise tracking-[0.06em] sm:tracking-[0.2em]">Performance · Electrónica · Programación</Eyebrow>
@@ -136,6 +137,12 @@ export default async function HomePage() {
                 ))}
               </div>
             </div>
+            {freeShipping > 0 && (
+              <p className="mt-5 flex animate-rise items-center gap-2 text-sm text-zinc-300 [animation-delay:520ms]">
+                <Truck className="size-4 text-brand-500" />
+                Despacho gratis en compras sobre {formatCLP(freeShipping)}
+              </p>
+            )}
           </div>
           <dl className="grid max-w-lg animate-rise grid-cols-3 gap-6 self-start border-t border-white/10 pt-6 [grid-area:stats] [animation-delay:580ms]">
             <Stat value={catalog.length} label="Productos" />
@@ -143,40 +150,6 @@ export default async function HomePage() {
             <Stat value={REGIONS.length} label="Regiones con despacho" />
           </dl>
 
-          {spotlight.length > 0 && (
-            <div className="relative animate-rise [grid-area:show] [animation-delay:260ms]">
-              <div className="neon-beam relative rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-2xl shadow-black/50 sm:p-7">
-                <span aria-hidden="true" className="neon-beam__ring" />
-                <div className="mb-5 flex items-center justify-between gap-3">
-                  <p className="flex items-center gap-2.5 font-display text-sm font-bold tracking-[0.2em] text-brand-500 uppercase">
-                    <span className="relative flex size-2.5" aria-hidden="true">
-                      <span className="absolute inline-flex size-full animate-ping-slow rounded-full bg-brand-500" />
-                      <span className="relative inline-flex size-2.5 rounded-full bg-brand-500" />
-                    </span>
-                    Lo más buscado
-                  </p>
-                  <Link href="/productos" className="text-sm font-semibold text-zinc-300 hover:text-white">
-                    Ver todo
-                  </Link>
-                </div>
-                <Rotator
-                  label="Productos destacados"
-                  slides={spotlight.map((product, index) => ({
-                    id: String(product.id),
-                    label: product.name,
-                    content: <SpotlightSlide product={product} eager={index === 0} />,
-                  }))}
-                />
-                {freeShipping > 0 && (
-                  <p className="mt-5 flex items-center gap-2 border-t border-white/10 pt-4 text-sm text-zinc-300">
-                    <Truck className="size-4 text-brand-500" />
-                    Despacho gratis en compras sobre {formatCLP(freeShipping)}
-                  </p>
-                )}
-                <span aria-hidden="true" className="neon-halo absolute inset-0 animate-neon-pulse rounded-[inherit]" />
-              </div>
-            </div>
-          )}
         </Container>
         <ScannerLine className="bottom-0" />
       </section>
@@ -450,43 +423,6 @@ function Stat({ value, label }: { value: number; label: string }) {
         <span aria-hidden="true" className="count-up tabular-nums" style={{ "--to": value } as CSSProperties} />
       </dd>
     </div>
-  );
-}
-
-function SpotlightSlide({ product, eager }: { product: ProductCardData; eager: boolean }) {
-  return (
-    <Link
-      href={`/productos/${product.slug}`}
-      className="group/slide grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] items-center gap-4 sm:gap-6"
-    >
-      <div className="relative">
-        {/* Equivale al círculo desenfocado de antes (inset-4 con blur de 40px), sin filtro. */}
-        <div className="glow-slide absolute -inset-[104px]" aria-hidden="true" />
-        <ProductImage
-          src={product.imageUrl}
-          alt={product.imageAlt ?? product.name}
-          icon={product.categoryIcon}
-          sizes="(min-width: 1024px) 240px, 40vw"
-          eager={eager}
-          className="relative aspect-square animate-float rounded-2xl border border-white/10 shadow-2xl shadow-black/60"
-        />
-      </div>
-      <div className="min-w-0">
-        <p className="text-xs font-semibold tracking-wider text-brand-500 uppercase">
-          {product.brandName ?? product.categoryName}
-        </p>
-        <h2 className="mt-1 line-clamp-3 font-display text-2xl leading-tight font-extrabold uppercase italic sm:text-3xl">
-          {product.name}
-        </h2>
-        <div className="mt-3">
-          <Price price={product.price} compareAtPrice={product.compareAtPrice} />
-        </div>
-        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-200 transition-colors group-hover/slide:text-white">
-          Ver producto
-          <ArrowRight className="size-4 text-brand-500 transition-transform group-hover/slide:translate-x-1" />
-        </span>
-      </div>
-    </Link>
   );
 }
 
