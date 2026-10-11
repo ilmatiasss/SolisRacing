@@ -1,30 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Saira_Condensed, Titillium_Web } from "next/font/google";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+// Texto: Titillium Web (aire de telemetría de carrera). Títulos y números: Saira Condensed (la cursiva es inclinación del navegador).
+const titillium = Titillium_Web({
+  variable: "--font-titillium",
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
-const barlow = Barlow_Condensed({
-  variable: "--font-barlow",
-  subsets: ["latin"],
+const saira = Saira_Condensed({
+  variable: "--font-saira",
+  subsets: ["latin", "latin-ext"],
   weight: ["500", "600", "700", "800"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Solis Racing Parts · Partes de performance y seteos",
+    default: "Solis Racing Parts · Partes de performance y programación",
     template: "%s · Solis Racing Parts",
   },
   description:
-    "Autopartes de performance en Antofagasta: FuelTech, sistemas de combustible, sensores, fittings, relojería y seteos. Despachos a todo Chile y pago con Webpay.",
+    "Autopartes de performance en Antofagasta: FuelTech, sistemas de combustible, sensores, fittings, relojería y programación. Despachos a todo Chile y pago con Webpay.",
   applicationName: "Solis Racing Parts",
   openGraph: {
     type: "website",
@@ -40,7 +41,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-CL" className={`${inter.variable} ${barlow.variable} h-full antialiased`}>
+    <html lang="es-CL" className={`${titillium.variable} ${saira.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>
   );

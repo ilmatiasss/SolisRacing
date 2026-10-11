@@ -5,8 +5,8 @@
  * y los componentes usan bg-surface, border-line, text-muted, etc.
  */
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-barlow), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-titillium), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-saira), var(--font-titillium), ui-sans-serif, system-ui, sans-serif;
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -334,6 +334,90 @@ html[data-settled]:not([data-preview]) [data-coming-soon] *,
 html[data-settled]:not([data-preview]) [data-coming-soon] *::before,
 html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
   animation-play-state: paused !important;
+}
+
+/*
+ * Turbo del logo: la rueda gira como al tomar carga (arranca lento, acelera, sostiene y baja), con
+ * un halo naranja y un difuminado de movimiento a máxima velocidad. Un solo ciclo de 12 s (varias
+ * vueltas por iteración) para no despertar al hilo principal en cada vuelta. Posición medida sobre
+ * la imagen del logo.
+ */
+.turbo-wheel {
+  position: absolute;
+  left: 17.2%;
+  top: 52.3%;
+  width: 11.5%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+.turbo-wheel__blades {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: turbo-spin 12s linear infinite;
+}
+.turbo-wheel::before,
+.turbo-wheel::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0;
+}
+/* Halo naranja que sube con la carga. */
+.turbo-wheel::before {
+  inset: -12%;
+  box-shadow:
+    0 0 6px 1px rgb(255 140 40 / 0.9),
+    0 0 18px 4px rgb(255 90 20 / 0.55);
+  animation: turbo-glow 12s linear infinite;
+}
+/* Difuminado de movimiento a máxima velocidad. */
+.turbo-wheel::after {
+  inset: 4%;
+  background: radial-gradient(circle, rgb(235 238 245 / 0.75) 0 18%, rgb(150 156 168 / 0.45) 55%, rgb(60 62 70 / 0.1) 72%, transparent 74%);
+  animation: turbo-blur 12s linear infinite;
+}
+@keyframes turbo-spin {
+  0% {
+    transform: rotate(0turn);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.46);
+  }
+  45% {
+    transform: rotate(6turn);
+    animation-timing-function: linear;
+  }
+  70% {
+    transform: rotate(15turn);
+    animation-timing-function: cubic-bezier(0.1, 0.36, 0.4, 1);
+  }
+  100% {
+    transform: rotate(18turn);
+  }
+}
+@keyframes turbo-glow {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  45%,
+  70% {
+    opacity: 1;
+  }
+}
+@keyframes turbo-blur {
+  0%,
+  30%,
+  85%,
+  100% {
+    opacity: 0;
+  }
+  50%,
+  68% {
+    opacity: 0.85;
+  }
 }
 
 .theme-admin {
@@ -1189,6 +1273,9 @@ body:has(.theme-admin) {
   .neon-sign__glow,
   .glitch__slice,
   .drag-light::after,
+  .turbo-wheel__blades,
+  .turbo-wheel::before,
+  .turbo-wheel::after,
   .light-trail,
   .neon-floor__grid,
   .scanner {

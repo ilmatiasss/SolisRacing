@@ -34,7 +34,7 @@ const PERKS = [
   "Despachos a todo Chile",
   "Tienda física en Antofagasta",
   "Paga con Webpay o transferencia",
-  "Seteos e instalación",
+  "Programación e instalación",
   "Asesoría experta",
 ];
 
@@ -82,9 +82,9 @@ export default async function HomePage() {
 
         <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20 lg:[grid-template-areas:'text_show'_'stats_show']">
           <div className="[grid-area:text]">
-            <Eyebrow className="animate-rise tracking-[0.12em] sm:tracking-[0.2em]">Performance · Electrónica · Seteos</Eyebrow>
+            <Eyebrow className="animate-rise tracking-[0.06em] sm:tracking-[0.2em]">Performance · Electrónica · Programación</Eyebrow>
             <div className="mt-5 flex items-center justify-between gap-6 sm:justify-start sm:gap-10">
-              <h1 className="font-display text-5xl leading-[0.92] font-extrabold tracking-tight uppercase italic sm:text-6xl lg:text-7xl">
+              <h1 className="font-display text-[2.6rem] leading-[0.92] font-extrabold tracking-normal uppercase italic min-[420px]:text-5xl sm:text-6xl lg:text-7xl">
                 <span className="block animate-rise [animation-delay:100ms]">
                   <GlitchText>Más potencia.</GlitchText>
                 </span>
@@ -113,7 +113,7 @@ export default async function HomePage() {
               {/* En el celular van lado a lado, a mitad de ancho cada uno. */}
               <div className="grid grid-cols-2 gap-3 sm:flex">
                 {[
-                  { href: "/servicios", icon: Gauge, label: "Agendar seteo" },
+                  { href: "/servicios", icon: Gauge, label: "Programación" },
                   { href: "/cotizador-ramal", icon: Cable, label: "Ramal a medida" },
                 ].map(({ href, icon: Icon, label }) => (
                   <Link
@@ -298,7 +298,7 @@ export default async function HomePage() {
           <Container className="reveal relative py-16 sm:py-20">
             <SectionHeading
               eyebrow="Servicios"
-              title="Seteos e instalaciones"
+              title="Programación e instalaciones"
               description="Instalación y programación de FuelTech, arneses eléctricos a medida y sistemas de combustible para tu proyecto."
               action={{ href: "/servicios", label: "Ver todos los servicios" }}
             />
@@ -370,7 +370,7 @@ export default async function HomePage() {
             { icon: Truck, title: "Despacho a todo Chile", text: "Enviamos por courier o retira en nuestra tienda de Antofagasta." },
             { icon: ShieldCheck, title: "Pago 100 % seguro", text: "Débito, crédito y prepago con Webpay, o transferencia." },
             { icon: Headset, title: "Asesoría experta", text: "Te ayudamos a elegir la pieza correcta para tu auto." },
-            { icon: Wrench, title: "Instalación y seteo", text: "Coordinamos la instalación y el seteo de lo que compras." },
+            { icon: Wrench, title: "Instalación y programación", text: "Coordinamos la instalación y la programación de lo que compras." },
           ].map(({ icon: Icon, title, text }) => (
             <div key={title} className="group flex gap-4 bg-surface p-6 transition-colors hover:bg-surface-2">
               <Icon className="size-6 shrink-0 text-brand-500 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110" />

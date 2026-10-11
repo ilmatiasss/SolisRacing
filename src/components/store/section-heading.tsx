@@ -29,7 +29,7 @@ export function SectionHeading({
     <div className={cn("mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", className)}>
       <div className="max-w-2xl">
         {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-        <h2 className="font-display text-3xl font-extrabold tracking-tight uppercase italic sm:text-4xl">{title}</h2>
+        <h2 className="font-display text-3xl font-extrabold tracking-normal uppercase italic sm:text-4xl">{title}</h2>
         {description && <p className="mt-2 text-muted">{description}</p>}
       </div>
       {action && (
@@ -65,7 +65,7 @@ export function PageHeader({
       />
       <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
         {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-        <h1 className="font-display text-4xl font-extrabold tracking-tight text-balance uppercase italic sm:text-5xl">
+        <h1 className="font-display text-4xl font-extrabold tracking-normal text-balance uppercase italic sm:text-5xl">
           {title}
         </h1>
         {description && <p className="mt-3 max-w-2xl text-muted">{description}</p>}

@@ -175,7 +175,7 @@ export function orderStatusEmail(order: EmailOrder, settings: StoreSettings): Em
       }
       break;
     case "delivered":
-      message = `Tu pedido <strong>${number}</strong> fue entregado. ¡Gracias por confiar en nosotros! Si necesitas instalación o seteo, escríbenos y lo coordinamos.`;
+      message = `Tu pedido <strong>${number}</strong> fue entregado. ¡Gracias por confiar en nosotros! Si necesitas instalación o programación, escríbenos y lo coordinamos.`;
       break;
     case "cancelled":
       message = `Tu pedido <strong>${number}</strong> fue cancelado.${order.cancelReason ? ` Motivo: ${e(order.cancelReason)}.` : ""} Si tienes dudas, contáctanos.`;

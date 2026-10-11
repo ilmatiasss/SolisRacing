@@ -93,7 +93,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
               {product.brand.name}
             </Link>
           )}
-          <h1 className="mt-2 font-display text-4xl leading-none font-extrabold tracking-tight text-balance uppercase italic sm:text-5xl">
+          <h1 className="mt-2 font-display text-4xl leading-none font-extrabold tracking-normal text-balance uppercase italic sm:text-5xl">
             {product.name}
           </h1>
           {product.sku && <p className="mt-3 text-sm text-muted">SKU: {product.sku}</p>}
@@ -185,7 +185,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
             <li className="flex gap-3">
               <Wrench className="size-5 shrink-0 text-brand-500" />
               <span>
-                ¿Necesitas instalación o seteo?{" "}
+                ¿Necesitas instalación o programación?{" "}
                 <Link href="/servicios" className="text-brand-400 hover:underline">
                   Cotiza con nosotros
                 </Link>

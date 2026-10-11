@@ -1,6 +1,6 @@
 # Solis Racing Parts · Tienda online
 
-Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www.instagram.com/solis_racingparts/)): venta de partes de performance para autos y agenda de seteos, pensado para Chile (pesos chilenos, regiones y comunas, RUT, boleta o factura, Webpay y transferencia).
+Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www.instagram.com/solis_racingparts/)): venta de partes de performance para autos y agenda de programación, pensado para Chile (pesos chilenos, regiones y comunas, RUT, boleta o factura, Webpay y transferencia).
 
 ## Qué incluye
 
@@ -13,7 +13,7 @@ Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www
 - Checkout chileno: región y comuna (16 regiones, 346 comunas), boleta o factura con validación de RUT, despacho a domicilio (tarifa por región y despacho gratis desde un monto), envío por pagar o retiro en tienda.
 - Pago con **Webpay Plus** (débito, crédito y prepago) o **transferencia bancaria**.
 - Página del pedido con comprobante de pago, datos para transferir e historial; seguimiento con número de pedido + correo.
-- Página de **servicios y seteos** con formulario para agendar hora, contacto, despachos y devoluciones, términos y privacidad.
+- Página de **servicios y programación** con formulario para agendar hora, contacto, despachos y devoluciones, términos y privacidad.
 - SEO: metadatos, sitemap, robots y datos estructurados de producto.
 
 **Panel de administración** (`/admin`)

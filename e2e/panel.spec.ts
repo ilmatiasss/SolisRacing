@@ -85,13 +85,13 @@ test("los videos de Instagram del panel aparecen en Quiénes somos", async ({ pa
   await expect(page.getByText("no es un link de publicación de Instagram")).toBeVisible();
   await page
     .locator("#instagramPosts")
-    .fill("https://www.instagram.com/p/C0ProyectoE2E/ | Seteo FuelTech | Nissan Skyline R34");
+    .fill("https://www.instagram.com/p/C0ProyectoE2E/ | Programación FuelTech | Nissan Skyline R34");
   await page.getByRole("button", { name: "Guardar configuración" }).click();
   await expect(page.getByText("Configuración guardada")).toBeVisible();
   await page.goto("/proyectos");
   await expect(page).toHaveURL(/\/nosotros$/);
   await expect(page.getByText("Nissan Skyline R34", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Seteo FuelTech/ }).first()).toHaveAttribute(
+  await expect(page.getByRole("link", { name: /Programación FuelTech/ }).first()).toHaveAttribute(
     "href",
     "https://www.instagram.com/p/C0ProyectoE2E/",
   );

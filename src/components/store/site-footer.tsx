@@ -59,7 +59,7 @@ export async function SiteFooter() {
         </FooterColumn>
 
         <FooterColumn title="Ayuda" className="lg:col-span-2">
-          <FooterLink href="/servicios">Servicios y seteos</FooterLink>
+          <FooterLink href="/servicios">Servicios y programación</FooterLink>
           <FooterLink href="/cotizador-ramal">Cotizador de ramales</FooterLink>
           <FooterLink href="/nosotros">Quiénes somos</FooterLink>
           <FooterLink href="/seguimiento">Seguimiento de pedidos</FooterLink>

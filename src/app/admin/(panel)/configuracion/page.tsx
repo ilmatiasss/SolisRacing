@@ -132,7 +132,7 @@ export default async function SettingsPage() {
             label="Publicaciones"
             htmlFor="instagramPosts"
             optional
-            hint="Uno por línea: link de la publicación o reel | título | etiqueta. Ej: https://www.instagram.com/reel/ABC123/ | Seteo FuelTech FT550 | Honda Civic 1998. Se muestran en la portada y en /nosotros."
+            hint="Uno por línea: link de la publicación o reel | título | etiqueta. Ej: https://www.instagram.com/reel/ABC123/ | Programación FuelTech FT550 | Honda Civic 1998. Se muestran en la portada y en /nosotros."
           >
             <Textarea
               id="instagramPosts"

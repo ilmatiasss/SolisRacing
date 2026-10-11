@@ -13,7 +13,7 @@ import { parseInstagramPosts } from "@/lib/instagram";
 export const metadata: Metadata = {
   title: "Quiénes somos",
   description:
-    "Solis Racing Parts: tienda física y taller de performance en Antofagasta. Repuestos, electrónica, seteos e instalaciones, con despachos a todo Chile.",
+    "Solis Racing Parts: tienda física y taller de performance en Antofagasta. Repuestos, electrónica, programación e instalaciones, con despachos a todo Chile.",
   alternates: { canonical: "/nosotros" },
 };
 
@@ -29,7 +29,7 @@ export default async function AboutPage() {
     },
     {
       icon: Wrench,
-      title: "Seteos e instalación",
+      title: "Programación e instalación",
       text: "Instalamos y programamos FuelTech, combustible y arneses, en Antofagasta y en visitas a la Región de Valparaíso.",
     },
     { icon: Truck, title: "Despachos a todo Chile", text: "Enviamos por courier o retiras en la tienda." },
@@ -40,7 +40,7 @@ export default async function AboutPage() {
       <PageHeader
         eyebrow="Quiénes somos"
         title="Conoce Solis Racing Parts"
-        description="Repuestos de performance, electrónica y seteos en Antofagasta y la Región de Valparaíso. Esto es lo que hacemos día a día."
+        description="Repuestos de performance, electrónica y programación en Antofagasta y la Región de Valparaíso. Esto es lo que hacemos día a día."
       />
       <Container className="py-14">
         <ul className="grid gap-4 md:grid-cols-3">
@@ -67,7 +67,7 @@ export default async function AboutPage() {
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           <Link href="/servicios" className={buttonClasses({ size: "lg" })}>
             <Gauge className="size-5" />
-            Agendar un seteo
+            Agendar una programación
           </Link>
           {settings.instagram && (
             <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className={buttonClasses({ variant: "outline", size: "lg" })}>

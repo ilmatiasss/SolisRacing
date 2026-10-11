@@ -20,10 +20,10 @@ export function ComingSoonOverlay({ settings }: { settings: StoreSettings }) {
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <span className="relative flex rounded-full">
             <span aria-hidden="true" className="absolute -inset-2 rounded-full shadow-[0_0_40px_10px_rgba(255,40,30,0.5)]" />
-            <LogoBadge size={96} eager className="relative" />
+            <LogoBadge size={176} eager spin className="relative" />
           </span>
           <p className="mt-6 font-display text-sm font-bold tracking-[0.35em] text-brand-500 uppercase">{settings.storeName}</p>
-          <h2 className="mt-4 font-display text-4xl leading-[1.02] font-extrabold tracking-tight uppercase italic [text-shadow:0_0_28px_rgba(255,40,40,0.55)] sm:text-6xl">
+          <h2 className="mt-4 font-display text-4xl leading-[1.02] font-extrabold tracking-normal uppercase italic [text-shadow:0_0_28px_rgba(255,40,40,0.55)] sm:text-6xl">
             {title}
           </h2>
           {signature && (

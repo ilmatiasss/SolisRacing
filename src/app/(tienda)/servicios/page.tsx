@@ -13,9 +13,9 @@ import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, whatsappLink } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Servicios y seteos",
+  title: "Servicios y programación",
   description:
-    "Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Seteos en Antofagasta y la Región de Valparaíso. Agenda tu hora en línea.",
+    "Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Programación en Antofagasta y la Región de Valparaíso. Agenda tu hora en línea.",
   alternates: { canonical: "/servicios" },
 };
 
@@ -23,7 +23,7 @@ const STEPS = [
   { title: "Asesoría", text: "Conversamos tu proyecto y elegimos las piezas correctas para tu motor y tu uso." },
   { title: "Cotización", text: "Te enviamos un presupuesto claro con piezas y mano de obra." },
   { title: "Instalación", text: "ECU, arnés, sensores y combustible instalados con terminaciones profesionales." },
-  { title: "Seteo y entrega", text: "Ajustamos el mapa, revisamos todo funcionando y te entregamos el auto." },
+  { title: "Programación y entrega", text: "Ajustamos el mapa, revisamos todo funcionando y te entregamos el auto." },
 ];
 
 const FAQ = [
@@ -33,7 +33,7 @@ const FAQ = [
   },
   {
     q: "¿Trabajan con FuelTech?",
-    a: "Sí. Te asesoramos para elegir el equipo y los sensores adecuados, y coordinamos la instalación y el seteo.",
+    a: "Sí. Te asesoramos para elegir el equipo y los sensores adecuados, y coordinamos la instalación y la programación.",
   },
   {
     q: "¿Hacen arneses a medida?",
@@ -41,7 +41,7 @@ const FAQ = [
   },
   {
     q: "¿Necesito comprar las piezas con ustedes?",
-    a: "No es obligatorio, pero si las compras con nosotros te asesoramos para que sean compatibles y aprovechen el seteo.",
+    a: "No es obligatorio, pero si las compras con nosotros te asesoramos para que sean compatibles y aprovechen la programación.",
   },
 ];
 
@@ -52,8 +52,8 @@ export default async function ServicesPage() {
     <>
       <PageHeader
         eyebrow="Servicios"
-        title="Servicios y seteos"
-        description="Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Te acompañamos desde la elección de piezas hasta el seteo final."
+        title="Servicios y programación"
+        description="Instalación y programación de FuelTech, arneses eléctricos a medida, sistemas de combustible, sensores y relojería. Te acompañamos desde la elección de piezas hasta la programación final."
       >
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#agendar" className={buttonClasses({ size: "lg" })}>
@@ -61,7 +61,7 @@ export default async function ServicesPage() {
             Agendar hora
           </a>
           <a
-            href={whatsappLink(settings.whatsapp, "Hola, quiero cotizar un seteo para mi auto.")}
+            href={whatsappLink(settings.whatsapp, "Hola, quiero cotizar la programación de mi auto.")}
             target="_blank"
             rel="noopener noreferrer"
             className={buttonClasses({ size: "lg", variant: "outline" })}

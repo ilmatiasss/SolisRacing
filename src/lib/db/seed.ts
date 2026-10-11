@@ -87,7 +87,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
     universal: true,
     shortDescription: "ECU programable FuelTech FT550.",
     description:
-      "ECU programable FuelTech FT550 para controlar la inyección y el encendido de tu motor.\n\nTe asesoramos para elegir los sensores y el arnés que necesitas, y coordinamos la instalación y el seteo.",
+      "ECU programable FuelTech FT550 para controlar la inyección y el encendido de tu motor.\n\nTe asesoramos para elegir los sensores y el arnés que necesitas, y coordinamos la instalación y la programación.",
     specs: [{ label: "Tipo", value: "ECU programable" }],
   },
   {
@@ -595,7 +595,7 @@ const INITIAL_SERVICES = [
     icon: "cpu",
     priceFrom: null,
     duration: null,
-    summary: "Instalamos tu ECU FuelTech con arnés y sensores, y la dejamos lista para el seteo.",
+    summary: "Instalamos tu ECU FuelTech con arnés y sensores, y la dejamos lista para programar.",
     description:
       "Te asesoramos para elegir el equipo correcto, instalamos la ECU con su arnés y sensores, y cargamos un mapa base seguro.",
   },
@@ -609,12 +609,12 @@ const INITIAL_SERVICES = [
       "Arneses de motor, swaps y adaptaciones para ECU programable, con cable de alta temperatura y conectores nuevos.",
   },
   {
-    name: "Seteo de ECU programable",
+    name: "Programación de ECU",
     icon: "gauge",
     priceFrom: null,
     duration: null,
     summary: "Ajuste de mezcla y avance con registros de datos para que tu motor rinda de forma segura.",
-    description: "Seteamos tu ECU programable según las piezas instaladas y el combustible que usas.",
+    description: "Programamos tu ECU según las piezas instaladas y el combustible que usas.",
   },
   {
     name: "Instalación de sistema de combustible",

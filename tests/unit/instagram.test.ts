@@ -13,7 +13,7 @@ describe("links de Instagram para «Quiénes somos»", () => {
   it("lee una publicación por línea con título y etiqueta opcionales, sin repetir", () => {
     const posts = parseInstagramPosts(
       [
-        "https://www.instagram.com/p/AAA/ | Seteo FuelTech FT550 | Honda Civic 1998",
+        "https://www.instagram.com/p/AAA/ | Programación FuelTech FT550 | Honda Civic 1998",
         "",
         "https://www.instagram.com/reel/BBB/",
         "https://www.instagram.com/p/AAA/?img_index=2",
@@ -21,7 +21,7 @@ describe("links de Instagram para «Quiénes somos»", () => {
       ].join("\n"),
     );
     expect(posts).toEqual([
-      { url: "https://www.instagram.com/p/AAA/", title: "Seteo FuelTech FT550", tag: "Honda Civic 1998" },
+      { url: "https://www.instagram.com/p/AAA/", title: "Programación FuelTech FT550", tag: "Honda Civic 1998" },
       { url: "https://www.instagram.com/reel/BBB/", title: "", tag: "" },
     ]);
   });

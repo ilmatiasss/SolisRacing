@@ -37,7 +37,7 @@ export async function SiteHeader() {
         <Container className="flex h-16 items-center gap-2 lg:gap-6">
           <MobileMenu categories={menuCategories} />
           <Link href="/" aria-label="Solis Racing Parts, ir al inicio" className="shrink-0">
-            <Logo eager glow />
+            <Logo eager glow turbo />
           </Link>
           <Suspense fallback={<HeaderNavLinks />}>
             <ActiveHeaderNav />

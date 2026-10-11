@@ -21,7 +21,7 @@ export default async function ServicesAdminPage() {
   const services = await listServicesAdmin();
   return (
     <>
-      <AdminPageHeader title="Servicios" description="Seteos, instalaciones y trabajos que se muestran en /servicios." />
+      <AdminPageHeader title="Servicios" description="Programación, instalaciones y trabajos que se muestran en /servicios." />
       <div className="space-y-4">
         {services.map((service) => (
           <details key={service.id} className="group rounded-2xl border border-line bg-surface shadow-xs">

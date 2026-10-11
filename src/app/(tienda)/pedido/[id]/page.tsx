@@ -115,7 +115,7 @@ async function OrderView({ params, searchParams }: Props) {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm text-muted">Pedido</p>
-            <h1 className="font-display text-5xl font-extrabold tracking-tight uppercase italic">{number}</h1>
+            <h1 className="font-display text-5xl font-extrabold tracking-normal uppercase italic">{number}</h1>
             <p className="mt-1 text-sm text-muted">Realizado el {formatDateTime(order.createdAt)}</p>
           </div>
           <div className="flex items-center gap-3 print:hidden">
