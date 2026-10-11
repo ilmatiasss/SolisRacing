@@ -2,6 +2,7 @@ import { ArrowRight, Cable, Gauge, Headset, PackageSearch, ShieldCheck, Star, Tr
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
+import { AnimatedLogo } from "@/components/logo";
 import { CatalogTabs } from "@/components/store/catalog-tabs";
 import { HeroSpotlight } from "@/components/store/hero-spotlight";
 import { Marquee } from "@/components/store/marquee";
@@ -12,7 +13,6 @@ import { ProductImage } from "@/components/store/product-image";
 import { InstagramGallery } from "@/components/store/instagram-gallery";
 import { Rotator } from "@/components/store/rotator";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
-import { Tachometer } from "@/components/store/tachometer";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { REGIONS } from "@/lib/chile";
@@ -80,11 +80,15 @@ export default async function HomePage() {
           aria-hidden="true"
         />
 
-        <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20 lg:[grid-template-areas:'text_show'_'stats_show']">
+        <Container className="relative grid items-center gap-x-12 gap-y-8 py-10 [grid-template-areas:'logo'_'text'_'show'_'stats'] sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-16 lg:[grid-template-areas:'text_logo'_'text_show'_'stats_show']">
+          {/* Logo con el turbo, el velocímetro que rebota en el corte y las luces de neón. */}
+          <div className="flex animate-rise justify-center [grid-area:logo] max-lg:-mb-2 lg:-mb-6">
+            <AnimatedLogo size={224} eager gauge neon className="size-40 sm:size-48 lg:size-56" />
+          </div>
           <div className="[grid-area:text]">
             <Eyebrow className="animate-rise tracking-[0.06em] sm:tracking-[0.2em]">Performance · Electrónica · Programación</Eyebrow>
             <div className="mt-5 flex items-center justify-between gap-6 sm:justify-start sm:gap-10">
-              <h1 className="font-display text-[2.6rem] leading-[0.92] font-extrabold tracking-normal uppercase italic min-[420px]:text-5xl sm:text-6xl lg:text-7xl">
+              <h1 className="font-display text-[2.6rem] leading-[0.92] font-extrabold tracking-normal uppercase italic min-[420px]:text-5xl sm:text-6xl xl:text-7xl">
                 <span className="block animate-rise [animation-delay:100ms]">
                   <GlitchText>Más potencia.</GlitchText>
                 </span>
@@ -141,7 +145,6 @@ export default async function HomePage() {
 
           {spotlight.length > 0 && (
             <div className="relative animate-rise [grid-area:show] [animation-delay:260ms]">
-              <Tachometer animated className="pointer-events-none absolute -top-24 -right-16 hidden w-[26rem] opacity-60 lg:block" />
               <div className="neon-beam relative rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-2xl shadow-black/50 sm:p-7">
                 <span aria-hidden="true" className="neon-beam__ring" />
                 <div className="mb-5 flex items-center justify-between gap-3">
