@@ -337,86 +337,359 @@ html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
 }
 
 /*
- * Turbo del logo: la rueda gira como al tomar carga (arranca lento, acelera, sostiene y baja), con
- * un halo naranja y un difuminado de movimiento a máxima velocidad. Un solo ciclo de 12 s (varias
- * vueltas por iteración) para no despertar al hilo principal en cada vuelta. Posición medida sobre
- * la imagen del logo.
+ * Logo animado (componente AnimatedLogo): capas sobre el logo original, posiciones en % de la
+ * imagen de 1254 px. El turbo toma carga (lento → rápido → baja) y la aguja sube y rebota en el
+ * corte de inyección mientras se enciende la zona roja. Todo en un ciclo de 10 s sincronizado
+ * (una sola iteración por ciclo, solo transform y opacity).
  */
-.turbo-wheel {
-  position: absolute;
-  left: 17.2%;
-  top: 52.3%;
-  width: 11.5%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 9999px;
-  pointer-events: none;
-}
-.turbo-wheel__blades {
+.logo-anim {
   position: relative;
   display: block;
-  width: 100%;
-  height: 100%;
-  animation: turbo-spin 12s linear infinite;
+  flex-shrink: 0;
+  /* El halo del original se desvanece hacia las esquinas del cuadrado. */
+  mask-image: radial-gradient(closest-side, #000 84%, transparent 100%);
 }
-.turbo-wheel::before,
-.turbo-wheel::after {
+.logo-anim--crop {
+  overflow: hidden;
+  border-radius: 9999px;
+  mask-image: none;
+}
+.logo-anim__art {
+  position: absolute;
+  inset: 0;
+}
+/* Recortado a la insignia redonda: círculo de radio 557 px con centro en (617, 616). */
+.logo-anim--crop .logo-anim__art {
+  inset: auto;
+  left: -5.386%;
+  top: -5.296%;
+  width: 112.567%;
+  height: 112.567%;
+}
+.logo-anim__wheel,
+.logo-anim__needle,
+.logo-anim__hub,
+.logo-anim__limiter {
+  position: absolute;
+  aspect-ratio: 1;
+}
+.logo-anim__wheel {
+  left: 14.713%;
+  top: 44.139%;
+  width: 12.121%;
+  border-radius: 9999px;
+  animation: logo-spool 10s linear infinite;
+}
+/* Difuminado de las aspas a alta velocidad (también evita el efecto de rueda que gira al revés). */
+.logo-anim__wheel::after {
   content: "";
   position: absolute;
-  border-radius: 9999px;
+  inset: 0;
+  border-radius: inherit;
+  background: url("../assets/logo/wheel-blur.webp") center / cover;
   opacity: 0;
+  animation: logo-wheel-blur 10s linear infinite;
 }
-/* Halo naranja que sube con la carga. */
-.turbo-wheel::before {
-  inset: -12%;
+/* Halo naranja del anillo del turbo con la presión. */
+.logo-anim__wheel::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  border-radius: inherit;
   box-shadow:
-    0 0 6px 1px rgb(255 140 40 / 0.9),
-    0 0 18px 4px rgb(255 90 20 / 0.55);
-  animation: turbo-glow 12s linear infinite;
+    0 0 10px 2px rgb(255 140 30 / 0.85),
+    0 0 26px 6px rgb(255 80 0 / 0.5);
+  opacity: 0;
+  animation: logo-boost 10s linear infinite;
 }
-/* Difuminado de movimiento a máxima velocidad. */
-.turbo-wheel::after {
-  inset: 4%;
-  background: radial-gradient(circle, rgb(235 238 245 / 0.75) 0 18%, rgb(150 156 168 / 0.45) 55%, rgb(60 62 70 / 0.1) 72%, transparent 74%);
-  animation: turbo-blur 12s linear infinite;
+.logo-anim__needle {
+  left: 29.107%;
+  top: 15.231%;
+  width: 41.786%;
 }
-@keyframes turbo-spin {
+.logo-anim__needle--live {
+  animation: logo-needle 10s linear infinite;
+}
+.logo-anim__hub {
+  left: 47.448%;
+  top: 33.573%;
+  width: 5.183%;
+}
+/* Zona roja del velocímetro que destella en cada golpe contra el corte. */
+.logo-anim__limiter {
+  left: 60%;
+  top: 14%;
+  width: 24%;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgb(255 90 30 / 0.95), rgb(255 40 0 / 0.4) 55%, transparent);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: logo-limiter 10s linear infinite;
+}
+@keyframes logo-spool {
   0% {
     transform: rotate(0turn);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.46);
+  }
+  10% {
+    transform: rotate(0.4turn);
+    animation-timing-function: cubic-bezier(0.4, 0.1, 0.8, 0.5);
   }
   45% {
     transform: rotate(6turn);
-    animation-timing-function: linear;
   }
   70% {
-    transform: rotate(15turn);
-    animation-timing-function: cubic-bezier(0.1, 0.36, 0.4, 1);
+    transform: rotate(16turn);
+    animation-timing-function: cubic-bezier(0.2, 0.5, 0.6, 0.9);
+  }
+  85% {
+    transform: rotate(18.4turn);
   }
   100% {
-    transform: rotate(18turn);
+    transform: rotate(19turn);
   }
 }
-@keyframes turbo-glow {
+@keyframes logo-wheel-blur {
   0%,
+  28%,
+  80%,
   100% {
-    opacity: 0.1;
+    opacity: 0;
+  }
+  40%,
+  72% {
+    opacity: 0.92;
+  }
+}
+@keyframes logo-boost {
+  0%,
+  10%,
+  88%,
+  100% {
+    opacity: 0;
   }
   45%,
   70% {
     opacity: 1;
   }
 }
-@keyframes turbo-blur {
-  0%,
-  30%,
-  85%,
+@keyframes logo-needle {
+  0% {
+    transform: rotate(-117.6deg);
+  }
+  4% {
+    transform: rotate(-114.6deg);
+    animation-timing-function: ease-in-out;
+  }
+  8% {
+    transform: rotate(-117.6deg);
+    animation-timing-function: ease-in-out;
+  }
+  10% {
+    transform: rotate(-117.6deg);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.8, 0.5);
+  }
+  42% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  43.17% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  44.33% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  45.5% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  46.67% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  47.83% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  49% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  50.17% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  51.33% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  52.5% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  53.67% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  54.83% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  56% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  57.17% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  58.33% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  59.5% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  60.67% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  61.83% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  63% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  64.17% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  65.33% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  66.5% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  67.67% {
+    transform: rotate(32.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  68.83% {
+    transform: rotate(18.4deg);
+    animation-timing-function: ease-in-out;
+  }
+  70% {
+    transform: rotate(32.4deg);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  82% {
+    transform: rotate(-121.6deg);
+    animation-timing-function: ease-in-out;
+  }
+  86% {
+    transform: rotate(-116.1deg);
+    animation-timing-function: ease-in-out;
+  }
+  89% {
+    transform: rotate(-117.6deg);
+  }
   100% {
+    transform: rotate(-117.6deg);
+  }
+}
+@keyframes logo-limiter {
+  0% {
     opacity: 0;
   }
-  50%,
-  68% {
-    opacity: 0.85;
+  41% {
+    opacity: 0;
+  }
+  42% {
+    opacity: 1;
+  }
+  43.17% {
+    opacity: 0.3;
+  }
+  44.33% {
+    opacity: 1;
+  }
+  45.5% {
+    opacity: 0.3;
+  }
+  46.67% {
+    opacity: 1;
+  }
+  47.83% {
+    opacity: 0.3;
+  }
+  49% {
+    opacity: 1;
+  }
+  50.17% {
+    opacity: 0.3;
+  }
+  51.33% {
+    opacity: 1;
+  }
+  52.5% {
+    opacity: 0.3;
+  }
+  53.67% {
+    opacity: 1;
+  }
+  54.83% {
+    opacity: 0.3;
+  }
+  56% {
+    opacity: 1;
+  }
+  57.17% {
+    opacity: 0.3;
+  }
+  58.33% {
+    opacity: 1;
+  }
+  59.5% {
+    opacity: 0.3;
+  }
+  60.67% {
+    opacity: 1;
+  }
+  61.83% {
+    opacity: 0.3;
+  }
+  63% {
+    opacity: 1;
+  }
+  64.17% {
+    opacity: 0.3;
+  }
+  65.33% {
+    opacity: 1;
+  }
+  66.5% {
+    opacity: 0.3;
+  }
+  67.67% {
+    opacity: 1;
+  }
+  68.83% {
+    opacity: 0.3;
+  }
+  70% {
+    opacity: 1;
+  }
+  74% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -1273,9 +1546,11 @@ body:has(.theme-admin) {
   .neon-sign__glow,
   .glitch__slice,
   .drag-light::after,
-  .turbo-wheel__blades,
-  .turbo-wheel::before,
-  .turbo-wheel::after,
+  .logo-anim__wheel,
+  .logo-anim__wheel::before,
+  .logo-anim__wheel::after,
+  .logo-anim__needle--live,
+  .logo-anim__limiter,
   .light-trail,
   .neon-floor__grid,
   .scanner {

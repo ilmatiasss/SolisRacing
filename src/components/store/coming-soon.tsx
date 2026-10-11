@@ -1,6 +1,6 @@
 import { Eye } from "lucide-react";
 import { InstagramIcon, WhatsAppIcon } from "@/components/icons";
-import { LogoBadge } from "@/components/logo";
+import { AnimatedLogo } from "@/components/logo";
 import { buttonClasses } from "@/components/ui/button";
 import { whatsappLink } from "@/lib/format";
 import type { StoreSettings } from "@/lib/settings";
@@ -18,11 +18,7 @@ export function ComingSoonOverlay({ settings }: { settings: StoreSettings }) {
         className="theme-store coming-soon fixed inset-0 z-60 flex items-center justify-center overflow-y-auto bg-black/40 px-6 py-10 text-fg backdrop-blur-xl"
       >
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <span className="relative flex rounded-full">
-            <span aria-hidden="true" className="absolute -inset-2 rounded-full shadow-[0_0_40px_10px_rgba(255,40,30,0.5)]" />
-            <LogoBadge size={176} eager spin className="relative" />
-          </span>
-          <p className="mt-6 font-display text-sm font-bold tracking-[0.35em] text-brand-500 uppercase">{settings.storeName}</p>
+          <AnimatedLogo size={256} eager gauge className="size-56 sm:size-64" />
           <h2 className="mt-4 font-display text-4xl leading-[1.02] font-extrabold tracking-normal uppercase italic [text-shadow:0_0_28px_rgba(255,40,40,0.55)] sm:text-6xl">
             {title}
           </h2>
