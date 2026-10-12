@@ -5,7 +5,9 @@ import { after } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { inquiries, services } from "@/lib/db/schema";
-import { ALL_BOOKING_TIMES, isBookableDate, parseServiceLocations, todayInChile } from "@/lib/booking";
+import { updateTag } from "next/cache";
+import { availableTimes, isDayOffered, todayInChile } from "@/lib/booking";
+import { BOOKINGS_TAG, readTakenSlots } from "@/lib/data/booking";
 import { readStoreSettings } from "@/lib/data/settings";
 import { estimateHarness, harnessPricing } from "@/lib/harness";
 import { formatCLP } from "@/lib/format";
@@ -66,15 +68,24 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
     return { error: "Revisa los campos marcados.", fieldErrors: { message: ["Escribe tu mensaje"] } };
   }
   if (data.kind === "service") {
-    // Agenda: lugar de los configurados, día disponible y hora ofrecida (se confirma por WhatsApp).
-    const settings = await readStoreSettings();
+    // Agenda: lugar configurado, día que ese lugar atiende y hora aún libre (se confirma por WhatsApp).
+    const { booking } = await readStoreSettings();
     const fieldErrors: Record<string, string[]> = {};
-    const locations = parseServiceLocations(settings.serviceLocations).map((location) => location.name);
-    if (!data.location || !locations.includes(data.location)) fieldErrors.location = ["Elige dónde quieres atenderte"];
-    if (!data.preferredDate || !isBookableDate(data.preferredDate, todayInChile())) {
-      fieldErrors.preferredDate = ["Elige un día disponible en el calendario"];
+    const location = booking.locations.find((item) => item.name === data.location);
+    const today = todayInChile();
+    const dayOk = Boolean(location && data.preferredDate && isDayOffered(location, data.preferredDate, today, booking.maxDays));
+    if (!location) fieldErrors.location = ["Elige dónde quieres atenderte"];
+    else if (!dayOk) fieldErrors.preferredDate = ["Elige un día disponible en el calendario"];
+    if (!data.preferredTime) {
+      fieldErrors.preferredTime = ["Elige una hora"];
+    } else if (location && dayOk && data.preferredDate) {
+      const free = availableTimes(location, data.preferredDate, today, booking.maxDays, await readTakenSlots());
+      if (!free.includes(data.preferredTime)) {
+        fieldErrors.preferredTime = location.times.includes(data.preferredTime)
+          ? ["Esa hora se acaba de tomar. Elige otra, por favor."]
+          : ["Elige una hora"];
+      }
     }
-    if (!data.preferredTime || !ALL_BOOKING_TIMES.includes(data.preferredTime)) fieldErrors.preferredTime = ["Elige una hora"];
     if (!data.phone) fieldErrors.phone = ["Déjanos un teléfono o WhatsApp para confirmar"];
     if (Object.keys(fieldErrors).length > 0) return { error: "Revisa los campos marcados.", fieldErrors };
   }
@@ -111,6 +122,9 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
       message: data.message,
     })
     .returning();
+
+  // La hora pedida deja de ofrecerse en la agenda.
+  if (inquiry.kind === "service") updateTag(BOOKINGS_TAG);
 
   after(async () => {
     const settings = await readStoreSettings();

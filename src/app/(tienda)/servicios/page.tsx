@@ -8,7 +8,7 @@ import { PageHeader, SectionHeading } from "@/components/store/section-heading";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { getActiveServices } from "@/lib/data/catalog";
-import { parseServiceLocations } from "@/lib/booking";
+import { getTakenSlots } from "@/lib/data/booking";
 import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, whatsappLink } from "@/lib/format";
 
@@ -46,7 +46,7 @@ const FAQ = [
 ];
 
 export default async function ServicesPage() {
-  const [services, settings] = await Promise.all([getActiveServices(), getStoreSettings()]);
+  const [services, settings, taken] = await Promise.all([getActiveServices(), getStoreSettings(), getTakenSlots()]);
 
   return (
     <>
@@ -161,7 +161,8 @@ export default async function ServicesPage() {
             {services.length > 0 ? (
               <ServiceBooking
                 services={services.map(({ id, name }) => ({ id, name }))}
-                locations={parseServiceLocations(settings.serviceLocations)}
+                booking={settings.booking}
+                taken={taken}
                 whatsapp={settings.whatsapp}
               />
             ) : (

@@ -1,4 +1,5 @@
 import {
+  CalendarDays,
   Car,
   ExternalLink,
   Inbox,
@@ -25,6 +26,7 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
       { href: "/admin", label: "Resumen", icon: LayoutDashboard },
       { href: "/admin/pedidos", label: "Pedidos", icon: Receipt, count: "orders" },
       { href: "/admin/solicitudes", label: "Solicitudes", icon: Inbox, count: "inquiries" },
+      { href: "/admin/agenda", label: "Agenda", icon: CalendarDays },
     ],
   },
   {

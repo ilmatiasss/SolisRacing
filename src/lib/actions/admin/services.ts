@@ -4,6 +4,7 @@ import { and, eq, ne } from "drizzle-orm";
 import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
+import { BOOKINGS_TAG } from "@/lib/data/booking";
 import { SERVICES_TAG } from "@/lib/data/catalog";
 import { db } from "@/lib/db";
 import { inquiries, services } from "@/lib/db/schema";
@@ -66,6 +67,8 @@ export async function updateInquiry(_prev: ServiceActionState, formData: FormDat
   if (!parsed.success) return { error: "Datos inválidos" };
   const { id, ...data } = parsed.data;
   await db.update(inquiries).set(data).where(eq(inquiries.id, id));
+  // Cerrar una solicitud de hora la vuelve a dejar libre en la agenda.
+  updateTag(BOOKINGS_TAG);
   refresh();
   return { ok: true, message: "Guardado." };
 }
@@ -75,5 +78,6 @@ export async function deleteInquiry(formData: FormData) {
   const id = Number(formData.get("id"));
   if (!Number.isInteger(id)) return;
   await db.delete(inquiries).where(eq(inquiries.id, id));
+  updateTag(BOOKINGS_TAG);
   refresh();
 }

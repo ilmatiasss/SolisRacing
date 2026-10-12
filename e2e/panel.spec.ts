@@ -96,3 +96,42 @@ test("los videos de Instagram del panel aparecen en Quiénes somos", async ({ pa
     "https://www.instagram.com/p/C0ProyectoE2E/",
   );
 });
+
+test("la agenda del panel define fechas de visita y no repite horas pedidas", async ({ page }) => {
+  // Fecha de visita: en 9 días (hora de Chile).
+  const visit = new Date(Date.now() + 9 * 86_400_000).toLocaleDateString("en-CA", { timeZone: "America/Santiago" });
+
+  await loginAsAdmin(page);
+  await page.goto("/admin/agenda");
+  const valparaiso = page.getByRole("region", { name: "Región de Valparaíso" });
+  await valparaiso.getByText("Solo en fechas de visita").click();
+  await valparaiso.getByLabel("Fechas de visita", { exact: true }).fill(visit);
+  await valparaiso.getByRole("button", { name: "Agregar" }).first().click();
+  await page.getByRole("button", { name: "Guardar agenda" }).click();
+  await expect(page.getByText("Agenda guardada")).toBeVisible();
+
+  const pickVisitDay = async () => {
+    await page.goto("/servicios");
+    await page.getByText("Región de Valparaíso", { exact: true }).click();
+    const days = page.locator("#agendar button[aria-pressed]:not([disabled])");
+    if ((await days.count()) === 0) await page.getByRole("button", { name: "Mes siguiente" }).click();
+    await expect(days).toHaveCount(1);
+    await days.first().click();
+  };
+
+  await pickVisitDay();
+  await page.getByText("15:00", { exact: true }).click();
+  await page.locator("#booking-name").fill("Camila Rojas");
+  await page.locator("#booking-email").fill("camila@example.com");
+  await page.locator("#booking-phone").fill("+56 9 4444 5555");
+  await page.getByRole("button", { name: "Solicitar hora" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "¡Solicitud enviada!" })).toContainText("a las 15:00");
+
+  // La hora pedida ya no se ofrece; las demás sí.
+  await pickVisitDay();
+  await expect(page.getByText("16:00", { exact: true })).toBeVisible();
+  await expect(page.getByText("15:00", { exact: true })).toHaveCount(0);
+
+  await page.goto("/admin/agenda");
+  await expect(page.getByRole("listitem").filter({ hasText: "Camila Rojas" }).last()).toContainText("15:00");
+});

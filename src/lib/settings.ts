@@ -1,3 +1,4 @@
+import { DEFAULT_BOOKING, normalizeBookingConfig, parseServiceLocations, weeklyLocation, type BookingConfig } from "./booking";
 import type { RegionCode } from "./chile";
 import type { HarnessSettings } from "./harness";
 
@@ -49,8 +50,8 @@ export type StoreSettings = HarnessSettings & {
   facebook: string;
   tiktok: string;
   youtube: string;
-  /** Lugares donde se atienden servicios, uno por línea: `nombre | detalle` (ver lib/booking). */
-  serviceLocations: string;
+  /** Agenda de servicios: lugares, días, horarios y fechas (se edita en Panel → Agenda; ver lib/booking). */
+  booking: BookingConfig;
   /** Videos de Instagram de «Quiénes somos»: uno por línea, `link | título | etiqueta` (ver lib/instagram). */
   instagramPosts: string;
   legalName: string;
@@ -135,7 +136,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   harnessPerCylinder: "12000",
   harnessOriginalSensorExtra: "4000",
   harnessMargin: "15",
-  serviceLocations: "Antofagasta | En la tienda, Ausonia 244\nRegión de Valparaíso | En visitas programadas a la Quinta Región",
+  booking: DEFAULT_BOOKING,
   instagramPosts: [
     "https://www.instagram.com/reel/DcCqz8MR37D/",
     "https://www.instagram.com/reel/DbGiiSDxISO/",
@@ -197,7 +198,14 @@ export function mergeSettings(stored: unknown): StoreSettings {
     }
     return result;
   };
-  return merge(DEFAULT_SETTINGS as unknown as Record<string, unknown>, stored) as StoreSettings;
+  const settings = merge(DEFAULT_SETTINGS as unknown as Record<string, unknown>, stored) as StoreSettings;
+  // Antes los lugares se guardaban como texto (`serviceLocations`): se pasan a la agenda nueva.
+  if (isPlainObject(stored) && !isPlainObject(stored.booking) && typeof stored.serviceLocations === "string") {
+    const legacy = parseServiceLocations(stored.serviceLocations);
+    if (legacy.length > 0) settings.booking = { ...settings.booking, locations: legacy.map(({ name, detail }) => weeklyLocation(name, detail)) };
+  }
+  settings.booking = normalizeBookingConfig(settings.booking);
+  return settings;
 }
 
 export type StoreSettingsInput = DeepPartial<StoreSettings>;

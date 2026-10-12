@@ -7,16 +7,18 @@ import { Button, buttonClasses } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { submitInquiry, type InquiryFormState } from "@/lib/actions/inquiries";
 import {
-  BOOKING_MAX_DAYS,
-  BOOKING_TIMES,
   addDays,
+  availableTimes,
+  describeWeekdays,
   formatBookingDate,
   formatMonth,
-  isBookableDate,
+  groupTimes,
+  isDayOffered,
   monthGrid,
   shiftMonth,
   todayInChile,
-  type ServiceLocation,
+  type BookingConfig,
+  type TakenSlot,
 } from "@/lib/booking";
 import { cn } from "@/lib/cn";
 import { whatsappLink } from "@/lib/format";
@@ -29,15 +31,18 @@ const subscribeToNothing = () => () => {};
 
 /**
  * Agenda de servicios en pasos: servicio, lugar, día y hora, y datos de contacto.
- * Es una solicitud: la tienda la confirma por WhatsApp (la disponibilidad real se ajustará en el panel).
+ * Solo ofrece los días y horas libres de cada lugar (Panel → Agenda). Es una solicitud: la tienda
+ * la confirma por WhatsApp.
  */
 export function ServiceBooking({
   services,
-  locations,
+  booking,
+  taken,
   whatsapp,
 }: {
   services: ServiceOption[];
-  locations: ServiceLocation[];
+  booking: BookingConfig;
+  taken: TakenSlot[];
   whatsapp: string;
 }) {
   const [state, action, pending] = useActionState<InquiryFormState, FormData>(submitInquiry, {});
@@ -47,6 +52,10 @@ export function ServiceBooking({
   const [shownMonth, setMonth] = useState<string | null>(null);
   const month = shownMonth ?? (today ? addDays(today, 1).slice(0, 7) : null);
   const [date, setDate] = useState("");
+  const [locationName, setLocationName] = useState(booking.locations[0]?.name ?? "");
+  const location = booking.locations.find((item) => item.name === locationName) ?? booking.locations[0];
+  const timesFor = (day: string) => (today && location ? availableTimes(location, day, today, booking.maxDays, taken) : []);
+  const times = date ? timesFor(date) : [];
   const [summary, setSummary] = useState<{ service: string; location: string; date: string; time: string } | null>(null);
 
   if (state.ok && summary) {
@@ -74,7 +83,10 @@ export function ServiceBooking({
     );
   }
 
-  const lastDay = today ? addDays(today, BOOKING_MAX_DAYS) : null;
+  const lastDay = today ? addDays(today, booking.maxDays) : null;
+  const hasDays = Boolean(
+    today && location && Array.from({ length: booking.maxDays }, (_, index) => addDays(today, index + 1)).some((day) => timesFor(day).length > 0),
+  );
   const canGoBack = today && month ? month > today.slice(0, 7) : false;
   const canGoForward = lastDay && month ? month < lastDay.slice(0, 7) : false;
 
@@ -116,22 +128,27 @@ export function ServiceBooking({
 
         <Step number={2} title="¿Dónde?" error={errors.location}>
           <div role="radiogroup" aria-label="Lugar de atención" className="grid gap-3 sm:grid-cols-2">
-            {locations.map((location, index) => (
+            {booking.locations.map((item) => (
               <label
-                key={location.name}
+                key={item.name}
                 className="flex cursor-pointer gap-3 rounded-xl border border-line bg-surface-2 p-4 transition-colors hover:border-line-strong has-[:checked]:border-brand-500 has-[:checked]:bg-brand-600/10 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-500"
               >
                 <input
                   type="radio"
                   name="location"
-                  value={location.name}
-                  defaultChecked={index === 0}
+                  value={item.name}
+                  checked={item.name === location?.name}
+                  onChange={() => {
+                    setLocationName(item.name);
+                    // El día elegido puede no existir en el otro lugar.
+                    if (date && today && !isDayOffered(item, date, today, booking.maxDays)) setDate("");
+                  }}
                   className="sr-only"
                 />
                 <MapPin className="mt-0.5 size-5 shrink-0 text-brand-500" />
                 <span>
-                  <span className="block font-semibold">{location.name}</span>
-                  {location.detail && <span className="block text-sm text-muted">{location.detail}</span>}
+                  <span className="block font-semibold">{item.name}</span>
+                  {item.detail && <span className="block text-sm text-muted">{item.detail}</span>}
                 </span>
               </label>
             ))}
@@ -175,7 +192,7 @@ export function ServiceBooking({
                 month &&
                 monthGrid(month).map((day, index) => {
                   if (!day) return <span key={`hueco-${index}`} />;
-                  const available = isBookableDate(day, today);
+                  const available = timesFor(day).length > 0;
                   const selected = day === date;
                   return (
                     <button
@@ -201,8 +218,20 @@ export function ServiceBooking({
                 <>
                   Elegiste el <span className="font-semibold text-fg">{formatBookingDate(date)}</span>.
                 </>
+              ) : !today || !location ? (
+                "…"
+              ) : !hasDays ? (
+                <>
+                  Por ahora no hay horas disponibles en {location.name}.{" "}
+                  <a href={whatsappLink(whatsapp, `Hola, quiero agendar en ${location.name}.`)} className="font-semibold text-fg underline">
+                    Escríbenos por WhatsApp
+                  </a>{" "}
+                  y coordinamos.
+                </>
+              ) : location.mode === "dates" ? (
+                `Fechas de visita en ${location.name}: elige uno de los días marcados.`
               ) : (
-                "De lunes a sábado, hasta dos meses adelante."
+                `Atendemos de ${describeWeekdays(location.weekdays)}. Los días tachados no tienen horas libres.`
               )}
             </p>
           </div>
@@ -211,24 +240,31 @@ export function ServiceBooking({
 
       <div className="space-y-7">
         <Step number={4} title="Hora" error={errors.preferredTime}>
-          <div className="space-y-3">
-            {Object.entries(BOOKING_TIMES).map(([part, times]) => (
-              <div key={part}>
-                <p className="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">{part}</p>
-                <div role="radiogroup" aria-label={part} className="grid grid-cols-3 gap-2">
-                  {times.map((time) => (
-                    <label
-                      key={time}
-                      className="cursor-pointer rounded-lg border border-line bg-surface-2 py-2.5 text-center text-sm font-semibold transition-colors hover:border-line-strong has-[:checked]:border-brand-500 has-[:checked]:bg-brand-600 has-[:checked]:text-white has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-500"
-                    >
-                      <input type="radio" name="preferredTime" value={time} className="sr-only" />
-                      {time}
-                    </label>
-                  ))}
+          {date && times.length > 0 ? (
+            // Al cambiar de día o de lugar se vuelve a elegir la hora.
+            <div key={`${location?.name}-${date}`} className="space-y-3">
+              {groupTimes(times).map((group) => (
+                <div key={group.label}>
+                  <p className="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">{group.label}</p>
+                  <div role="radiogroup" aria-label={group.label} className="grid grid-cols-3 gap-2">
+                    {group.times.map((time) => (
+                      <label
+                        key={time}
+                        className="cursor-pointer rounded-lg border border-line bg-surface-2 py-2.5 text-center text-sm font-semibold transition-colors hover:border-line-strong has-[:checked]:border-brand-500 has-[:checked]:bg-brand-600 has-[:checked]:text-white has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-500"
+                      >
+                        <input type="radio" name="preferredTime" value={time} className="sr-only" />
+                        {time}
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="rounded-xl border border-dashed border-line px-4 py-6 text-center text-sm text-muted">
+              Elige un día en el calendario para ver las horas libres.
+            </p>
+          )}
         </Step>
 
         <Step number={5} title="Tus datos">
