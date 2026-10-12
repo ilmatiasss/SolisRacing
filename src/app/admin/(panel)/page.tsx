@@ -1,11 +1,14 @@
-import { ArrowRight, Plus, TriangleAlert } from "lucide-react";
+import { ArrowRight, CalendarClock, Inbox, PackageCheck, Plus, Receipt, TrendingUp, TriangleAlert, Wallet } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SalesChart } from "@/components/admin/sales-chart";
 import { AdminPageHeader, Card, EmptyState, Notice, StatCard, Table, Td, Th } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/auth";
+import { formatBookingDate } from "@/lib/booking";
 import { getDashboardData } from "@/lib/data/admin";
+import { listUpcomingBookings } from "@/lib/data/booking";
 import { readStoreSettings } from "@/lib/data/settings";
 import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
@@ -21,7 +24,7 @@ export const instant = false;
 export default async function DashboardPage() {
   const user = await requireAdmin();
   await expireAbandonedWebpayOrders().catch(() => 0);
-  const [data, settings] = await Promise.all([getDashboardData(), readStoreSettings()]);
+  const [data, settings, bookings] = await Promise.all([getDashboardData(), readStoreSettings(), listUpcomingBookings()]);
   const env = webpayEnvironment();
   const pending = [
     !settings.email && "el correo de la tienda (ahí llegan los avisos de pedidos y solicitudes)",
@@ -64,28 +67,73 @@ export default async function DashboardPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Ventas del mes" value={formatCLP(data.monthSales)} hint={`${data.monthOrders} pedidos pagados`} tone="success" />
-        <StatCard label="Últimos 30 días" value={formatCLP(data.last30Sales)} />
+        <StatCard
+          label="Ventas del mes"
+          value={formatCLP(data.monthSales)}
+          hint={`${data.monthOrders} ${data.monthOrders === 1 ? "pedido pagado" : "pedidos pagados"}`}
+          tone="success"
+          icon={TrendingUp}
+        />
+        <StatCard label="Últimos 30 días" value={formatCLP(data.last30Sales)} icon={Receipt} />
         <StatCard
           label="Por despachar"
           value={data.toShip}
           hint="Pagados o en preparación"
           tone={data.toShip ? "brand" : "neutral"}
+          icon={PackageCheck}
         />
         <StatCard
           label="Transferencias pendientes"
           value={data.pendingTransfers}
           hint="Revisa si llegó el pago"
           tone={data.pendingTransfers ? "warning" : "neutral"}
+          icon={Wallet}
         />
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+      <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr] [&>*]:min-w-0">
+        <Card>
+          <SalesChart daily={data.daily} />
+        </Card>
+        <Card
+          title="Próximas horas"
+          bodyClassName="p-0"
+          actions={
+            <Link href="/admin/agenda" className="flex items-center gap-1 text-sm font-semibold text-brand-500 hover:underline">
+              Agenda <ArrowRight className="size-4" />
+            </Link>
+          }
+        >
+          {bookings.length === 0 ? (
+            <p className="flex items-center gap-2 px-5 py-6 text-sm text-muted">
+              <CalendarClock className="size-4" /> No hay horas pedidas.
+            </p>
+          ) : (
+            <ul className="divide-y divide-line">
+              {bookings.slice(0, 6).map((booking) => (
+                <li key={booking.id} className="flex items-center gap-3 px-5 py-3 text-sm">
+                  <span className="flex w-14 shrink-0 flex-col items-center rounded-lg bg-brand-600/10 py-1 text-brand-500">
+                    <span className="font-display text-base leading-none font-extrabold italic tabular-nums">{booking.time}</span>
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-medium">{booking.name}</span>
+                    <span className="block truncate text-xs text-muted first-letter:uppercase">
+                      {booking.date ? formatBookingDate(booking.date) : ""} · {booking.location}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      </div>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr] [&>*]:min-w-0">
         <Card
           title="Últimos pedidos"
           bodyClassName="p-0"
           actions={
-            <Link href="/admin/pedidos" className="flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline">
+            <Link href="/admin/pedidos" className="flex items-center gap-1 text-sm font-semibold text-brand-500 hover:underline">
               Ver todos <ArrowRight className="size-4" />
             </Link>
           }
@@ -107,7 +155,7 @@ export default async function DashboardPage() {
                 {data.recentOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-surface-2">
                     <Td>
-                      <Link href={`/admin/pedidos/${order.id}`} className="font-semibold text-brand-600 hover:underline">
+                      <Link href={`/admin/pedidos/${order.id}`} className="font-semibold text-brand-500 hover:underline">
                         {formatOrderNumber(order.id)}
                       </Link>
                       <p className="text-xs text-muted">{formatDateTime(order.createdAt)}</p>
@@ -135,7 +183,7 @@ export default async function DashboardPage() {
               <ul className="divide-y divide-line">
                 {data.lowStock.map((product) => (
                   <li key={product.id} className="flex items-center justify-between gap-3 px-5 py-3 text-sm">
-                    <Link href={`/admin/productos/${product.id}`} className="min-w-0 truncate hover:text-brand-600">
+                    <Link href={`/admin/productos/${product.id}`} className="min-w-0 truncate hover:text-brand-500">
                       {product.name}
                     </Link>
                     <Badge tone={product.stock === 0 ? "danger" : "warning"}>
@@ -147,10 +195,14 @@ export default async function DashboardPage() {
             )}
           </Card>
           <Card
-            title="Solicitudes nuevas"
+            title={
+              <span className="flex items-center gap-2">
+                <Inbox className="size-4.5 text-brand-500" /> Solicitudes nuevas
+              </span>
+            }
             bodyClassName="p-0"
             actions={
-              <Link href="/admin/solicitudes" className="text-sm font-semibold text-brand-600 hover:underline">
+              <Link href="/admin/solicitudes" className="text-sm font-semibold text-brand-500 hover:underline">
                 Ver
               </Link>
             }

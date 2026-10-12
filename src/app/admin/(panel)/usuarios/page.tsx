@@ -47,7 +47,7 @@ export default async function UsersPage() {
                           variant="ghost"
                           size="sm"
                           pendingText="…"
-                          className="text-muted hover:text-red-600"
+                          className="text-muted hover:text-red-400"
                           confirm={`¿Quitar el acceso de ${user.name}?`}
                         >
                           <Trash2 className="size-4" />

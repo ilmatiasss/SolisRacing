@@ -46,7 +46,8 @@ export async function getDashboardData() {
   const monthStart = sql`date_trunc('month', now() at time zone 'America/Santiago') at time zone 'America/Santiago'`;
   const last30 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  const [[month], [last30Row], statusCounts, recentOrders, lowStock, newInquiries] = await Promise.all([
+  const chileDay = sql<string>`to_char(${orders.paidAt} at time zone 'America/Santiago', 'YYYY-MM-DD')`;
+  const [[month], [last30Row], statusCounts, recentOrders, lowStock, newInquiries, daily] = await Promise.all([
     db
       .select({ total: sum(orders.total).mapWith(Number), orders: count() })
       .from(orders)
@@ -87,6 +88,12 @@ export async function getDashboardData() {
       .where(eq(inquiries.status, "new"))
       .orderBy(desc(inquiries.createdAt))
       .limit(5),
+    // Ventas pagadas por día (hora de Chile) para el gráfico del resumen.
+    db
+      .select({ day: chileDay, total: sum(orders.total).mapWith(Number), orders: count() })
+      .from(orders)
+      .where(and(inArray(orders.status, PAID_STATUSES), gte(orders.paidAt, last30)))
+      .groupBy(chileDay),
   ]);
 
   const countBy = (predicate: (row: (typeof statusCounts)[number]) => boolean) =>
@@ -101,6 +108,7 @@ export async function getDashboardData() {
     recentOrders,
     lowStock,
     newInquiries,
+    daily,
   };
 }
 

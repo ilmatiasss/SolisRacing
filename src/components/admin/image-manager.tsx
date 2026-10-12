@@ -92,12 +92,12 @@ export function ImageManager({
     <div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {images.map((image, index) => (
-          <figure key={image.url} className="group relative overflow-hidden rounded-xl border border-line bg-white">
+          <figure key={image.url} className="group relative overflow-hidden rounded-xl border border-line bg-surface-2">
             <div className="relative aspect-square">
               <Image src={image.url} alt={image.alt || productName} fill sizes="200px" className="object-contain p-2" />
             </div>
             {index === 0 && (
-              <span className="absolute top-2 left-2 rounded-md bg-zinc-900 px-2 py-0.5 text-[11px] font-semibold text-white">
+              <span className="absolute top-2 left-2 rounded-md bg-brand-600 px-2 py-0.5 text-[11px] font-semibold text-white">
                 Principal
               </span>
             )}
@@ -137,7 +137,7 @@ export function ImageManager({
           }}
           className={cn(
             "flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed text-sm text-muted transition-colors",
-            dragging ? "border-brand-600 bg-brand-50 text-brand-700" : "border-line-strong hover:border-zinc-400 hover:text-fg",
+            dragging ? "border-brand-600 bg-brand-50 text-brand-500" : "border-line-strong hover:border-zinc-400 hover:text-fg",
           )}
         >
           {uploading > 0 ? <LoaderCircle className="size-6 animate-spin" /> : <ImagePlus className="size-6" />}
@@ -161,7 +161,7 @@ export function ImageManager({
         JPG, PNG o WebP. Las fotos se optimizan automáticamente. La primera es la imagen principal; idealmente con fondo blanco.
       </p>
       {errors.length > 0 && (
-        <ul className="mt-2 space-y-1 text-sm text-red-600">
+        <ul className="mt-2 space-y-1 text-sm text-red-400">
           {errors.map((error) => (
             <li key={error}>{error}</li>
           ))}
@@ -192,8 +192,8 @@ function IconButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "flex size-7 cursor-pointer items-center justify-center rounded-md text-muted hover:bg-white hover:text-fg disabled:cursor-not-allowed disabled:opacity-30",
-        danger && "hover:text-red-600",
+        "flex size-7 cursor-pointer items-center justify-center rounded-md text-muted hover:bg-white/10 hover:text-fg disabled:cursor-not-allowed disabled:opacity-30",
+        danger && "hover:text-red-400",
       )}
     >
       {children}

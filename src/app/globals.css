@@ -739,15 +739,16 @@ html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
   }
 }
 
+/* Panel de administración: oscuro como la tienda, con superficies un poco más claras para leer datos. */
 .theme-admin {
-  --bg: #f5f5f6;
-  --surface: #ffffff;
-  --surface-2: #f4f4f5;
-  --line: #e4e4e7;
-  --line-strong: #d4d4d8;
-  --fg: #18181b;
-  --muted: #6b6b75;
-  color-scheme: light;
+  --bg: #0a0a0c;
+  --surface: #121215;
+  --surface-2: #1a1a1f;
+  --line: #26262d;
+  --line-strong: #3a3a43;
+  --fg: #f4f4f5;
+  --muted: #a1a1aa;
+  color-scheme: dark;
 }
 
 html {
@@ -761,8 +762,8 @@ body {
 }
 
 body:has(.theme-admin) {
-  background: #f5f5f6;
-  color: #18181b;
+  background: #0a0a0c;
+  color: #f4f4f5;
 }
 
 ::selection {

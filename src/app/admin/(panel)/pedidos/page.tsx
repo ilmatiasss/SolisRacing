@@ -61,7 +61,7 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
             href={tabHref(tab.value)}
             className={cn(
               "shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium",
-              status === tab.value ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-200/60",
+              status === tab.value ? "bg-brand-600 text-white" : "text-zinc-400 hover:bg-white/5",
             )}
           >
             {tab.label}
@@ -102,7 +102,7 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
               {rows.map((order) => (
                 <tr key={order.id} className="hover:bg-surface-2">
                   <Td>
-                    <Link href={`/admin/pedidos/${order.id}`} className="font-semibold text-brand-600 hover:underline">
+                    <Link href={`/admin/pedidos/${order.id}`} className="font-semibold text-brand-500 hover:underline">
                       {formatOrderNumber(order.id)}
                     </Link>
                     <p className="text-xs text-muted">{formatDateTime(order.createdAt)}</p>
@@ -118,7 +118,7 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
                   <Td>
                     {PAYMENT_METHOD_SHORT[order.paymentMethod]}
                     {order.testPayment && order.paymentMethod === "webpay" && (
-                      <span className="ml-1.5 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-800">PRUEBA</span>
+                      <span className="ml-1.5 rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-bold text-amber-200">PRUEBA</span>
                     )}
                   </Td>
                   <Td>

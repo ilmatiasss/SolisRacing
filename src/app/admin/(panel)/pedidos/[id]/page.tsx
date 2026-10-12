@@ -68,7 +68,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
               rel="noopener noreferrer"
               className={buttonClasses({ variant: "outline", size: "sm" })}
             >
-              <WhatsAppIcon className="size-4 text-emerald-600" /> WhatsApp
+              <WhatsAppIcon className="size-4 text-emerald-400" /> WhatsApp
             </a>
             <a href={customerLink} target="_blank" rel="noopener noreferrer" className={buttonClasses({ variant: "outline", size: "sm" })}>
               <ExternalLink className="size-4" /> Vista del cliente
@@ -97,12 +97,12 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
             <ul className="divide-y divide-line">
               {order.items.map((item) => (
                 <li key={item.id} className="flex items-center gap-4 px-5 py-3">
-                  <span className="relative size-12 shrink-0 overflow-hidden rounded-lg border border-line bg-white">
+                  <span className="relative size-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface-2">
                     {item.imageUrl && <Image src={item.imageUrl} alt="" fill sizes="48px" className="object-contain p-0.5" />}
                   </span>
                   <div className="min-w-0 flex-1 text-sm">
                     {item.productId ? (
-                      <Link href={`/admin/productos/${item.productId}`} className="font-medium hover:text-brand-600">
+                      <Link href={`/admin/productos/${item.productId}`} className="font-medium hover:text-brand-500">
                         {item.productName}
                       </Link>
                     ) : (
@@ -183,7 +183,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
                   </p>
                 )}
                 {order.customerNotes && (
-                  <p className="rounded-lg bg-amber-50 p-3 text-amber-900">
+                  <p className="rounded-lg bg-amber-500/10 p-3 text-amber-200">
                     <strong>Nota del cliente:</strong> {order.customerNotes}
                   </p>
                 )}

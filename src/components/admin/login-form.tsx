@@ -26,7 +26,7 @@ export function LoginForm() {
         <Input id="password" name="password" type="password" autoComplete="current-password" required />
       </Field>
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300" role="alert">
           {state.error}
         </p>
       )}

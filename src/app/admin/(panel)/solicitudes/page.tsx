@@ -46,7 +46,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
             href={value ? `/admin/solicitudes?estado=${value}` : "/admin/solicitudes"}
             className={cn(
               "shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium",
-              status === value ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-200/60",
+              status === value ? "bg-brand-600 text-white" : "text-zinc-400 hover:bg-white/5",
             )}
           >
             {value ? INQUIRY_STATUS_LABELS[value] : "Todas"}
@@ -89,7 +89,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
                         href={whatsappLink(inquiry.phone, `Hola ${inquiry.name.split(" ")[0]}, te escribimos de ${settings.storeName} por tu solicitud.`)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-emerald-700 hover:underline"
+                        className="flex items-center gap-1.5 text-emerald-400 hover:underline"
                       >
                         <WhatsAppIcon className="size-4" /> WhatsApp
                       </a>
@@ -135,7 +135,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
                     variant="ghost"
                     size="sm"
                     pendingText="…"
-                    className="w-full text-muted hover:text-red-600"
+                    className="w-full text-muted hover:text-red-400"
                     confirm="¿Eliminar esta solicitud?"
                   >
                     <Trash2 className="size-4" /> Eliminar

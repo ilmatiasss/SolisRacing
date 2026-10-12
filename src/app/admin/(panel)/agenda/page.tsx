@@ -43,7 +43,7 @@ export default async function AgendaPage() {
             {[...days].map(([date, items]) => (
               <li key={date} className="px-5 py-4">
                 <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                  <CalendarClock className="size-4 text-brand-600" />
+                  <CalendarClock className="size-4 text-brand-500" />
                   <span className="inline-block first-letter:uppercase">{formatBookingDate(date)}</span>
                   {date === today && <Badge tone="brand">Hoy</Badge>}
                 </p>
@@ -77,7 +77,7 @@ export default async function AgendaPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label={`WhatsApp a ${booking.name}`}
-                              className="text-emerald-700 hover:text-emerald-800"
+                              className="text-emerald-400 hover:text-emerald-300"
                             >
                               <WhatsAppIcon className="size-4" />
                             </a>
@@ -94,7 +94,7 @@ export default async function AgendaPage() {
         )}
         {bookings.length > 0 && (
           <p className="border-t border-line px-5 py-3 text-sm">
-            <Link href="/admin/solicitudes" className="font-semibold text-brand-700 hover:underline">
+            <Link href="/admin/solicitudes" className="font-semibold text-brand-500 hover:underline">
               Confirmar o cerrar horas en Solicitudes →
             </Link>
           </p>

@@ -82,7 +82,9 @@ export function SidebarNav({
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      active ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
+                      active
+                        ? "bg-brand-600 text-white shadow-[0_0_18px_rgba(225,6,0,0.35)]"
+                        : "text-zinc-400 hover:bg-white/5 hover:text-white",
                     )}
                   >
                     <item.icon className="size-4.5" />
@@ -107,7 +109,7 @@ export function SidebarNav({
       <Link
         href="/"
         target="_blank"
-        className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 hover:bg-white/5 hover:text-white"
       >
         <ExternalLink className="size-4.5" />
         Ver tienda

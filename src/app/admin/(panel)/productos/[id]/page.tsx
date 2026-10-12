@@ -67,7 +67,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
           images: product.images.map((image) => ({ url: image.url, alt: image.alt })),
         }}
       />
-      <Card title="Zona de peligro" className="mt-6 border-red-200">
+      <Card title="Zona de peligro" className="mt-6 border-red-500/30">
         <form action={deleteProduct} className="flex flex-wrap items-center justify-between gap-4">
           <input type="hidden" name="id" value={product.id} />
           <p className="max-w-xl text-sm text-muted">

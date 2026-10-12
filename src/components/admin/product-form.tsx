@@ -259,7 +259,7 @@ export function ProductForm({
                       variant="ghost"
                       size="icon"
                       aria-label="Quitar compatibilidad"
-                      className="text-muted hover:text-red-600"
+                      className="text-muted hover:text-red-400"
                       onClick={() => setFitments((rows) => rows.filter((r) => r.key !== row.key))}
                     >
                       <Trash2 className="size-4" />
@@ -305,7 +305,7 @@ export function ProductForm({
                   variant="ghost"
                   size="icon"
                   aria-label="Quitar especificación"
-                  className="text-muted hover:text-red-600"
+                  className="text-muted hover:text-red-400"
                   onClick={() => setSpecs((rows) => rows.filter((r) => r.key !== row.key))}
                 >
                   <Trash2 className="size-4" />

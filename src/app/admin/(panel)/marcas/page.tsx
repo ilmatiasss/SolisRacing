@@ -48,7 +48,7 @@ export default async function BrandsPage() {
                     variant="ghost"
                     size="sm"
                     pendingText="…"
-                    className="h-9 text-muted hover:text-red-600"
+                    className="h-9 text-muted hover:text-red-400"
                     confirm={`¿Eliminar la marca "${brand.name}"? Sus productos quedarán sin marca.`}
                   >
                     <Trash2 className="size-4" />

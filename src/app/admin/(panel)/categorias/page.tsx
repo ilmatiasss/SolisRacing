@@ -50,7 +50,7 @@ export default async function CategoriesPage() {
           <ul className="divide-y divide-line">
             {categories.map((category) => (
               <li key={category.id} className="flex flex-col gap-3 p-4 lg:flex-row lg:items-start">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface-2 text-brand-600">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface-2 text-brand-500">
                   <DynamicIcon name={category.icon} className="size-5" />
                 </div>
                 <ActionForm action={saveCategory} className="grid flex-1 gap-2 md:grid-cols-[1fr_12rem_5rem_auto]">
@@ -77,7 +77,7 @@ export default async function CategoriesPage() {
                       variant="ghost"
                       size="sm"
                       pendingText="…"
-                      className="text-muted hover:text-red-600"
+                      className="text-muted hover:text-red-400"
                       confirm={`¿Eliminar la categoría "${category.name}"? Sus productos quedarán sin categoría.`}
                     >
                       <Trash2 className="size-4" /> Eliminar

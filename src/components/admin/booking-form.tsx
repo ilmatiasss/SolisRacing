@@ -129,11 +129,11 @@ function LocationEditor({
     <section className="rounded-2xl border border-line bg-surface shadow-xs" aria-label={location.name || "Lugar nuevo"}>
       <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-4">
         <h2 className="flex items-center gap-2 font-semibold">
-          <MapPin className="size-4.5 text-brand-600" />
+          <MapPin className="size-4.5 text-brand-500" />
           {location.name || "Lugar nuevo"}
         </h2>
         {onRemove && (
-          <Button variant="ghost" size="sm" onClick={onRemove} className="text-muted hover:text-red-600">
+          <Button variant="ghost" size="sm" onClick={onRemove} className="text-muted hover:text-red-400">
             <Trash2 className="size-4" />
             Quitar lugar
           </Button>
@@ -198,7 +198,7 @@ function LocationEditor({
                     }
                     className={cn(
                       "size-10 cursor-pointer rounded-lg border text-sm font-semibold transition-colors",
-                      active ? "border-brand-600 bg-brand-600 text-white" : "border-line text-zinc-600 hover:bg-zinc-100",
+                      active ? "border-brand-600 bg-brand-600 text-white" : "border-line text-zinc-400 hover:bg-white/5",
                     )}
                   >
                     {label}
@@ -300,7 +300,7 @@ function DateList({
               type="button"
               aria-label={`Quitar ${formatBookingDate(date)}`}
               onClick={() => onChange(dates.filter((value) => value !== date))}
-              className="flex size-6 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-zinc-200 hover:text-fg"
+              className="flex size-6 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-white/10 hover:text-fg"
             >
               <X className="size-3.5" />
             </button>
@@ -345,7 +345,7 @@ function TimeList({ inputId, times, onChange }: { inputId: string; times: string
         </Button>
       </div>
       <ul className="mt-3 flex flex-wrap gap-2">
-        {times.length === 0 && <li className="text-sm text-red-600">Agrega al menos un horario.</li>}
+        {times.length === 0 && <li className="text-sm text-red-400">Agrega al menos un horario.</li>}
         {times.map((time) => (
           <li key={time} className="flex items-center gap-1 rounded-full border border-line bg-surface-2 py-1 pr-1 pl-3 text-sm font-medium tabular-nums">
             {time}
@@ -353,7 +353,7 @@ function TimeList({ inputId, times, onChange }: { inputId: string; times: string
               type="button"
               aria-label={`Quitar ${time}`}
               onClick={() => onChange(times.filter((value) => value !== time))}
-              className="flex size-6 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-zinc-200 hover:text-fg"
+              className="flex size-6 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-white/10 hover:text-fg"
             >
               <X className="size-3.5" />
             </button>

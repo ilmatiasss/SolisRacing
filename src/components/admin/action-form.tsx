@@ -46,12 +46,12 @@ export function ActionForm({
     >
       <PendingContext value={pending}>{children}</PendingContext>
       {state.error && (
-        <p className="mt-2 basis-full text-sm text-red-600" role="alert">
+        <p className="mt-2 basis-full text-sm text-red-400" role="alert">
           {state.error}
         </p>
       )}
       {showSuccess && state.ok && state.message && (
-        <p className="mt-2 basis-full text-sm text-emerald-700" role="status">
+        <p className="mt-2 basis-full text-sm text-emerald-400" role="status">
           {state.message}
         </p>
       )}

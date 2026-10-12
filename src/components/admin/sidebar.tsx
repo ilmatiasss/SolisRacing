@@ -18,7 +18,7 @@ async function CurrentUser() {
   const user = await requireAdmin();
   return (
     <div className="flex items-center gap-3">
-      <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-bold text-white">
+      <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white shadow-[0_0_14px_rgba(225,6,0,0.45)]">
         {user.name.slice(0, 1).toUpperCase()}
       </div>
       <div className="min-w-0 flex-1">
@@ -30,7 +30,7 @@ async function CurrentUser() {
           type="submit"
           aria-label="Cerrar sesión"
           title="Cerrar sesión"
-          className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-muted hover:bg-zinc-100 hover:text-zinc-900"
+          className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-muted hover:bg-white/5 hover:text-white"
         >
           <LogOut className="size-4.5" />
         </button>
@@ -41,11 +41,14 @@ async function CurrentUser() {
 
 export function AdminSidebar() {
   return (
-    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-surface lg:flex">
-      <div className="flex h-16 items-center border-b border-line px-5">
+    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-surface/80 backdrop-blur lg:flex">
+      <div className="flex h-16 items-center justify-between border-b border-line px-5">
         <Link href="/admin" aria-label="Inicio del panel">
-          <Logo tone="dark" size="sm" />
+          <Logo size="sm" turbo />
         </Link>
+        <span className="rounded-md border border-brand-600/40 bg-brand-600/10 px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-brand-500 uppercase">
+          Panel
+        </span>
       </div>
       <div className="flex-1 overflow-y-auto p-3">
         <Suspense fallback={<SidebarNav />}>
@@ -68,7 +71,7 @@ export function AdminTopbar() {
         <NavWithCounts mobile />
       </Suspense>
       <Link href="/admin">
-        <Logo tone="dark" size="sm" />
+        <Logo size="sm" />
       </Link>
     </header>
   );

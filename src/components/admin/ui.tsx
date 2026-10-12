@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -87,21 +88,38 @@ export function StatCard({
   value,
   hint,
   tone = "neutral",
+  icon: Icon,
 }: {
   label: string;
   value: ReactNode;
   hint?: ReactNode;
   tone?: "neutral" | "brand" | "warning" | "success";
+  icon?: LucideIcon;
 }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-5 shadow-xs">
-      <p className="text-sm text-muted">{label}</p>
+    <div className="relative overflow-hidden rounded-2xl border border-line bg-surface p-5 shadow-xs">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm text-muted">{label}</p>
+        {Icon && (
+          <span
+            className={cn(
+              "flex size-9 shrink-0 items-center justify-center rounded-xl",
+              tone === "brand" && "bg-brand-600/15 text-brand-500",
+              tone === "warning" && "bg-amber-500/15 text-amber-400",
+              tone === "success" && "bg-emerald-500/15 text-emerald-400",
+              tone === "neutral" && "bg-white/5 text-zinc-300",
+            )}
+          >
+            <Icon className="size-4.5" />
+          </span>
+        )}
+      </div>
       <p
         className={cn(
-          "mt-2 text-3xl font-bold tracking-tight tabular-nums",
-          tone === "brand" && "text-brand-600",
-          tone === "warning" && "text-amber-600",
-          tone === "success" && "text-emerald-600",
+          "mt-1 font-display text-3xl font-extrabold tracking-wide tabular-nums italic",
+          tone === "brand" && "text-brand-500",
+          tone === "warning" && "text-amber-400",
+          tone === "success" && "text-emerald-400",
         )}
       >
         {value}
@@ -125,10 +143,10 @@ export function Notice({
       role={tone === "danger" ? "alert" : "status"}
       className={cn(
         "rounded-xl border px-4 py-3 text-sm",
-        tone === "info" && "border-sky-200 bg-sky-50 text-sky-900",
-        tone === "success" && "border-emerald-200 bg-emerald-50 text-emerald-900",
-        tone === "warning" && "border-amber-200 bg-amber-50 text-amber-900",
-        tone === "danger" && "border-red-200 bg-red-50 text-red-900",
+        tone === "info" && "border-sky-500/30 bg-sky-500/10 text-sky-200",
+        tone === "success" && "border-emerald-500/30 bg-emerald-500/10 text-emerald-200",
+        tone === "warning" && "border-amber-500/30 bg-amber-500/10 text-amber-200",
+        tone === "danger" && "border-red-500/30 bg-red-500/10 text-red-200",
         className,
       )}
     >

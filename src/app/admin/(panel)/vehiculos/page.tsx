@@ -56,7 +56,7 @@ export default async function VehiclesPage() {
                     variant="ghost"
                     size="sm"
                     pendingText="…"
-                    className="text-muted hover:text-red-600"
+                    className="text-muted hover:text-red-400"
                     confirm={`¿Eliminar ${make.name} y todos sus modelos? Se quitará la compatibilidad de los productos asociados.`}
                   >
                     <Trash2 className="size-4" />
@@ -85,7 +85,7 @@ export default async function VehiclesPage() {
                         variant="ghost"
                         size="sm"
                         pendingText="…"
-                        className="h-9 text-muted hover:text-red-600"
+                        className="h-9 text-muted hover:text-red-400"
                         confirm={`¿Eliminar el modelo ${model.name}?`}
                       >
                         <Trash2 className="size-4" />

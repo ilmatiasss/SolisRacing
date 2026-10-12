@@ -21,7 +21,7 @@ export function MobileAdminNav({ counts }: { counts: NavCounts }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Abrir menú del panel"
-        className="flex size-10 cursor-pointer items-center justify-center rounded-lg hover:bg-zinc-100"
+        className="flex size-10 cursor-pointer items-center justify-center rounded-lg hover:bg-white/5"
       >
         <Menu className="size-5" />
       </button>

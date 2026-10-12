@@ -26,7 +26,7 @@ export default async function ServicesAdminPage() {
         {services.map((service) => (
           <details key={service.id} className="group rounded-2xl border border-line bg-surface shadow-xs">
             <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-4">
-              <span className="flex size-10 items-center justify-center rounded-lg bg-surface-2 text-brand-600">
+              <span className="flex size-10 items-center justify-center rounded-lg bg-surface-2 text-brand-500">
                 <DynamicIcon name={service.icon} className="size-5" />
               </span>
               <span className="flex-1">
@@ -37,7 +37,7 @@ export default async function ServicesAdminPage() {
                 </span>
               </span>
               {!service.active && <Badge>Oculto</Badge>}
-              <span className="text-sm text-brand-600 group-open:hidden">Editar</span>
+              <span className="text-sm text-brand-500 group-open:hidden">Editar</span>
             </summary>
             <div className="border-t border-line p-5">
               <ActionForm action={saveService} className="space-y-4">
@@ -52,7 +52,7 @@ export default async function ServicesAdminPage() {
                   variant="ghost"
                   size="sm"
                   pendingText="Eliminando…"
-                  className="text-muted hover:text-red-600"
+                  className="text-muted hover:text-red-400"
                   confirm={`¿Eliminar el servicio "${service.name}"?`}
                 >
                   <Trash2 className="size-4" /> Eliminar servicio

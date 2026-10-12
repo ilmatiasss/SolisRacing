@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 export const instant = false;
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <div className="theme-admin min-h-dvh bg-bg text-fg">{children}</div>;
+  return <div className="theme-admin min-h-dvh bg-bg bg-[radial-gradient(70rem_32rem_at_100%_-8rem,rgb(225_6_0/0.11),transparent_65%)] bg-no-repeat text-fg">{children}</div>;
 }

@@ -98,7 +98,7 @@ export default async function ProductsAdminPage({ searchParams }: PageProps<"/ad
                 <tr key={product.id} className="hover:bg-surface-2">
                   <Td>
                     <Link href={`/admin/productos/${product.id}`} className="flex items-center gap-3">
-                      <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-line bg-white">
+                      <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-line bg-surface-2">
                         {product.imageUrl ? (
                           <Image src={product.imageUrl} alt="" fill sizes="44px" className="object-contain p-0.5" />
                         ) : (
@@ -106,7 +106,7 @@ export default async function ProductsAdminPage({ searchParams }: PageProps<"/ad
                         )}
                       </span>
                       <span className="min-w-0">
-                        <span className="block truncate font-medium hover:text-brand-600">{product.name}</span>
+                        <span className="block truncate font-medium hover:text-brand-500">{product.name}</span>
                         <span className="block text-xs text-muted">
                           {[product.brandName, product.sku].filter(Boolean).join(" · ") || "—"}
                           {product.featured && " · ★ Destacado"}
@@ -122,7 +122,7 @@ export default async function ProductsAdminPage({ searchParams }: PageProps<"/ad
                     )}
                   </Td>
                   <Td className="text-right">
-                    <span className={product.stock === 0 ? "font-semibold text-red-600" : product.stock <= 3 ? "font-semibold text-amber-600" : ""}>
+                    <span className={product.stock === 0 ? "font-semibold text-red-400" : product.stock <= 3 ? "font-semibold text-amber-400" : ""}>
                       {product.stock}
                     </span>
                   </Td>
