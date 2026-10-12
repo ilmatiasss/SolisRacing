@@ -44,7 +44,7 @@ export default async function AgendaPage() {
               <li key={date} className="px-5 py-4">
                 <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
                   <CalendarClock className="size-4 text-brand-600" />
-                  <span className="first-letter:uppercase">{formatBookingDate(date)}</span>
+                  <span className="inline-block first-letter:uppercase">{formatBookingDate(date)}</span>
                   {date === today && <Badge tone="brand">Hoy</Badge>}
                 </p>
                 <ul className="space-y-2">
