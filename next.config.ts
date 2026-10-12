@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
+  async rewrites() {
+    // Prueba de integración con Fullpyme: si su conector usa la URL como dominio y le agrega /v1/…
+    // (como la API de Jumpseller), también llega al registro.
+    return [{ source: "/v1/:path*", destination: "/api/jumpseller/v1/:path*" }];
+  },
   async redirects() {
     // La galería de Instagram partió como "Proyectos" y pasó a ser "Quiénes somos".
     return [{ source: "/proyectos", destination: "/nosotros", permanent: true }];

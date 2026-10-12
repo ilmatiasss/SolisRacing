@@ -170,3 +170,24 @@ test("una solicitud de supresión de datos llega al panel y se puede atender", a
   await page.getByRole("button", { name: "Eliminar sus solicitudes y mensajes" }).click();
   await expect(page.getByText("Se eliminó 1 solicitud.")).toBeVisible();
 });
+
+test("la prueba de integración registra las consultas tipo Jumpseller sin guardar el token", async ({ page, request }) => {
+  const auth = { Authorization: `Basic ${Buffer.from("solis-prueba:prueba-1234").toString("base64")}` };
+  const products = await request.get("/api/jumpseller/v1/products.json?page=1&limit=50", { headers: auth });
+  expect(products.ok()).toBe(true);
+  expect(await products.json()).toEqual([]);
+  // Si Fullpyme usa la URL como dominio, /v1/… también llega.
+  const store = await request.get("/v1/store/info.json?login=solis-prueba&authtoken=prueba-1234");
+  expect((await store.json()).store.currency).toBe("CLP");
+  await request.put("/api/jumpseller/v1/products/15.json", { headers: auth, data: { product: { stock: 3, price: 19990 } } });
+
+  await loginAsAdmin(page);
+  await page.goto("/admin/integraciones");
+  await expect(page.getByText("Consultas recibidas (3)")).toBeVisible();
+  await expect(page.getByText("/v1/products.json?page=1&limit=50")).toBeVisible();
+  await expect(page.getByText("/v1/products/15.json")).toBeVisible();
+  await expect(page.getByText(/usuario=solis-prueba token=pru…\(11\)/).first()).toBeVisible();
+  await expect(page.getByText("/v1/store/info.json?login=solis-prueba&authtoken=pru…(11)")).toBeVisible();
+  // En el registro (no en las instrucciones) el token nunca aparece completo.
+  await expect(page.locator("section").filter({ hasText: "Consultas recibidas" })).not.toContainText("prueba-1234");
+});

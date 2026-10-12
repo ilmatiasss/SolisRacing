@@ -6,6 +6,7 @@ import {
   Layers,
   LayoutDashboard,
   Package,
+  Plug,
   Receipt,
   Settings,
   ShieldCheck,
@@ -45,6 +46,7 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin/configuracion", label: "Configuración", icon: Settings },
       { href: "/admin/usuarios", label: "Usuarios", icon: Users },
+      { href: "/admin/integraciones", label: "Integraciones", icon: Plug },
       { href: "/admin/privacidad", label: "Privacidad", icon: ShieldCheck },
     ],
   },

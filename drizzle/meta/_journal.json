@@ -43,6 +43,13 @@
       "when": 1791779603221,
       "tag": "0005_solicitud_derechos_datos",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791847178030,
+      "tag": "0006_registro_integracion",
+      "breakpoints": true
     }
   ]
 }

@@ -332,6 +332,25 @@ export const inquiries = pgTable(
 /*                         Configuración y usuarios                           */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Registro de prueba de integración: lo que envía el conector de Fullpyme (pensado para Jumpseller)
+ * cuando se apunta a la tienda. Sirve para saber qué consultas hace antes de implementarlas.
+ * Se guardan solo las últimas 200.
+ */
+export const integrationRequests = pgTable(
+  "integration_requests",
+  {
+    id: serial().primaryKey(),
+    method: text().notNull(),
+    path: text().notNull(),
+    query: text(),
+    headers: jsonb().$type<Record<string, string>>(),
+    body: text(),
+    createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index().on(t.createdAt)],
+);
+
 export const settings = pgTable("settings", {
   key: text().primaryKey(),
   value: jsonb().notNull(),
