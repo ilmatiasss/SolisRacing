@@ -135,3 +135,38 @@ test("la agenda del panel define fechas de visita y no repite horas pedidas", as
   await page.goto("/admin/agenda");
   await expect(page.getByRole("listitem").filter({ hasText: "Camila Rojas" }).last()).toContainText("15:00");
 });
+
+test("una solicitud de supresión de datos llega al panel y se puede atender", async ({ page }) => {
+  await page.goto("/privacidad");
+  await expect(page.getByRole("heading", { name: /Tus derechos/ })).toBeVisible();
+  await page.getByRole("link", { name: "formulario de derechos" }).first().click();
+  await expect(page).toHaveURL(/\/privacidad\/derechos$/);
+
+  await page.getByRole("button", { name: "Enviar solicitud" }).click();
+  await expect(page.getByText("Elige qué derecho quieres ejercer")).toBeVisible();
+  await page.getByText("Supresión", { exact: true }).click();
+  await page.locator("#privacy-name").fill("Paula Contreras");
+  await page.locator("#privacy-email").fill("paula@example.com");
+  await page.locator("#privacy-rut").fill("12.345.678-0");
+  await page.locator("#privacy-message").fill("Quiero que eliminen mis datos de contacto.");
+  await page.getByRole("button", { name: "Enviar solicitud" }).click();
+  await expect(page.getByText("El RUT no es válido")).toBeVisible();
+  await page.locator("#privacy-rut").fill("");
+  await page.getByRole("button", { name: "Enviar solicitud" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Solicitud recibida" })).toBeVisible();
+
+  await loginAsAdmin(page);
+  await page.goto("/admin/solicitudes");
+  const request = page.locator("section").filter({ hasText: "Paula Contreras" });
+  await expect(request).toContainText("Derechos sobre datos personales: Supresión");
+  await expect(request).toContainText("Responder antes del");
+
+  await page.goto("/admin/privacidad?correo=paula@example.com");
+  await expect(page.getByText("Solicitudes y mensajes (1)")).toBeVisible();
+  const download = page.waitForEvent("download");
+  await page.getByRole("link", { name: "Descargar sus datos (JSON)" }).click();
+  expect((await download).suggestedFilename()).toBe("datos-paula-example-com.json");
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "Eliminar sus solicitudes y mensajes" }).click();
+  await expect(page.getByText("Se eliminó 1 solicitud.")).toBeVisible();
+});

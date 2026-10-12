@@ -9,6 +9,7 @@ import { submitHarnessQuote, type InquiryFormState } from "@/lib/actions/inquiri
 import { cn } from "@/lib/cn";
 import { formatCLP, whatsappLink } from "@/lib/format";
 import { DEFAULT_SENSOR_COUNT, HARNESS_CYLINDERS, estimateHarness, type HarnessPricing } from "@/lib/harness";
+import { PrivacyNotice } from "@/components/store/privacy-notice";
 
 const OTHER_MAKE = "Otra";
 
@@ -261,6 +262,7 @@ export function HarnessQuote({ pricing, whatsapp }: { pricing: HarnessPricing; w
             <WhatsAppIcon className="size-4.5" />
             Consultar por WhatsApp
           </a>
+          <PrivacyNotice className="mt-3" purpose="preparar y enviarte la cotización de tu ramal" />
         </div>
       </aside>
     </form>

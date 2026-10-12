@@ -66,6 +66,7 @@ export async function SiteFooter() {
           <FooterLink href="/despachos-y-devoluciones">Despachos y devoluciones</FooterLink>
           <FooterLink href="/terminos">Términos y condiciones</FooterLink>
           <FooterLink href="/privacidad">Política de privacidad</FooterLink>
+          <FooterLink href="/privacidad/derechos">Mis datos personales</FooterLink>
           <FooterLink href="/contacto">Contacto</FooterLink>
         </FooterColumn>
 

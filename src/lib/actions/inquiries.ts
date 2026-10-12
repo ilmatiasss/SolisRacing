@@ -13,6 +13,8 @@ import { estimateHarness, harnessPricing } from "@/lib/harness";
 import { formatCLP } from "@/lib/format";
 import { sendEmail } from "@/lib/email";
 import { inquiryAdminEmail } from "@/lib/email-templates";
+import { PRIVACY_RIGHTS, privacyRightLabel, type PrivacyRight } from "@/lib/privacy";
+import { formatRut, isValidRut } from "@/lib/rut";
 
 export type InquiryFormState = {
   ok?: boolean;
@@ -212,5 +214,59 @@ export async function submitHarnessQuote(_prev: InquiryFormState, formData: Form
     if (settings.email) await sendEmail({ to: settings.email, replyTo: inquiry.email, ...email });
   });
 
+  return { ok: true };
+}
+
+const privacySchema = z.object({
+  right: z.enum(PRIVACY_RIGHTS.map((right) => right.value) as [PrivacyRight, ...PrivacyRight[]], {
+    error: "Elige qué derecho quieres ejercer",
+  }),
+  name: z.string().trim().min(2, { error: "Ingresa tu nombre completo" }).max(100),
+  email: z.email({ error: "Ingresa el correo con el que compraste o nos escribiste" }).max(200),
+  phone: optionalText(30),
+  rut: z
+    .string()
+    .trim()
+    .max(15)
+    .refine((value) => !value || isValidRut(value), { error: "El RUT no es válido" })
+    .transform((value) => (value ? formatRut(value) : null)),
+  message: z.string().trim().min(10, { error: "Cuéntanos qué necesitas (por ejemplo, qué dato corregir)" }).max(2000),
+});
+
+/**
+ * Solicitud para ejercer los derechos sobre datos personales (acceso, rectificación, supresión,
+ * oposición, portabilidad o bloqueo). Queda en Panel → Solicitudes con su plazo de respuesta.
+ */
+export async function submitPrivacyRequest(_prev: InquiryFormState, formData: FormData): Promise<InquiryFormState> {
+  if (formData.get("website")) return { ok: true };
+  const parsed = privacySchema.safeParse({
+    right: formData.get("right") ?? "",
+    name: formData.get("name") ?? "",
+    email: formData.get("email") ?? "",
+    phone: formData.get("phone") ?? "",
+    rut: formData.get("rut") ?? "",
+    message: formData.get("message") ?? "",
+  });
+  if (!parsed.success) {
+    return { error: "Revisa los campos marcados.", fieldErrors: z.flattenError(parsed.error).fieldErrors };
+  }
+  const data = parsed.data;
+  const [inquiry] = await db
+    .insert(inquiries)
+    .values({
+      kind: "privacy",
+      serviceName: privacyRightLabel(data.right),
+      name: data.name,
+      email: data.email.toLowerCase(),
+      phone: data.phone,
+      message: [data.rut ? `RUT: ${data.rut}` : null, data.message].filter(Boolean).join("\n\n"),
+    })
+    .returning();
+
+  after(async () => {
+    const settings = await readStoreSettings();
+    const email = inquiryAdminEmail(inquiry, settings);
+    if (settings.email) await sendEmail({ to: settings.email, replyTo: inquiry.email, ...email });
+  });
   return { ok: true };
 }

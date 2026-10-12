@@ -1,8 +1,8 @@
 import "server-only";
 import { getRegion } from "./chile";
-import type { DeliveryMethod, OrderStatus, PaymentMethod } from "./db/schema";
+import type { DeliveryMethod, InquiryKind, OrderStatus, PaymentMethod } from "./db/schema";
 import { formatCLP, formatOrderNumber } from "./format";
-import { orderStatusLabel } from "./order-status";
+import { inquiryTitle, orderStatusLabel } from "./order-status";
 import type { StoreSettings } from "./settings";
 import { DELIVERY_METHOD_LABELS } from "./shipping";
 import { siteUrl } from "./site";
@@ -214,7 +214,7 @@ export function newOrderAdminEmail(order: EmailOrder, settings: StoreSettings): 
 export function inquiryAdminEmail(
   inquiry: {
     id: number;
-    kind: "service" | "contact" | "part" | "harness";
+    kind: InquiryKind;
     serviceName: string | null;
     name: string;
     email: string;
@@ -230,11 +230,11 @@ export function inquiryAdminEmail(
   const title =
     inquiry.kind === "service"
       ? `Solicitud de servicio: ${inquiry.serviceName ?? "Servicio"}`
-      : inquiry.kind === "part"
-        ? "Pedido especial de repuesto"
-        : inquiry.kind === "harness"
-          ? "Cotización de ramal a medida"
-          : "Nuevo mensaje de contacto";
+      : inquiry.kind === "harness"
+        ? "Cotización de ramal a medida"
+        : inquiry.kind === "contact"
+          ? "Nuevo mensaje de contacto"
+          : inquiryTitle(inquiry.kind, inquiry.serviceName);
   const lines = [
     ["Nombre", inquiry.name],
     ["Correo", inquiry.email],

@@ -22,6 +22,7 @@ import {
 } from "@/lib/booking";
 import { cn } from "@/lib/cn";
 import { whatsappLink } from "@/lib/format";
+import { PrivacyNotice } from "@/components/store/privacy-notice";
 
 type ServiceOption = { id: number; name: string };
 
@@ -303,6 +304,7 @@ export function ServiceBooking({
             {pending ? "Enviando…" : "Solicitar hora"}
           </Button>
           <p className="mt-2 text-xs text-muted">Te confirmamos la hora por WhatsApp; no se cobra nada al agendar.</p>
+          <PrivacyNotice className="mt-1" purpose="agendar y confirmar tu hora" />
         </div>
       </div>
     </form>

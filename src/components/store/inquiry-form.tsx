@@ -5,6 +5,7 @@ import { startTransition, useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { submitInquiry, type InquiryFormState } from "@/lib/actions/inquiries";
+import { PrivacyNotice } from "@/components/store/privacy-notice";
 
 type ServiceOption = { id: number; name: string };
 
@@ -134,6 +135,10 @@ export function InquiryForm({
           <Send className="size-4.5" />
           {pending ? "Enviando…" : kind === "service" ? "Solicitar hora" : kind === "part" ? "Pedir cotización" : "Enviar mensaje"}
         </Button>
+        <PrivacyNotice
+          className="mt-2"
+          purpose={kind === "part" ? "buscar tu repuesto y enviarte precio y plazo" : "responder tu mensaje"}
+        />
       </div>
     </form>
   );

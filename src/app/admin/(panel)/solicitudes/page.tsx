@@ -15,7 +15,8 @@ import { listInquiriesAdmin } from "@/lib/data/admin";
 import { readStoreSettings } from "@/lib/data/settings";
 import type { InquiryStatus } from "@/lib/db/schema";
 import { formatDate, formatDateTime, whatsappLink } from "@/lib/format";
-import { INQUIRY_STATUS_LABELS, INQUIRY_STATUS_TONES } from "@/lib/order-status";
+import { INQUIRY_STATUS_LABELS, INQUIRY_STATUS_TONES, inquiryTitle } from "@/lib/order-status";
+import { privacyDeadline } from "@/lib/privacy";
 
 export const metadata: Metadata = { title: "Solicitudes" };
 
@@ -64,15 +65,12 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
               <div className="space-y-3 text-sm">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone={INQUIRY_STATUS_TONES[inquiry.status]}>{INQUIRY_STATUS_LABELS[inquiry.status]}</Badge>
-                  <span className="font-semibold">
-                    {inquiry.kind === "service"
-                      ? inquiry.serviceName ?? "Servicio"
-                      : inquiry.kind === "part"
-                        ? "Pedido especial de repuesto"
-                        : inquiry.kind === "harness"
-                          ? "Cotización de ramal"
-                          : "Mensaje de contacto"}
-                  </span>
+                  <span className="font-semibold">{inquiryTitle(inquiry.kind, inquiry.serviceName)}</span>
+                  {inquiry.kind === "privacy" && inquiry.status !== "closed" && (
+                    <Badge tone={privacyDeadline(inquiry.createdAt) < new Date() ? "danger" : "warning"}>
+                      Responder antes del {formatDate(privacyDeadline(inquiry.createdAt))}
+                    </Badge>
+                  )}
                   <span className="text-xs text-muted">· {formatDateTime(inquiry.createdAt)}</span>
                 </div>
                 <p className="text-base font-semibold">{inquiry.name}</p>

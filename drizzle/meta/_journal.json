@@ -36,6 +36,13 @@
       "when": 1791691213779,
       "tag": "0004_programacion_en_vez_de_seteo",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791779603221,
+      "tag": "0005_solicitud_derechos_datos",
+      "breakpoints": true
     }
   ]
 }

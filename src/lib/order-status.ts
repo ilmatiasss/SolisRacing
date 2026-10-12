@@ -1,4 +1,4 @@
-import type { InquiryStatus, OrderStatus, PaymentMethod } from "./db/schema";
+import type { InquiryKind, InquiryStatus, OrderStatus, PaymentMethod } from "./db/schema";
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   pending: "Pendiente de pago",
@@ -36,6 +36,23 @@ export const PAYMENT_METHOD_SHORT: Record<PaymentMethod, string> = {
   webpay: "Webpay",
   transfer: "Transferencia",
 };
+
+/** Título de una solicitud según su tipo (panel y correos). */
+export function inquiryTitle(kind: InquiryKind, serviceName: string | null): string {
+  switch (kind) {
+    case "service":
+      return serviceName ?? "Servicio";
+    case "part":
+      return "Pedido especial de repuesto";
+    case "harness":
+      return "Cotización de ramal";
+    case "privacy":
+      // En las solicitudes de derechos, `serviceName` guarda el derecho pedido (Acceso, Supresión…).
+      return `Derechos sobre datos personales${serviceName ? `: ${serviceName}` : ""}`;
+    default:
+      return "Mensaje de contacto";
+  }
+}
 
 export const INQUIRY_STATUS_LABELS: Record<InquiryStatus, string> = {
   new: "Nueva",

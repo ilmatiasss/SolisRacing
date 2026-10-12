@@ -17,6 +17,7 @@ import { isDeliveryMethodEnabled, quoteShipping } from "@/lib/shipping";
 import { cartStore, cartTotals, useCartItems } from "../cart/cart-store";
 import { useCartRefresh, useHydrated } from "../cart/use-cart-refresh";
 import { WebpayRedirect } from "./webpay-redirect";
+import { PrivacyNotice } from "@/components/store/privacy-notice";
 
 const DRAFT_KEY = "solis-racing-checkout-v1";
 const DRAFT_FIELDS = [
@@ -495,6 +496,7 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
         <p className="flex items-center justify-center gap-1.5 text-xs text-muted">
           <ShieldCheck className="size-3.5" /> Tus datos viajan cifrados. No guardamos datos de tarjetas.
         </p>
+        <PrivacyNotice className="text-center" purpose="procesar, despachar y facturar tu pedido" />
       </aside>
     </form>
   );

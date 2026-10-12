@@ -8,6 +8,7 @@ import {
   Package,
   Receipt,
   Settings,
+  ShieldCheck,
   Tag,
   Users,
   Wrench,
@@ -44,6 +45,7 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin/configuracion", label: "Configuración", icon: Settings },
       { href: "/admin/usuarios", label: "Usuarios", icon: Users },
+      { href: "/admin/privacidad", label: "Privacidad", icon: ShieldCheck },
     ],
   },
 ];

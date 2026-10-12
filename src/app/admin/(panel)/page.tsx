@@ -9,10 +9,11 @@ import { requireAdmin } from "@/lib/auth";
 import { formatBookingDate } from "@/lib/booking";
 import { getDashboardData } from "@/lib/data/admin";
 import { listUpcomingBookings } from "@/lib/data/booking";
+import { purgeExpiredPersonalData } from "@/lib/data/privacy";
 import { readStoreSettings } from "@/lib/data/settings";
 import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
-import { ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
+import { inquiryTitle, ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
 import { expireAbandonedWebpayOrders } from "@/lib/orders";
 import { webpayEnvironment } from "@/lib/payments/webpay";
 
@@ -24,12 +25,15 @@ export const instant = false;
 export default async function DashboardPage() {
   const user = await requireAdmin();
   await expireAbandonedWebpayOrders().catch(() => 0);
+  // Plazos de conservación de la política de privacidad (borra o anonimiza lo vencido).
+  await purgeExpiredPersonalData().catch(() => null);
   const [data, settings, bookings] = await Promise.all([getDashboardData(), readStoreSettings(), listUpcomingBookings()]);
   const env = webpayEnvironment();
   const pending = [
     !settings.email && "el correo de la tienda (ahí llegan los avisos de pedidos y solicitudes)",
     settings.payments.transferAccountNumber === DEFAULT_SETTINGS.payments.transferAccountNumber &&
       "los datos bancarios para transferencias",
+    !settings.legalRut && "el RUT de la empresa (se muestra en la política de privacidad como responsable de los datos)",
   ].filter((item): item is string => Boolean(item));
 
   return (
@@ -215,7 +219,7 @@ export default async function DashboardPage() {
                   <li key={inquiry.id} className="px-5 py-3 text-sm">
                     <p className="font-medium">{inquiry.name}</p>
                     <p className="text-xs text-muted">
-                      {inquiry.kind === "service" ? inquiry.serviceName ?? "Servicio" : inquiry.kind === "part" ? "Repuesto" : inquiry.kind === "harness" ? "Ramal" : "Contacto"} ·{" "}
+                      {inquiryTitle(inquiry.kind, inquiry.serviceName)} ·{" "}
                       {formatDateTime(inquiry.createdAt)}
                     </p>
                   </li>
