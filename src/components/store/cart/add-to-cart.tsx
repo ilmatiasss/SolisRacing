@@ -26,11 +26,11 @@ export function QuickAddButton({ product, className }: { product: ProductSnapsho
         cartDrawer.set(true);
       }}
       className={cn(
-        "flex size-10 cursor-pointer items-center justify-center rounded-xl bg-brand-600 text-white transition-colors hover:bg-brand-500 disabled:cursor-not-allowed disabled:bg-zinc-700",
+        "flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-brand-600 text-white transition-colors hover:bg-brand-500 disabled:cursor-not-allowed disabled:bg-zinc-700",
         className,
       )}
     >
-      {inCart ? <Check className="size-4.5" /> : <ShoppingCart className="size-4.5" />}
+      {inCart ? <Check className="size-4" /> : <ShoppingCart className="size-4" />}
     </button>
   );
 }

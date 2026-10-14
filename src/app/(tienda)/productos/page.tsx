@@ -149,7 +149,7 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
 
           {result.products.length > 0 ? (
             <>
-              <ProductGrid products={result.products} />
+              <ProductGrid products={result.products} withSidebar />
               <Pagination filters={filters} page={result.page} pageCount={result.pageCount} />
             </>
           ) : (
@@ -356,9 +356,9 @@ function CatalogSkeleton() {
             <div key={i} className="h-8 animate-pulse rounded-lg bg-surface" />
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 8 }, (_, i) => (
-            <div key={i} className="aspect-[3/4] animate-pulse rounded-lg bg-surface" />
+            <div key={i} className="aspect-[4/5] animate-pulse rounded-lg bg-surface" />
           ))}
         </div>
       </Container>

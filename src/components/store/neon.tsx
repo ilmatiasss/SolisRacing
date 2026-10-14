@@ -83,57 +83,49 @@ export function DragTree({ className }: { className?: string }) {
   );
 }
 
-const TRAILS = [
-  { top: "14%", width: "22%", seconds: 2.6, delay: -0.4, opacity: 0.9 },
-  { top: "31%", width: "34%", seconds: 3.4, delay: -2.1, opacity: 0.55 },
-  { top: "47%", width: "18%", seconds: 2.1, delay: -1.2, opacity: 0.8 },
-  { top: "63%", width: "28%", seconds: 3, delay: -0.9, opacity: 0.65 },
-  { top: "78%", width: "40%", seconds: 3.8, delay: -2.8, opacity: 0.5 },
-  { top: "91%", width: "24%", seconds: 2.4, delay: -1.7, opacity: 0.85 },
-];
+/** Eje de revoluciones de la hoja de medición. */
+const RPM_TICKS = ["2.000", "3.000", "4.000", "5.000", "6.000", "7.000", "8.000"];
 
-/** Estelas de luz roja que cruzan el fondo a distintas alturas y velocidades. */
-export function LightTrails({ className }: { className?: string }) {
+/**
+ * Fondo de la portada: hoja de medición de un dinamómetro, con curvas de potencia (roja) y torque
+ * (clara) que se dibujan solas y una línea que las recorre (ver `.dyno` en globals.css). Es solo
+ * decoración: las curvas no representan datos reales.
+ */
+export function DynoBackdrop({ className }: { className?: string }) {
   return (
-    <div className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true">
-      {TRAILS.map((trail) => (
-        <span
-          key={trail.top}
-          className="light-trail"
-          style={
-            {
-              top: trail.top,
-              width: trail.width,
-              opacity: trail.opacity,
-              "--trail-duration": `${trail.seconds}s`,
-              "--trail-delay": `${trail.delay}s`,
-            } as CSSProperties
-          }
+    <div className={cn("dyno absolute inset-x-0 bottom-0 h-44 sm:h-56", className)} aria-hidden="true">
+      <div className="dyno__grid absolute inset-0" />
+      <svg viewBox="0 0 1200 220" preserveAspectRatio="none" className="absolute inset-0 size-full">
+        {/* Torque: sube rápido, meseta y baja suave. */}
+        <path
+          pathLength="1"
+          className="dyno__curve dyno__curve--torque"
+          stroke="rgb(244 239 232 / 0.6)"
+          strokeWidth="2"
+          d="M0 170 C120 150 230 118 360 104 S600 92 760 100 S1030 130 1200 154"
         />
-      ))}
-    </div>
-  );
-}
-
-/** Piso de neón en perspectiva que avanza hacia la pantalla. */
-export function NeonFloor({ className }: { className?: string }) {
-  return (
-    <div className={cn("neon-floor pointer-events-none absolute inset-x-0 bottom-0", className)} aria-hidden="true">
-      <div className="neon-floor__plane">
-        <div className="neon-floor__grid" />
+        {/* Potencia: crece hasta el pico y cae al corte. */}
+        <path
+          pathLength="1"
+          className="dyno__curve"
+          stroke="rgb(255 48 32 / 1)"
+          strokeWidth="2.5"
+          d="M0 188 C150 182 290 164 430 128 S700 52 860 40 S1060 48 1200 78"
+        />
+      </svg>
+      <div className="dyno__cursor" />
+      <div className="absolute inset-x-0 bottom-3 flex justify-between px-[6.25%] text-[10px] font-semibold tracking-widest text-zinc-500 tabular-nums">
+        {RPM_TICKS.map((tick) => (
+          <span key={tick} className="-translate-x-1/2 first:translate-x-0 last:translate-x-0">
+            {tick}
+          </span>
+        ))}
       </div>
-    </div>
-  );
-}
-
-/** Línea de neón con un destello que va y vuelve. */
-export function ScannerLine({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn("pointer-events-none absolute inset-x-0 h-px bg-linear-to-r from-transparent via-brand-600/70 to-transparent", className)}
-      aria-hidden="true"
-    >
-      <span className="scanner" />
+      <p className="absolute top-6 right-6 hidden text-[10px] font-semibold tracking-[0.25em] text-zinc-500 uppercase sm:block">
+        <span className="mr-2 inline-block h-0.5 w-5 align-middle bg-brand-600" /> Potencia
+        <span className="mr-2 ml-4 inline-block h-0.5 w-5 align-middle bg-zinc-400/60" /> Torque
+        <span className="ml-4">· RPM</span>
+      </p>
     </div>
   );
 }

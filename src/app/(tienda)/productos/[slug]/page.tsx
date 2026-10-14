@@ -267,7 +267,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
       {related.length > 0 && (
         <Container className="border-t border-line pt-12">
           <SectionHeading eyebrow="También te puede interesar" title="Productos relacionados" />
-          <ProductGrid products={related} />
+          <ProductGrid products={related} withSidebar />
         </Container>
       )}
     </>

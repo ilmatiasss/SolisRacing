@@ -31,35 +31,35 @@ export function ProductCard({
           src={product.imageUrl}
           alt={product.imageAlt ?? product.name}
           icon={product.categoryIcon}
-          sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 50vw"
-          className="aspect-square transition-transform duration-500 group-hover:scale-[1.03]"
+          sizes="(min-width: 1280px) 200px, (min-width: 768px) 25vw, 50vw"
+          className="aspect-[4/3] transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </Link>
-      <div className="pointer-events-none absolute top-3 left-3 flex flex-col items-start gap-1.5">
+      <div className="pointer-events-none absolute top-2 left-2 flex flex-col items-start gap-1.5">
         {discount > 0 && (
-          <span className="rounded-sm bg-brand-600 px-2 py-1 text-xs font-bold tracking-wide text-white uppercase">
+          <span className="rounded-sm bg-brand-600 px-1.5 py-0.5 text-[11px] font-bold tracking-wide text-white uppercase">
             Oferta -{discount}%
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col gap-1.5 p-3">
         {(product.brandName || product.universal) && (
-          <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider uppercase">
             {product.brandName && <span className="text-brand-500">{product.brandName}</span>}
             {product.universal && (
               <span className="rounded bg-white/8 px-1.5 py-px text-[10px] tracking-wide text-zinc-400">Universal</span>
             )}
           </p>
         )}
-        <h3 className="line-clamp-2 text-sm leading-snug font-semibold text-fg sm:text-[0.95rem]">
+        <h3 className="line-clamp-2 text-[0.8125rem] leading-snug font-semibold text-fg sm:text-sm">
           <Link href={href} className="after:absolute after:inset-0 after:content-['']">
             {product.name}
           </Link>
         </h3>
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
+        <div className="mt-auto flex items-end justify-between gap-2 pt-1">
           <div className="min-w-0">
-            <Price price={product.price} compareAtPrice={product.compareAtPrice} size="sm" />
-            <StockStatus stock={product.stock} className="text-xs" />
+            <Price price={product.price} compareAtPrice={product.compareAtPrice} size="xs" />
+            <StockStatus stock={product.stock} className="text-[11px]" />
           </div>
           <QuickAddButton
             className="relative z-10"
@@ -79,9 +79,23 @@ export function ProductCard({
 }
 
 /** Grilla de productos; con `animate`, las tarjetas entran una tras otra. */
-export function ProductGrid({ products, animate = false }: { products: ProductCardData[]; animate?: boolean }) {
+export function ProductGrid({
+  products,
+  animate = false,
+  withSidebar = false,
+}: {
+  products: ProductCardData[];
+  animate?: boolean;
+  /** En el catálogo hay un panel de filtros al lado: una columna menos. */
+  withSidebar?: boolean;
+}) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+    <div
+      className={cn(
+        "grid grid-cols-2 gap-3",
+        withSidebar ? "sm:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6",
+      )}
+    >
       {products.map((product, index) => (
         <ProductCard
           key={product.id}

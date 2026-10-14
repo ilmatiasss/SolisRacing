@@ -9,7 +9,7 @@ export function Price({
 }: {
   price: number;
   compareAtPrice?: number | null;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
 }) {
   const discount = discountPercent(price, compareAtPrice);
@@ -18,6 +18,7 @@ export function Price({
       <span
         className={cn(
           "font-display font-bold tracking-tight text-fg tabular-nums",
+          size === "xs" && "text-base",
           size === "sm" && "text-lg",
           size === "md" && "text-xl",
           size === "lg" && "text-4xl",

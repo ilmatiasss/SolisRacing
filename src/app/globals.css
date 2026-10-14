@@ -60,7 +60,6 @@
   --animate-rise: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
   --animate-card-in: card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
   --animate-glow: glow 24s ease-in-out infinite; /* 4 ciclos de 6 s */
-  --animate-speedlines: speedlines 24s linear infinite; /* 10 ciclos de 2,4 s */
   --animate-needle:
     needle-rev 2.2s cubic-bezier(0.3, 0.7, 0.2, 1) 0.4s both, needle-life 24s ease-in-out 2.6s infinite; /* 4 ciclos de 6 s */
   --animate-redline: redline 24s ease-in-out 2.6s infinite; /* 4 ciclos de 6 s */
@@ -112,38 +111,6 @@
     87.5% {
       opacity: 1;
       transform: translate(-4%, 3%) scale(1.08);
-    }
-  }
-  /*
-   * Las líneas van a 115°: 10 períodos de 23px equivalen a 253.78px en horizontal (bucle sin saltos).
-   * Cada ciclo vuelve a 0 con un salto instantáneo (`step-start` en el tramo de 0,001%), igual que
-   * el fin de vuelta de antes.
-   */
-  @keyframes speedlines {
-    0%,
-    10.001%,
-    20.001%,
-    30.001%,
-    40.001%,
-    50.001%,
-    60.001%,
-    70.001%,
-    80.001%,
-    90.001% {
-      transform: translateX(0);
-    }
-    10%,
-    20%,
-    30%,
-    40%,
-    50%,
-    60%,
-    70%,
-    80%,
-    90%,
-    100% {
-      transform: translateX(-253.78px);
-      animation-timing-function: step-start;
     }
   }
   @keyframes needle-rev {
@@ -1112,193 +1079,54 @@ body:has(.theme-admin) {
   }
 }
 
-/* Estelas de luz que cruzan la portada (como luces traseras en foto de larga exposición). */
-.light-trail {
-  position: absolute;
-  left: 0;
-  height: 2px;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, transparent, rgb(255 42 42 / 0.2) 35%, #ff2a2a 85%, #ffe1db);
-  box-shadow: 0 0 10px 1px rgb(255 30 30 / 0.55);
-  transform: translateX(-110%);
-  /* Una vuelta = 8 pasadas iguales (ver los tokens de animación al inicio). */
-  animation: light-trail calc(var(--trail-duration, 3s) * 8) cubic-bezier(0.45, 0, 0.6, 1) var(--trail-delay, 0s) infinite;
-}
-@keyframes light-trail {
-  0%,
-  12.501%,
-  25.001%,
-  37.501%,
-  50.001%,
-  62.501%,
-  75.001%,
-  87.501% {
-    transform: translateX(-110%);
-  }
-  12.5%,
-  25%,
-  37.5%,
-  50%,
-  62.5%,
-  75%,
-  87.5%,
-  100% {
-    transform: translateX(110vw);
-    animation-timing-function: step-start;
-  }
-}
-
-/* Piso de neón en perspectiva que avanza hacia la pantalla. */
-.neon-floor {
-  perspective: 380px;
-  perspective-origin: 50% 0%;
-  overflow: hidden;
-  mask-image: linear-gradient(to top, #000 15%, transparent 95%);
-}
 /*
- * Con perspectiva de 380px y el plano inclinado 72°, lo que está a más de 400px de su borde superior
- * queda detrás del observador, y hacia abajo el plano se ve cada vez más angosto que el contenedor:
- * con ese tamaño basta (la capa que se dibuja en la GPU es ~4 veces más chica).
+ * Fondo de la portada: hoja de medición de un banco de pruebas. Cuadrícula fina, curvas de potencia y
+ * torque que se dibujan una sola vez y una línea que las recorre despacio, como en una pasada en el
+ * dinamómetro. La línea es lo único que se mueve (solo `transform`); el ancho se mide con unidades de
+ * contenedor para no tocar el diseño en cada cuadro.
  */
-.neon-floor__plane {
+.dyno {
+  container-type: inline-size;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 40%);
+}
+.dyno__grid {
+  background-image:
+    linear-gradient(to right, rgb(244 239 232 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(244 239 232 / 0.07) 1px, transparent 1px);
+  background-size: 12.5% 100%, 100% 25%;
+}
+.dyno__curve {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: dyno-draw 3.4s cubic-bezier(0.3, 0.6, 0.25, 1) 0.5s forwards;
+}
+.dyno__curve--torque {
+  animation-delay: 0.9s;
+}
+@keyframes dyno-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.dyno__cursor {
   position: absolute;
   top: 0;
+  bottom: 0;
   left: 0;
-  right: 0;
-  height: 400px;
-  transform-origin: 50% 0;
-  transform: rotateX(72deg);
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgb(225 6 0 / 0.75) 30%, rgb(225 6 0 / 0.75) 80%, transparent);
+  transform: translateX(0);
+  animation: dyno-scan 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) 4s infinite alternate;
 }
-.neon-floor__grid {
-  position: absolute;
-  inset: -128px 0 0 0;
-  background-image:
-    linear-gradient(rgb(255 45 45 / 0.8) 2px, transparent 2px),
-    linear-gradient(90deg, rgb(255 45 45 / 0.8) 2px, transparent 2px);
-  background-size: 64px 64px;
-  /* Las líneas verticales quedan donde estaban cuando el plano medía el doble de ancho. */
-  background-position: calc(-50% - 32px) 0;
-  animation: neon-floor 17s linear infinite;
-}
-/* Avanza dos celdas por ciclo (1,7 s) y vuelve de golpe: 10 ciclos por vuelta. */
-@keyframes neon-floor {
-  0%,
-  10.001%,
-  20.001%,
-  30.001%,
-  40.001%,
-  50.001%,
-  60.001%,
-  70.001%,
-  80.001%,
-  90.001% {
-    transform: translateY(0);
-  }
-  10%,
-  20%,
-  30%,
-  40%,
-  50%,
-  60%,
-  70%,
-  80%,
-  90%,
-  100% {
-    transform: translateY(128px);
-    animation-timing-function: step-start;
-  }
-}
-
-/* Línea con un destello que va y vuelve (tipo escáner). Solo `transform`: lo anima la GPU. */
-.scanner {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 22%;
-  height: 3px;
-  translate: 0 -50%;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, transparent, #ff2a2a 40%, #ffd5ce 50%, #ff2a2a 60%, transparent);
-  box-shadow: 0 0 16px 3px rgb(255 30 30 / 0.7);
-  animation: scanner 20.8s ease-in-out infinite;
-}
-/*
- * El destello mide 22% del ancho: recorrer hasta el 78% equivale a 3,545 veces su propio ancho.
- * Cada vuelta son 4 idas y vueltas de 2,6 s cada tramo.
- */
-@keyframes scanner {
-  0%,
-  25%,
-  50%,
-  75%,
-  100% {
-    transform: translateX(0);
-  }
-  12.5%,
-  37.5%,
-  62.5%,
-  87.5% {
-    transform: translateX(354.5%);
-  }
-}
-
-/*
- * Borde con un haz de luz que gira: un anillo de 2px por dentro del borde exterior de la tarjeta.
- * Antes se animaba el ángulo del degradado, que obliga a redibujar en cada cuadro; ahora un cuadrado
- * con degradado cónico gira (solo `transform`, lo anima la GPU) dentro de .neon-beam__ring, que lo
- * recorta al contorno de la tarjeta, y un panel opaco (::after) lo tapa desde 2px hacia adentro.
- * El halo rojo (.neon-halo) va encima, como antes.
- */
-.neon-beam {
-  position: relative;
-  isolation: isolate;
-}
-.neon-beam__ring {
-  position: absolute;
-  z-index: -2;
-  inset: -1px; /* sobre el borde de 1px: el contorno exterior de la tarjeta */
-  border-radius: 1.5rem;
-  overflow: hidden;
-  pointer-events: none;
-}
-.neon-beam__ring::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 180%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  background: conic-gradient(
-    transparent 0deg 240deg,
-    rgb(255 42 42 / 0.9) 295deg,
-    #ffd0c8 325deg,
-    rgb(255 42 42 / 0.9) 345deg,
-    transparent 360deg
-  );
-  animation: beam-spin 21s linear infinite;
-}
-.neon-beam::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 1px;
-  border-radius: calc(1.5rem - 2px);
-  pointer-events: none;
-  background: #0c080a; /* el zinc-950/90 de antes sobre el fondo rojizo de la portada */
-}
-/* 6 giros de 3,5 s por vuelta. */
-@keyframes beam-spin {
+@keyframes dyno-scan {
   to {
-    transform: rotate(6turn);
+    transform: translateX(100cqw);
   }
-}
-/* Halo rojo que respira alrededor de la tarjeta (late con opacidad, ver animate-neon-pulse). */
-.neon-halo {
-  pointer-events: none;
-  box-shadow:
-    0 0 40px rgb(255 30 30 / 0.3),
-    0 0 90px rgb(255 30 30 / 0.15);
 }
 
 /*
@@ -1612,9 +1440,11 @@ body:has(.theme-admin) {
   .logo-anim__limiter,
   .logo-neon__tube,
   .logo-neon__lights,
-  .light-trail,
-  .neon-floor__grid,
-  .scanner {
+  .dyno__cursor {
     animation: none !important;
+  }
+  .dyno__curve {
+    animation: none !important;
+    stroke-dashoffset: 0;
   }
 }
