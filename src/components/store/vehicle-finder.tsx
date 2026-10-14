@@ -46,7 +46,7 @@ export function VehicleFinder({
   return (
     <form
       onSubmit={submit}
-      className={cn("grid gap-3", compact ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-[1fr_1fr_0.7fr_auto]", className)}
+      className={cn("grid gap-3", compact ? "sm:grid-cols-[1fr_1fr_0.6fr]" : "sm:grid-cols-2 lg:grid-cols-[1fr_1fr_0.7fr_auto]", className)}
     >
       <label className="sr-only" htmlFor="finder-make">
         Marca
@@ -89,7 +89,7 @@ export function VehicleFinder({
           </option>
         ))}
       </Select>
-      <Button type="submit" disabled={!make || pending} className={cn(compact && "sm:col-span-2")}>
+      <Button type="submit" disabled={!make || pending} className={cn(compact && "sm:col-span-3")}>
         {pending ? <Car className="size-4.5 animate-pulse" /> : <Search className="size-4.5" />}
         Buscar repuestos
       </Button>

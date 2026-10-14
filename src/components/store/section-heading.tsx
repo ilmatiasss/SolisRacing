@@ -47,19 +47,27 @@ export function PageHeader({
   title,
   description,
   children,
+  aside,
 }: {
   eyebrow?: string;
   title: ReactNode;
   description?: ReactNode;
   children?: ReactNode;
+  /** Panel a la derecha del título en pantallas grandes (por ejemplo, un buscador). */
+  aside?: ReactNode;
 }) {
   return (
     <div className="relative border-b border-line bg-surface">
-      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-        {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-        <h1 className="title-mark font-display text-4xl font-bold tracking-wide text-balance uppercase sm:text-5xl">{title}</h1>
-        {description && <p className="mt-4 max-w-2xl text-muted">{description}</p>}
-        {children}
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <div className={aside ? "grid items-center gap-6 lg:grid-cols-[1fr_minmax(0,34rem)] lg:gap-12" : undefined}>
+          <div>
+            {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
+            <h1 className="title-mark font-display text-4xl font-bold tracking-wide text-balance uppercase sm:text-5xl">{title}</h1>
+            {description && <p className="mt-4 max-w-2xl text-muted">{description}</p>}
+            {children}
+          </div>
+          {aside}
+        </div>
       </div>
       <div className="hazard h-1.5" aria-hidden="true" />
     </div>

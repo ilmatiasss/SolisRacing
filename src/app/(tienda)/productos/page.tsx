@@ -13,6 +13,7 @@ import { catalogHref, parseCatalogFilters, type CatalogFilters } from "@/lib/cat
 import { cn } from "@/lib/cn";
 import {
   getBrands,
+  getFeaturedProducts,
   getCategories,
   getVehicleTree,
   searchProducts,
@@ -47,6 +48,12 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
     getCurrentYear(),
     getStoreSettings(),
   ]);
+
+  // Con pocos resultados la página quedaba vacía: se completa con otros productos destacados.
+  const sparse = result.total > 0 && result.total < 8 && result.page === 1;
+  const more = sparse
+    ? (await getFeaturedProducts(14)).filter((product) => !result.products.some((shown) => shown.id === product.id)).slice(0, 8)
+    : [];
 
   const category = categories.find((c) => c.slug === filters.categoria);
   const brand = brands.find((b) => b.slug === filters.marca);
@@ -84,20 +91,22 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
             ? "Mostramos primero las piezas específicas para tu auto y luego las universales."
             : "Repuestos y accesorios de performance con despacho a todo Chile.")
         }
-      >
-        <div className="mt-8 max-w-4xl rounded-lg border border-white/10 bg-zinc-950/90 p-4 md:bg-zinc-950/70 md:backdrop-blur">
-          <p className="mb-3 flex items-center gap-2 text-sm font-semibold">
-            <Car className="size-4 text-brand-500" />
-            {vehicleLabel ? "Cambiar auto" : "Filtra por tu auto"}
-          </p>
-          <VehicleFinder
-            key={`${filters.auto}-${filters.modelo}-${filters.anio}`}
-            makes={makes}
-            currentYear={currentYear}
-            initial={filters}
-          />
-        </div>
-      </PageHeader>
+        aside={
+          <div className="rounded-lg border border-line-strong bg-surface-2 p-4">
+            <p className="mb-3 flex items-center gap-2 text-sm font-semibold">
+              <Car className="size-4 text-brand-500" />
+              {vehicleLabel ? "Cambiar auto" : "Filtra por tu auto"}
+            </p>
+            <VehicleFinder
+              compact
+              key={`${filters.auto}-${filters.modelo}-${filters.anio}`}
+              makes={makes}
+              currentYear={currentYear}
+              initial={filters}
+            />
+          </div>
+        }
+      />
 
       <Container className="grid gap-8 py-10 lg:grid-cols-[16rem_1fr]">
         <aside className="lg:sticky lg:top-32 lg:self-start">
@@ -151,6 +160,36 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
             <>
               <ProductGrid products={result.products} withSidebar />
               <Pagination filters={filters} page={result.page} pageCount={result.pageCount} />
+              {more.length > 0 && (
+                <div className="mt-10 space-y-8 border-t border-line pt-10">
+                  <div className="flex flex-col gap-5 rounded-lg border border-line border-l-4 border-l-brand-600 bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h2 className="font-display text-2xl font-bold tracking-wide uppercase">¿No ves lo que buscas?</h2>
+                      <p className="mt-1 max-w-xl text-sm text-muted">
+                        Conseguimos repuestos de performance a pedido. Cuéntanos qué necesitas y para qué auto, y te mandamos precio y plazo.
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 flex-wrap gap-3">
+                      <Link href="/pedido-especial" className={buttonClasses()}>
+                        Pedir un repuesto
+                      </Link>
+                      <a
+                        href={whatsappLink(settings.whatsapp, `Hola, busco un repuesto${category ? ` de ${category.name}` : ""} que no veo en la web.`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={buttonClasses({ variant: "outline" })}
+                      >
+                        <WhatsAppIcon className="size-4.5" />
+                        WhatsApp
+                      </a>
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="mb-4 font-display text-2xl font-bold tracking-wide uppercase">También te puede interesar</h2>
+                    <ProductGrid products={more} withSidebar />
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <div className="rounded-lg border border-dashed border-line-strong bg-surface p-10 text-center">

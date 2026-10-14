@@ -4,18 +4,16 @@ import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
 import { CatalogTabs } from "@/components/store/catalog-tabs";
 import { Marquee } from "@/components/store/marquee";
-import { DragTree, DynoBackdrop, GlitchText, NeonSign } from "@/components/store/neon";
+import { DragTree, GlitchText, NeonSign } from "@/components/store/neon";
 import { Price } from "@/components/store/price";
 import { ProductGrid } from "@/components/store/product-card";
 import { ProductImage } from "@/components/store/product-image";
-import { InstagramGallery } from "@/components/store/instagram-gallery";
 import { Rotator } from "@/components/store/rotator";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
 import { Tachometer } from "@/components/store/tachometer";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { REGIONS } from "@/lib/chile";
-import { cn } from "@/lib/cn";
 import {
   getActiveServices,
   getBrands,
@@ -27,15 +25,6 @@ import {
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, whatsappLink } from "@/lib/format";
-import { parseInstagramPosts } from "@/lib/instagram";
-
-const PERKS = [
-  "Despachos a todo Chile",
-  "Tienda física en Antofagasta",
-  "Paga con Webpay o transferencia",
-  "Programación e instalación",
-  "Asesoría experta",
-];
 
 export default async function HomePage() {
   const [categories, featured, onSale, catalog, services, brands, settings] = await Promise.all([
@@ -52,23 +41,21 @@ export default async function HomePage() {
     .map((category) => ({ category, products: catalog.filter((product) => product.categorySlug === category.slug) }))
     .filter((shelf) => shelf.products.length > 0);
   const freeShipping = settings.shipping.freeShippingThreshold;
-  const instagramPosts = parseInstagramPosts(settings.instagramPosts);
 
   return (
     <>
       {/* Portada */}
       <section className="relative overflow-hidden">
-        <DynoBackdrop />
         <div
           className="glow-hero-a absolute top-1/2 right-[-10%] size-[42rem] -translate-y-1/2 animate-glow opacity-50"
           aria-hidden="true"
         />
         <div className="glow-hero-b absolute -top-48 left-[-15%] size-[30rem] animate-glow opacity-60 [animation-delay:-3s]" aria-hidden="true" />
 
-        <Container className="relative grid items-center gap-x-12 gap-y-8 pt-10 pb-44 [grid-template-areas:'text'_'show'_'stats'] sm:pt-16 sm:pb-60 lg:grid-cols-[1.05fr_0.95fr] lg:pt-20 lg:[grid-template-areas:'text_show'_'stats_show']">
+        <Container className="relative grid items-center gap-x-16 gap-y-8 py-10 [grid-template-areas:'text'_'show'_'stats'] sm:py-16 lg:grid-cols-2 lg:py-20 lg:[grid-template-areas:'text_show'_'stats_show']">
           <div className="[grid-area:text]">
             <Eyebrow className="animate-rise tracking-[0.06em] sm:tracking-[0.2em]">Performance · Electrónica · Programación</Eyebrow>
-            <div className="mt-5 flex items-center justify-between gap-6 sm:justify-start sm:gap-10">
+            <div className="mt-5 flex max-w-xl items-center justify-between gap-6">
               <h1 className="font-display text-[2.6rem] leading-[0.92] font-extrabold tracking-normal uppercase italic min-[420px]:text-5xl sm:text-6xl lg:text-7xl">
                 <span className="block animate-rise [animation-delay:100ms]">
                   <GlitchText>Más potencia.</GlitchText>
@@ -126,7 +113,7 @@ export default async function HomePage() {
 
           {spotlight.length > 0 && (
             <div className="relative animate-rise [grid-area:show] [animation-delay:260ms]">
-              <Tachometer animated className="pointer-events-none absolute -top-24 -right-16 hidden w-[26rem] opacity-60 lg:block" />
+              <Tachometer animated className="pointer-events-none absolute top-1/2 left-1/2 hidden w-[46rem] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-35 lg:block" />
               <div className="relative rounded-xl border border-line-strong bg-surface p-5 sm:p-7">
                 <div className="mb-5 flex items-center justify-between gap-3">
                   <p className="flex items-center gap-2.5 font-display text-sm font-bold tracking-[0.2em] text-brand-500 uppercase">
@@ -160,42 +147,25 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Bandas en movimiento */}
-      <section aria-label="Lo que ofrecemos" className="cv-auto relative h-40 overflow-hidden sm:h-48">
-        {shelves.length > 0 && (
-          <div className="absolute top-[30%] -left-[5%] w-[110%] -translate-y-1/2 rotate-[2.5deg] bg-zinc-100 py-2.5 text-zinc-950 shadow-xl shadow-black/40 sm:top-1/2 sm:py-3">
-            <Marquee reverse repeat={3}>
-              {shelves.map(({ category }) => (
-                <span
-                  key={category.slug}
-                  className="flex items-center gap-3 px-6 font-display text-xl font-extrabold tracking-wide uppercase italic sm:text-2xl"
-                >
-                  <DynamicIcon name={category.icon} className="size-5 text-brand-600" />
-                  {category.name}
-                </span>
-              ))}
-            </Marquee>
-          </div>
-        )}
-        <div
-          className={cn(
-            "absolute -left-[5%] w-[110%] -translate-y-1/2 -rotate-[2.5deg] border-y border-red-300/40 bg-brand-600 py-3 text-white shadow-[0_0_50px_rgba(255,20,20,0.55)] [text-shadow:0_0_14px_rgba(255,255,255,0.5)] sm:top-1/2 sm:py-4",
-            shelves.length > 0 ? "top-[70%]" : "top-1/2",
-          )}
-        >
-          <Marquee repeat={3}>
-            {PERKS.map((perk) => (
-              <span
-                key={perk}
-                className="flex items-center gap-6 px-6 font-display text-2xl font-extrabold tracking-wide uppercase italic sm:text-3xl"
+      {/* Marcas: tira simple bajo el banner (la barra de arriba de todo ya lleva los datos de la tienda) */}
+      {brands.length > 0 && (
+        <section aria-labelledby="marcas-titulo" className="border-y border-line bg-surface py-5">
+          <p id="marcas-titulo" className="sr-only">
+            Marcas que trabajamos
+          </p>
+          <Marquee repeat={4} className="[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            {brands.map((brand) => (
+              <Link
+                key={brand.slug}
+                href={`/productos?marca=${brand.slug}`}
+                className="px-8 font-display text-2xl font-bold tracking-wide whitespace-nowrap text-zinc-500 uppercase transition-colors hover:text-fg"
               >
-                {perk}
-                <span aria-hidden="true" className="font-display text-2xl opacity-60">/</span>
-              </span>
+                {brand.name}
+              </Link>
             ))}
           </Marquee>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Catálogo por categoría */}
       {catalog.length > 0 && (
@@ -310,19 +280,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Quiénes somos (videos de Instagram cargados en el panel) */}
-      {instagramPosts.length > 0 && (
-        <Container className="cv-auto reveal pt-16 sm:pt-20">
-          <SectionHeading
-            eyebrow="Quiénes somos"
-            title="Así trabajamos"
-            description="La tienda, el taller y los proyectos del día a día, tal como los subimos a Instagram."
-            action={{ href: "/nosotros", label: "Conócenos" }}
-          />
-          <InstagramGallery posts={instagramPosts.slice(0, 3)} />
-        </Container>
-      )}
-
       {/* Ofertas */}
       {onSale.length > 0 && (
         <Container className="cv-auto reveal py-16 sm:py-20">
@@ -377,29 +334,6 @@ export default async function HomePage() {
             </a>
           </div>
         </Container>
-      )}
-
-      {/* Marcas */}
-      {brands.length > 0 && (
-        <section aria-labelledby="marcas-titulo" className="cv-auto pt-16">
-          <p id="marcas-titulo" className="text-center text-xs font-semibold tracking-[0.25em] text-muted uppercase">
-            Marcas que trabajamos
-          </p>
-          <Marquee
-            repeat={4}
-            className="mt-6 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
-          >
-            {brands.map((brand) => (
-              <Link
-                key={brand.slug}
-                href={`/productos?marca=${brand.slug}`}
-                className="px-8 font-display text-3xl font-bold tracking-wide whitespace-nowrap text-zinc-600 uppercase transition-colors hover:text-fg"
-              >
-                {brand.name}
-              </Link>
-            ))}
-          </Marquee>
-        </section>
       )}
     </>
   );

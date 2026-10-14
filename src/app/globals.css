@@ -1080,56 +1080,6 @@ body:has(.theme-admin) {
 }
 
 /*
- * Fondo de la portada: hoja de medición de un banco de pruebas. Cuadrícula fina, curvas de potencia y
- * torque que se dibujan una sola vez y una línea que las recorre despacio, como en una pasada en el
- * dinamómetro. La línea es lo único que se mueve (solo `transform`); el ancho se mide con unidades de
- * contenedor para no tocar el diseño en cada cuadro.
- */
-.dyno {
-  container-type: inline-size;
-  pointer-events: none;
-  mask-image: linear-gradient(to bottom, transparent 0, #000 40%);
-}
-.dyno__grid {
-  background-image:
-    linear-gradient(to right, rgb(244 239 232 / 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(244 239 232 / 0.07) 1px, transparent 1px);
-  background-size: 12.5% 100%, 100% 25%;
-}
-.dyno__curve {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: dyno-draw 3.4s cubic-bezier(0.3, 0.6, 0.25, 1) 0.5s forwards;
-}
-.dyno__curve--torque {
-  animation-delay: 0.9s;
-}
-@keyframes dyno-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-.dyno__cursor {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, rgb(225 6 0 / 0.75) 30%, rgb(225 6 0 / 0.75) 80%, transparent);
-  transform: translateX(0);
-  animation: dyno-scan 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) 4s infinite alternate;
-}
-@keyframes dyno-scan {
-  to {
-    transform: translateX(100cqw);
-  }
-}
-
-/*
  * Resplandores. Antes eran círculos de color con `filter: blur()`, que la GPU del celular vuelve a
  * desenfocar en cada cuadro mientras la portada se mueve. Ahora son degradados radiales con la misma
  * caída que un círculo desenfocado (calculada: difieren en 1 o 2 niveles de color). Los animados
@@ -1439,12 +1389,7 @@ body:has(.theme-admin) {
   .logo-anim__needle--live,
   .logo-anim__limiter,
   .logo-neon__tube,
-  .logo-neon__lights,
-  .dyno__cursor {
+  .logo-neon__lights {
     animation: none !important;
-  }
-  .dyno__curve {
-    animation: none !important;
-    stroke-dashoffset: 0;
   }
 }
