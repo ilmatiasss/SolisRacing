@@ -135,6 +135,9 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   ].join("\n"),
   harnessPerCylinder: "12000",
   harnessOriginalSensorExtra: "4000",
+  // Mano de obra: en 0 hasta que la tienda la configure (Panel → Ramales).
+  harnessLaborBase: "0",
+  harnessLaborPerSensor: "0",
   harnessMargin: "15",
   booking: DEFAULT_BOOKING,
   instagramPosts: [

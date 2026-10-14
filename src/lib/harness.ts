@@ -13,6 +13,10 @@ export type HarnessPricing = {
   extras: PricedOption[];
   perCylinder: number;
   originalSensorExtra: number;
+  /** Mano de obra de armado: monto fijo por ramal. */
+  laborBase: number;
+  /** Mano de obra adicional por cada sensor del ramal. */
+  laborPerSensor: number;
   /** Margen del rango, en porcentaje (15 = ±15 %). */
   margin: number;
 };
@@ -24,6 +28,8 @@ export type HarnessSettings = {
   harnessExtras: string;
   harnessPerCylinder: string;
   harnessOriginalSensorExtra: string;
+  harnessLaborBase: string;
+  harnessLaborPerSensor: string;
   harnessMargin: string;
 };
 
@@ -72,6 +78,8 @@ export function harnessPricing(settings: HarnessSettings): HarnessPricing {
     extras: parsePricedOptions(settings.harnessExtras),
     perCylinder: parseAmount(settings.harnessPerCylinder) ?? 0,
     originalSensorExtra: parseAmount(settings.harnessOriginalSensorExtra) ?? 0,
+    laborBase: parseAmount(settings.harnessLaborBase) ?? 0,
+    laborPerSensor: parseAmount(settings.harnessLaborPerSensor) ?? 0,
     margin: Math.min(parseAmount(settings.harnessMargin) ?? 0, 50),
   };
 }
@@ -109,6 +117,8 @@ export function estimateHarness(pricing: HarnessPricing, choice: HarnessChoice):
     lines.push({ label: "Conectores para sensores originales", amount: sensors.length * pricing.originalSensorExtra });
   }
   for (const extra of extras) lines.push({ label: extra.name, amount: extra.price });
+  const labor = pricing.laborBase + sensors.length * pricing.laborPerSensor;
+  if (labor > 0) lines.push({ label: "Mano de obra de armado", amount: labor });
   const total = lines.reduce((sum, line) => sum + line.amount, 0);
   // En enteros (× (100 ± margen) / 100) para no arrastrar decimales de punto flotante al redondear.
   return {

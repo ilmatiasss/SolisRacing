@@ -191,3 +191,45 @@ test("la prueba de integración registra las consultas tipo Jumpseller sin guard
   // En el registro (no en las instrucciones) el token nunca aparece completo.
   await expect(page.locator("section").filter({ hasText: "Consultas recibidas" })).not.toContainText("prueba-1234");
 });
+
+test("la mano de obra y los precios de Ramales se reflejan en el cotizador de la tienda", async ({ page }) => {
+  await loginAsAdmin(page);
+  await page.goto("/admin/ramales");
+
+  // Vista previa en vivo: FT450 + 4 cilindros + 6 sensores originales = 180.000 + 48.000 + 48.000 + 24.000 = 300.000.
+  const preview = page.getByRole("region", { name: "Vista previa del cálculo" });
+  await expect(preview).toContainText("$255.000 – $345.000");
+  await page.locator("#harness-laborBase").fill("50.000");
+  await page.locator("#harness-laborPerSensor").fill("2000");
+  // Mano de obra = 50.000 + 6 × 2.000 = 62.000 → total 362.000, rango ±15 %.
+  await expect(preview).toContainText("Mano de obra de armado");
+  await expect(preview).toContainText("$362.000");
+
+  // Valores inválidos no se guardan.
+  await page.locator("#ecu-price-0").fill("");
+  await page.locator("#ecu-name-0").fill("FT450");
+  await page.locator("#harness-margin").fill("80");
+  await page.getByRole("button", { name: "Guardar valores" }).click();
+  await expect(page.getByText("el margen del rango")).toBeVisible();
+  await page.locator("#harness-margin").fill("15");
+
+  // Se cambia el precio de la FT450 y se guarda.
+  await page.locator("#ecu-price-0").fill("190000");
+  await page.getByRole("button", { name: "Guardar valores" }).click();
+  await expect(page.getByText("Valores guardados")).toBeVisible();
+
+  await page.goto("/cotizador-ramal");
+  await page.getByRole("radio", { name: "FT450" }).click();
+  const panel = page.locator("#valor-ramal");
+  await expect(panel.getByText("Mano de obra de armado")).toBeVisible();
+  // 190.000 + 48.000 + 48.000 + 24.000 + 62.000 = 372.000 → 316.200 → 315.000 y 427.800 → 430.000.
+  await expect(panel.getByText("$315.000 – $430.000")).toBeVisible();
+
+  // Se deja todo como estaba para las demás pruebas.
+  await page.goto("/admin/ramales");
+  await page.locator("#harness-laborBase").fill("0");
+  await page.locator("#harness-laborPerSensor").fill("0");
+  await page.locator("#ecu-price-0").fill("180000");
+  await page.getByRole("button", { name: "Guardar valores" }).click();
+  await expect(page.getByText("Valores guardados")).toBeVisible();
+});

@@ -1,4 +1,5 @@
 import {
+  Cable,
   CalendarDays,
   Car,
   ExternalLink,
@@ -39,6 +40,7 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
       { href: "/admin/marcas", label: "Marcas", icon: Tag },
       { href: "/admin/vehiculos", label: "Vehículos", icon: Car },
       { href: "/admin/servicios", label: "Servicios", icon: Wrench },
+      { href: "/admin/ramales", label: "Ramales", icon: Cable },
     ],
   },
   {

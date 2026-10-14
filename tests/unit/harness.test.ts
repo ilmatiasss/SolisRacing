@@ -49,3 +49,20 @@ describe("cotizador de ramales", () => {
     expect(estimateHarness(pricing, { ...base, cylinders: 7, originalSensors: false })).toBeNull();
   });
 });
+
+describe("mano de obra del ramal", () => {
+  const choice = { ecu: "FT450", cylinders: 4, originalSensors: false, sensors: ["Velocidad", "Fase (CMP)"], extras: [] };
+
+  it("no suma nada mientras no se configure", () => {
+    expect(pricing.laborBase).toBe(0);
+    expect(estimateHarness(pricing, choice)?.lines.map((line) => line.label)).not.toContain("Mano de obra de armado");
+  });
+
+  it("suma un monto fijo más un monto por sensor, como una línea aparte", () => {
+    const withLabor = harnessPricing({ ...DEFAULT_SETTINGS, harnessLaborBase: "$50.000", harnessLaborPerSensor: "3000" });
+    const estimate = estimateHarness(withLabor, choice);
+    // 180.000 + 4 × 12.000 + (8.000 + 10.000) = 246.000, más mano de obra 50.000 + 2 × 3.000 = 56.000
+    expect(estimate?.lines.at(-1)).toEqual({ label: "Mano de obra de armado", amount: 56000 });
+    expect(estimate?.total).toBe(302000);
+  });
+});
