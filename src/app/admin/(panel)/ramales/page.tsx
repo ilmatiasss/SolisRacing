@@ -29,7 +29,7 @@ export default async function HarnessAdminPage() {
       />
       <Notice tone="info" className="mb-6">
         El cliente elige motor, computadora, sensores y extras, y ve un <strong>valor aproximado</strong> (un rango). Aquí defines
-        cada precio y tu mano de obra; a la derecha ves cómo queda el cálculo antes de guardar. Las solicitudes formales llegan a{" "}
+        cada precio y tu mano de obra, y ves cómo queda el cálculo antes de guardar. Las solicitudes formales llegan a{" "}
         <Link href="/admin/solicitudes" className="font-semibold underline">
           Solicitudes
         </Link>
