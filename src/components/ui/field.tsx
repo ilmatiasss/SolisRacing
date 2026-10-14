@@ -7,7 +7,7 @@ import type {
 import { cn } from "@/lib/cn";
 
 const controlBase = cn(
-  "w-full rounded-xl border border-line bg-surface-2 px-3.5 text-sm text-fg shadow-xs transition-colors",
+  "w-full rounded-lg border border-line bg-surface-2 px-3.5 text-sm text-fg transition-colors",
   "placeholder:text-muted/70 focus:border-brand-600 focus:outline-none focus:ring-3 focus:ring-brand-600/20",
   "disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:border-red-500",
 );

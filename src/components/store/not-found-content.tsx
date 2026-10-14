@@ -6,8 +6,8 @@ import { Container } from "@/components/ui/container";
 export function NotFoundContent() {
   return (
     <Container className="flex flex-col items-center py-24 text-center">
-      <p className="font-display text-8xl font-extrabold text-brand-600 italic">404</p>
-      <h1 className="mt-4 font-display text-3xl font-extrabold uppercase italic sm:text-4xl">
+      <p className="font-display text-8xl font-bold text-brand-600">404</p>
+      <h1 className="mt-4 font-display text-3xl font-bold uppercase sm:text-4xl">
         Te saliste de la pista
       </h1>
       <p className="mt-3 max-w-md text-muted">

@@ -30,7 +30,7 @@ export default function OrderPage({ params, searchParams }: Props) {
     <Suspense
       fallback={
         <Container className="py-16">
-          <div className="h-64 animate-pulse rounded-2xl bg-surface" />
+          <div className="h-64 animate-pulse rounded-lg bg-surface" />
         </Container>
       }
     >
@@ -115,7 +115,7 @@ async function OrderView({ params, searchParams }: Props) {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm text-muted">Pedido</p>
-            <h1 className="font-display text-5xl font-extrabold tracking-normal uppercase italic">{number}</h1>
+            <h1 className="font-display text-5xl font-bold tracking-normal uppercase">{number}</h1>
             <p className="mt-1 text-sm text-muted">Realizado el {formatDateTime(order.createdAt)}</p>
           </div>
           <div className="flex items-center gap-3 print:hidden">
@@ -127,8 +127,8 @@ async function OrderView({ params, searchParams }: Props) {
         </div>
 
         {awaitingTransfer && (
-          <section className="rounded-2xl border border-signal-400/30 bg-surface p-6">
-            <h2 className="flex items-center gap-2 font-display text-2xl font-bold uppercase italic">
+          <section className="rounded-lg border border-signal-400/30 bg-surface p-6">
+            <h2 className="flex items-center gap-2 font-display text-2xl font-bold uppercase">
               <Landmark className="size-6 text-signal-400" /> Datos para transferir
             </h2>
             <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
@@ -157,8 +157,8 @@ async function OrderView({ params, searchParams }: Props) {
         )}
 
         {webpay && order.paymentMethod === "webpay" && order.status !== "cancelled" && webpay.response_code === 0 && (
-          <section className="rounded-2xl border border-line bg-surface p-6">
-            <h2 className="font-display text-2xl font-bold uppercase italic">Comprobante de pago</h2>
+          <section className="rounded-lg border border-line bg-surface p-6">
+            <h2 className="font-display text-2xl font-bold uppercase">Comprobante de pago</h2>
             {webpay.environment && webpay.environment !== "production" && (
               <p className="mt-2 text-xs font-semibold text-signal-400">
                 Transacción de prueba ({webpay.environment === "mock" ? "simulador" : "ambiente de integración"}): no
@@ -191,8 +191,8 @@ async function OrderView({ params, searchParams }: Props) {
         )}
 
         <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-          <section className="rounded-2xl border border-line bg-surface p-6">
-            <h2 className="font-display text-2xl font-bold uppercase italic">Productos</h2>
+          <section className="rounded-lg border border-line bg-surface p-6">
+            <h2 className="font-display text-2xl font-bold uppercase">Productos</h2>
             <ul className="mt-4 divide-y divide-line">
               {order.items.map((item) => (
                 <li key={item.id} className="flex items-center gap-4 py-3">
@@ -239,8 +239,8 @@ async function OrderView({ params, searchParams }: Props) {
           </section>
 
           <div className="space-y-6">
-            <section className="rounded-2xl border border-line bg-surface p-6 text-sm">
-              <h2 className="font-display text-2xl font-bold uppercase italic">Entrega</h2>
+            <section className="rounded-lg border border-line bg-surface p-6 text-sm">
+              <h2 className="font-display text-2xl font-bold uppercase">Entrega</h2>
               <p className="mt-3 font-semibold">{DELIVERY_METHOD_LABELS[order.deliveryMethod]}</p>
               {pickup ? (
                 <p className="mt-1 text-muted">{settings.shipping.pickupAddress}</p>
@@ -268,8 +268,8 @@ async function OrderView({ params, searchParams }: Props) {
               </p>
             </section>
 
-            <section className="rounded-2xl border border-line bg-surface p-6">
-              <h2 className="font-display text-2xl font-bold uppercase italic">Seguimiento</h2>
+            <section className="rounded-lg border border-line bg-surface p-6">
+              <h2 className="font-display text-2xl font-bold uppercase">Seguimiento</h2>
               <ol className="mt-4 space-y-4">
                 {[...order.events].reverse().map((event) => (
                   <li key={event.id} className="flex gap-3 text-sm">
@@ -309,10 +309,10 @@ function Banner({ tone, title, children }: { tone: "success" | "danger" | "warni
     warning: { box: "border-signal-400/30 bg-signal-400/10", icon: <TriangleAlert className="size-6 text-signal-400" /> },
   }[tone];
   return (
-    <div className={`flex gap-4 rounded-2xl border p-5 ${styles.box}`} role="status">
+    <div className={`flex gap-4 rounded-lg border p-5 ${styles.box}`} role="status">
       <div className="shrink-0">{styles.icon}</div>
       <div className="text-sm text-zinc-200">
-        <p className="font-display text-2xl font-bold text-white uppercase italic">{title}</p>
+        <p className="font-display text-2xl font-bold text-white uppercase">{title}</p>
         <div className="mt-1">{children}</div>
       </div>
     </div>

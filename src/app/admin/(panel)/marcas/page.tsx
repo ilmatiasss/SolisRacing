@@ -29,7 +29,7 @@ export default async function BrandsPage() {
       </Card>
       <Card title={`Marcas (${brands.length})`} bodyClassName="p-0">
         {brands.length === 0 ? (
-          <EmptyState title="Aún no hay marcas" />
+          <EmptyState title="Aún no hay marcas" description="Agrega la primera con el formulario de arriba." />
         ) : (
           <ul className="grid divide-y divide-line md:grid-cols-2 md:divide-y-0">
             {brands.map((brand) => (

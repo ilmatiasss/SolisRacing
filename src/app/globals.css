@@ -18,6 +18,19 @@
 }
 
 @theme {
+  /* Neutros cálidos (tono taller: grafito con un dejo de café) en lugar del zinc azulado de fábrica. */
+  --color-zinc-50: #faf7f2;
+  --color-zinc-100: #f1ece4;
+  --color-zinc-200: #e2dbd0;
+  --color-zinc-300: #c9c1b4;
+  --color-zinc-400: #a59d90;
+  --color-zinc-500: #7f776b;
+  --color-zinc-600: #5d574d;
+  --color-zinc-700: #433e36;
+  --color-zinc-800: #2c2823;
+  --color-zinc-900: #1b1814;
+  --color-zinc-950: #0f0d0b;
+
   --color-brand-50: #fff1f0;
   --color-brand-100: #ffe0dd;
   --color-brand-200: #ffc6c0;
@@ -306,14 +319,16 @@
 }
 
 .theme-store {
-  --bg: #09090b;
-  --surface: #111114;
-  --surface-2: #19191d;
-  --line: #26262c;
-  --line-strong: #3a3a42;
-  --fg: #fafafa;
-  --muted: #a1a1aa;
+  --bg: #0e0c0a;
+  --surface: #161310;
+  --surface-2: #1f1b17;
+  --line: #2d2924;
+  --line-strong: #453f37;
+  --fg: #f4efe8;
+  --muted: #aca396;
   color-scheme: dark;
+  /* Grano de papel muy suave: rompe el negro liso (una sola imagen pequeña que se repite). */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .93 0 0 0 0 .85 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Aviso «Próximamente»: la tienda queda de fondo (sin scroll ni animaciones) salvo en vista previa. */
@@ -739,15 +754,29 @@ html[data-settled]:not([data-preview]) [data-coming-soon] *::after {
   }
 }
 
+/* Subrayado trazado a mano bajo los títulos de sección. */
+.title-mark::after {
+  content: "";
+  display: block;
+  width: 3.75rem;
+  height: 0.5rem;
+  margin-top: 0.6rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 8'%3E%3Cpath d='M1.5 5.2C9 2 15 6.4 24 3.6s17 .4 25 1.6c4 .6 7-.8 9.5-1.4' fill='none' stroke='%23e10600' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center / contain;
+}
+/* Franja de advertencia de taller: rayas diagonales rojas y negras. */
+.hazard {
+  background: repeating-linear-gradient(-45deg, var(--color-brand-600) 0 10px, #0f0d0b 10px 20px);
+}
+
 /* Panel de administración: oscuro como la tienda, con superficies un poco más claras para leer datos. */
 .theme-admin {
-  --bg: #0a0a0c;
-  --surface: #121215;
-  --surface-2: #1a1a1f;
-  --line: #26262d;
-  --line-strong: #3a3a43;
-  --fg: #f4f4f5;
-  --muted: #a1a1aa;
+  --bg: #0c0b0a;
+  --surface: #151311;
+  --surface-2: #1e1b18;
+  --line: #2b2723;
+  --line-strong: #413b34;
+  --fg: #f4f0ea;
+  --muted: #aaa297;
   color-scheme: dark;
 }
 
@@ -756,14 +785,13 @@ html {
 }
 
 body {
-  background: #09090b;
-  color: #fafafa;
-  font-feature-settings: "cv11", "ss01";
+  background: #0e0c0a;
+  color: #f4efe8;
 }
 
 body:has(.theme-admin) {
-  background: #0a0a0c;
-  color: #f4f4f5;
+  background: #0c0b0a;
+  color: #f4f0ea;
 }
 
 ::selection {
@@ -1356,22 +1384,6 @@ body:has(.theme-admin) {
     rgb(253 29 29 / 0.011) 219px,
     rgb(253 29 29 / 0.005) 244px,
     transparent 320px
-  );
-}
-.glow-page-header {
-  pointer-events: none;
-  background: radial-gradient(
-    circle closest-side,
-    rgb(225 6 0 / 0.138) 0,
-    rgb(225 6 0 / 0.133) 36px,
-    rgb(225 6 0 / 0.118) 72px,
-    rgb(225 6 0 / 0.097) 102px,
-    rgb(225 6 0 / 0.039) 172px,
-    rgb(225 6 0 / 0.025) 192px,
-    rgb(225 6 0 / 0.016) 213px,
-    rgb(225 6 0 / 0.008) 235px,
-    rgb(225 6 0 / 0.003) 261px,
-    transparent 336px
   );
 }
 .glow-placeholder {

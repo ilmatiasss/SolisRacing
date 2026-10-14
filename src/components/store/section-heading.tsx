@@ -5,10 +5,7 @@ import { cn } from "@/lib/cn";
 
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p className={cn("flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-brand-500 uppercase", className)}>
-      <span className="h-px w-6 bg-brand-500 shadow-[0_0_8px_2px_rgba(255,30,30,0.55)]" aria-hidden="true" />
-      {children}
-    </p>
+    <p className={cn("text-xs font-semibold tracking-[0.18em] text-brand-400 uppercase", className)}>{children}</p>
   );
 }
 
@@ -29,8 +26,8 @@ export function SectionHeading({
     <div className={cn("mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", className)}>
       <div className="max-w-2xl">
         {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-        <h2 className="font-display text-3xl font-extrabold tracking-normal uppercase italic sm:text-4xl">{title}</h2>
-        {description && <p className="mt-2 text-muted">{description}</p>}
+        <h2 className="title-mark font-display text-3xl font-bold tracking-wide uppercase sm:text-4xl">{title}</h2>
+        {description && <p className="mt-3 text-muted">{description}</p>}
       </div>
       {action && (
         <Link
@@ -57,20 +54,14 @@ export function PageHeader({
   children?: ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden border-b border-line bg-zinc-950">
-      <div className="bg-speedlines absolute inset-0" aria-hidden="true" />
-      <div
-        className="glow-page-header absolute -top-72 -right-48 size-[42rem]"
-        aria-hidden="true"
-      />
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <div className="relative border-b border-line bg-surface">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
         {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-        <h1 className="font-display text-4xl font-extrabold tracking-normal text-balance uppercase italic sm:text-5xl">
-          {title}
-        </h1>
-        {description && <p className="mt-3 max-w-2xl text-muted">{description}</p>}
+        <h1 className="title-mark font-display text-4xl font-bold tracking-wide text-balance uppercase sm:text-5xl">{title}</h1>
+        {description && <p className="mt-4 max-w-2xl text-muted">{description}</p>}
         {children}
       </div>
+      <div className="hazard h-1.5" aria-hidden="true" />
     </div>
   );
 }

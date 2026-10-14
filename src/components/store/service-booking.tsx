@@ -62,9 +62,9 @@ export function ServiceBooking({
   if (state.ok && summary) {
     const message = `Hola, solicité hora para ${summary.service} en ${summary.location} el ${formatBookingDate(summary.date)} a las ${summary.time}.`;
     return (
-      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center" role="status">
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-8 text-center" role="status">
         <CalendarCheck className="mx-auto size-10 text-emerald-400" />
-        <p className="mt-4 font-display text-2xl font-bold uppercase italic">¡Solicitud enviada!</p>
+        <p className="mt-4 font-display text-2xl font-bold uppercase">¡Solicitud enviada!</p>
         <p className="mt-2 text-zinc-200">
           {summary.service} · {summary.location}
           <br />
@@ -206,7 +206,7 @@ export function ServiceBooking({
                       className={cn(
                         "h-10 rounded-lg text-sm font-medium transition-colors",
                         available ? "text-fg hover:bg-white/10" : "text-zinc-600 line-through decoration-zinc-700",
-                        selected && "bg-brand-600 text-white shadow-[0_0_16px_rgba(255,30,30,0.5)] hover:bg-brand-600",
+                        selected && "bg-brand-600 text-white hover:bg-brand-600",
                       )}
                     >
                       {Number(day.slice(8))}
@@ -324,7 +324,7 @@ function Step({
 }) {
   return (
     <fieldset>
-      <legend className="mb-3 flex items-center gap-3 font-display text-xl font-bold uppercase italic">
+      <legend className="mb-3 flex items-center gap-3 font-display text-xl font-bold uppercase">
         <span className="flex size-7 items-center justify-center rounded-full bg-brand-600 text-sm not-italic text-white">
           {number}
         </span>

@@ -29,7 +29,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
   const statusParam = stringParam(sp.estado);
   const status = statusParam && statusParam in INQUIRY_STATUS_LABELS ? (statusParam as InquiryStatus) : undefined;
   const page = pageParam(sp.pagina);
-  const [{ rows, total, pageCount }, settings] = await Promise.all([
+  const [{ rows, pageCount }, settings] = await Promise.all([
     listInquiriesAdmin({ status, page }),
     readStoreSettings(),
   ]);
@@ -56,7 +56,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
       </div>
       {rows.length === 0 ? (
         <Card>
-          <EmptyState title="No hay solicitudes" description={`Total: ${total}`} />
+          <EmptyState title="No hay solicitudes" description="Aquí llegan las horas pedidas, cotizaciones de ramales, pedidos especiales y mensajes de contacto." />
         </Card>
       ) : (
         <div className="space-y-4">

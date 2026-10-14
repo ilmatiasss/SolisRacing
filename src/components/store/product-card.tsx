@@ -21,7 +21,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-1 hover:border-brand-500/70 hover:shadow-[0_0_30px_rgba(255,30,30,0.3)]",
+        "group relative flex flex-col overflow-hidden rounded-lg border border-line bg-surface transition-colors duration-200 hover:border-zinc-500",
         className,
       )}
       style={style}
@@ -32,17 +32,12 @@ export function ProductCard({
           alt={product.imageAlt ?? product.name}
           icon={product.categoryIcon}
           sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 50vw"
-          className="aspect-square transition-transform duration-500 group-hover:scale-[1.06]"
-        />
-        {/* Brillo que cruza la foto al pasar el mouse. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+          className="aspect-square transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </Link>
       <div className="pointer-events-none absolute top-3 left-3 flex flex-col items-start gap-1.5">
         {discount > 0 && (
-          <span className="rounded-md bg-brand-600 px-2 py-1 text-xs font-bold text-white shadow">
+          <span className="rounded-sm bg-brand-600 px-2 py-1 text-xs font-bold tracking-wide text-white uppercase">
             Oferta -{discount}%
           </span>
         )}

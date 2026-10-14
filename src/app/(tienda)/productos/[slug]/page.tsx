@@ -93,7 +93,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
               {product.brand.name}
             </Link>
           )}
-          <h1 className="mt-2 font-display text-4xl leading-none font-extrabold tracking-normal text-balance uppercase italic sm:text-5xl">
+          <h1 className="mt-2 font-display text-4xl leading-none font-bold tracking-normal text-balance uppercase sm:text-5xl">
             {product.name}
           </h1>
           {product.sku && <p className="mt-3 text-sm text-muted">SKU: {product.sku}</p>}
@@ -121,7 +121,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
             />
           </div>
 
-          <div className="mt-6 rounded-2xl border border-line bg-surface p-4">
+          <div className="mt-6 rounded-lg border border-line bg-surface p-4">
             {product.universal ? (
               <p className="flex items-start gap-3 text-sm">
                 <CheckCircle2 className="mt-0.5 size-4.5 shrink-0 text-emerald-400" />
@@ -197,7 +197,7 @@ async function ProductView({ params }: { params: Props["params"] }) {
 
       <Container className="grid gap-10 border-t border-line py-12 lg:grid-cols-[1.4fr_1fr]">
         <section aria-labelledby="descripcion">
-          <h2 id="descripcion" className="font-display text-2xl font-extrabold uppercase italic">
+          <h2 id="descripcion" className="font-display text-2xl font-bold uppercase">
             Descripción
           </h2>
           <RichText
@@ -207,10 +207,10 @@ async function ProductView({ params }: { params: Props["params"] }) {
         </section>
         {product.specs.length > 0 && (
           <section aria-labelledby="especificaciones">
-            <h2 id="especificaciones" className="font-display text-2xl font-extrabold uppercase italic">
+            <h2 id="especificaciones" className="font-display text-2xl font-bold uppercase">
               Especificaciones
             </h2>
-            <dl className="mt-4 divide-y divide-line overflow-hidden rounded-2xl border border-line">
+            <dl className="mt-4 divide-y divide-line overflow-hidden rounded-lg border border-line">
               {product.specs.map((spec, index) => (
                 <div key={index} className="grid grid-cols-2 gap-4 bg-surface px-4 py-3 text-sm">
                   <dt className="text-muted">{spec.label}</dt>
@@ -225,10 +225,10 @@ async function ProductView({ params }: { params: Props["params"] }) {
       {product.fitments.length > 0 && (
         <Container className="pb-12">
           <section id="compatibilidad" aria-labelledby="compatibilidad-titulo" className="scroll-mt-32">
-            <h2 id="compatibilidad-titulo" className="font-display text-2xl font-extrabold uppercase italic">
+            <h2 id="compatibilidad-titulo" className="font-display text-2xl font-bold uppercase">
               Compatibilidad
             </h2>
-            <div className="mt-4 overflow-x-auto rounded-2xl border border-line">
+            <div className="mt-4 overflow-x-auto rounded-lg border border-line">
               <table className="w-full min-w-[32rem] text-left text-sm">
                 <thead className="bg-surface-2 text-xs tracking-wider text-muted uppercase">
                   <tr>
@@ -312,12 +312,12 @@ function ProductJsonLd({ product }: { product: ProductDetail }) {
 function ProductSkeleton() {
   return (
     <Container className="grid gap-10 py-14 lg:grid-cols-2 lg:gap-14">
-      <div className="aspect-square animate-pulse rounded-3xl bg-surface" />
+      <div className="aspect-square animate-pulse rounded-xl bg-surface" />
       <div className="space-y-4">
         <div className="h-4 w-24 animate-pulse rounded bg-surface" />
         <div className="h-12 w-3/4 animate-pulse rounded bg-surface" />
         <div className="h-10 w-40 animate-pulse rounded bg-surface" />
-        <div className="h-24 animate-pulse rounded-2xl bg-surface" />
+        <div className="h-24 animate-pulse rounded-lg bg-surface" />
         <div className="h-13 animate-pulse rounded-xl bg-surface" />
       </div>
     </Container>

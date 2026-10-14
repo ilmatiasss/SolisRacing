@@ -2,6 +2,7 @@ import { ArrowRight, CalendarClock, Inbox, PackageCheck, Plus, Receipt, Trending
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SalesChart } from "@/components/admin/sales-chart";
+import { SetupChecklist, type SetupStep } from "@/components/admin/setup-checklist";
 import { AdminPageHeader, Card, EmptyState, Notice, StatCard, Table, Td, Th } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
@@ -29,12 +30,47 @@ export default async function DashboardPage() {
   await purgeExpiredPersonalData().catch(() => null);
   const [data, settings, bookings] = await Promise.all([getDashboardData(), readStoreSettings(), listUpcomingBookings()]);
   const env = webpayEnvironment();
-  const pending = [
-    !settings.email && "el correo de la tienda (ahí llegan los avisos de pedidos y solicitudes)",
-    settings.payments.transferAccountNumber === DEFAULT_SETTINGS.payments.transferAccountNumber &&
-      "los datos bancarios para transferencias",
-    !settings.legalRut && "el RUT de la empresa (se muestra en la política de privacidad como responsable de los datos)",
-  ].filter((item): item is string => Boolean(item));
+  const steps: SetupStep[] = [
+    {
+      label: "Correo de la tienda",
+      hint: "Ahí llegan los avisos de pedidos, cotizaciones y mensajes.",
+      href: "/admin/configuracion",
+      done: Boolean(settings.email),
+    },
+    {
+      label: "Datos bancarios para transferencias",
+      hint: "Banco, cuenta y titular que verá el cliente al pagar por transferencia.",
+      href: "/admin/configuracion",
+      done: settings.payments.transferAccountNumber !== DEFAULT_SETTINGS.payments.transferAccountNumber,
+    },
+    {
+      label: "Razón social y RUT de la empresa",
+      hint: "Aparecen en la política de privacidad como responsable de los datos.",
+      href: "/admin/configuracion",
+      done: Boolean(settings.legalRut),
+    },
+    {
+      label: "Precios de los ramales",
+      hint: "Reemplaza los valores de ejemplo por los tuyos, con tu mano de obra.",
+      href: "/admin/ramales",
+      done:
+        settings.harnessEcus !== DEFAULT_SETTINGS.harnessEcus ||
+        settings.harnessSensors !== DEFAULT_SETTINGS.harnessSensors ||
+        settings.harnessLaborBase !== DEFAULT_SETTINGS.harnessLaborBase,
+    },
+    {
+      label: "Días y horarios de la agenda",
+      hint: "Define dónde y cuándo atiendes, y agrega las fechas de tus viajes a la Quinta Región.",
+      href: "/admin/agenda",
+      done: JSON.stringify(settings.booking) !== JSON.stringify(DEFAULT_SETTINGS.booking),
+    },
+    {
+      label: "Abrir la tienda al público",
+      hint: "Desactiva el aviso «Próximamente» cuando quieras que se vea la tienda.",
+      href: "/admin/configuracion",
+      done: !settings.comingSoon.enabled,
+    },
+  ];
 
   return (
     <>
@@ -60,15 +96,7 @@ export default async function DashboardPage() {
         </Notice>
       )}
 
-      {pending.length > 0 && (
-        <Notice tone="info" className="mb-6">
-          <strong>Completa los datos de tu tienda:</strong> {pending.length > 1 ? "faltan" : "falta"}{" "}
-          {new Intl.ListFormat("es", { type: "conjunction" }).format(pending)}.{" "}
-          <Link href="/admin/configuracion" className="font-semibold underline">
-            Ir a Configuración
-          </Link>
-        </Notice>
-      )}
+      <SetupChecklist steps={steps} />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard

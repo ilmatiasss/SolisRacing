@@ -69,7 +69,7 @@ export type CheckoutConfig = {
 
 export function CheckoutForm(props: CheckoutConfig) {
   const hydrated = useHydrated();
-  if (!hydrated) return <div className="h-96 animate-pulse rounded-2xl bg-surface" />;
+  if (!hydrated) return <div className="h-96 animate-pulse rounded-lg bg-surface" />;
   return <CheckoutFormInner {...props} />;
 }
 
@@ -130,9 +130,9 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center rounded-2xl border border-dashed border-line-strong bg-surface px-6 py-16 text-center">
+      <div className="flex flex-col items-center rounded-lg border border-dashed border-line-strong bg-surface px-6 py-16 text-center">
         <PackageOpen className="size-10 text-muted" />
-        <p className="mt-4 font-display text-2xl font-bold uppercase italic">No hay productos para pagar</p>
+        <p className="mt-4 font-display text-2xl font-bold uppercase">No hay productos para pagar</p>
         <Link href="/productos" className={buttonClasses({ className: "mt-6" })}>
           Ir al catálogo
         </Link>
@@ -159,7 +159,7 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
 
       <div className="space-y-6">
         {webpayEnvironment !== "production" && paymentOptions.includes("webpay") && (
-          <div className="flex gap-3 rounded-2xl border border-signal-400/30 bg-signal-400/10 p-4 text-sm" role="note">
+          <div className="flex gap-3 rounded-lg border border-signal-400/30 bg-signal-400/10 p-4 text-sm" role="note">
             <TriangleAlert className="mt-0.5 size-4.5 shrink-0 text-signal-400" />
             <p>
               <strong>Webpay está en modo de prueba</strong>
@@ -409,8 +409,8 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
         </Section>
       </div>
 
-      <aside className="h-fit space-y-4 rounded-2xl border border-line bg-surface p-6 lg:sticky lg:top-32">
-        <h2 className="font-display text-2xl font-bold uppercase italic">Tu pedido</h2>
+      <aside className="h-fit space-y-4 rounded-lg border border-line bg-surface p-6 lg:sticky lg:top-32">
+        <h2 className="font-display text-2xl font-bold uppercase">Tu pedido</h2>
         {notices.length > 0 && (
           <div className="space-y-1 rounded-xl border border-signal-400/30 bg-signal-400/10 p-3 text-xs" role="status">
             {notices.map((notice) => (
@@ -504,8 +504,8 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
 
 function Section({ number, title, children }: { number: number; title: string; children: ReactNode }) {
   return (
-    <section className="rounded-2xl border border-line bg-surface p-5 sm:p-6">
-      <h2 className="mb-5 flex items-center gap-3 font-display text-xl font-bold uppercase italic">
+    <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
+      <h2 className="mb-5 flex items-center gap-3 font-display text-xl font-bold uppercase">
         <span className="flex size-7 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white not-italic">
           {number}
         </span>

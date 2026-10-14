@@ -33,7 +33,7 @@ export default async function ShippingPolicyPage() {
       {sh.shippingEnabled && (
         <section>
           <h2>Tarifas por región</h2>
-          <div className="overflow-hidden rounded-2xl border border-line">
+          <div className="overflow-hidden rounded-lg border border-line">
             <table className="w-full text-sm">
               <tbody className="divide-y divide-line">
                 {REGIONS.map((region) => (

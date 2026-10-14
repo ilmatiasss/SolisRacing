@@ -52,7 +52,7 @@ export default async function ContactPage() {
               href={href}
               target={external ? "_blank" : undefined}
               rel={external ? "noopener noreferrer" : undefined}
-              className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 transition-colors hover:border-brand-600/60"
+              className="flex items-center gap-4 rounded-lg border border-line bg-surface p-5 transition-colors hover:border-brand-600/60"
             >
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-600/15 text-brand-500">
                 <Icon className="size-5" />
@@ -63,7 +63,7 @@ export default async function ContactPage() {
               </span>
             </a>
           ))}
-          <div className="flex gap-4 rounded-2xl border border-line bg-surface p-5">
+          <div className="flex gap-4 rounded-lg border border-line bg-surface p-5">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-600/15 text-brand-500">
               <Clock className="size-5" />
             </span>
@@ -73,8 +73,8 @@ export default async function ContactPage() {
             </span>
           </div>
         </div>
-        <section aria-labelledby="form-titulo" className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
-          <h2 id="form-titulo" className="font-display text-3xl font-extrabold uppercase italic">
+        <section aria-labelledby="form-titulo" className="rounded-lg border border-line bg-surface p-6 sm:p-8">
+          <h2 id="form-titulo" className="font-display text-3xl font-bold uppercase">
             Envíanos un mensaje
           </h2>
           <p className="mt-1 mb-6 text-sm text-muted">Te respondemos lo antes posible, también por WhatsApp.</p>

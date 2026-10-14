@@ -1,64 +1,9 @@
-import {
-  Cable,
-  CalendarDays,
-  Car,
-  ExternalLink,
-  Inbox,
-  Layers,
-  LayoutDashboard,
-  Package,
-  Plug,
-  Receipt,
-  Settings,
-  ShieldCheck,
-  Tag,
-  Users,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
+import { ADMIN_NAV, isNavActive, type NavCounts } from "./nav";
 
-export type NavCounts = { orders: number; inquiries: number };
-
-type NavItem = { href: string; label: string; icon: LucideIcon; count?: keyof NavCounts };
-
-const SECTIONS: { title?: string; items: NavItem[] }[] = [
-  {
-    items: [
-      { href: "/admin", label: "Resumen", icon: LayoutDashboard },
-      { href: "/admin/pedidos", label: "Pedidos", icon: Receipt, count: "orders" },
-      { href: "/admin/solicitudes", label: "Solicitudes", icon: Inbox, count: "inquiries" },
-      { href: "/admin/agenda", label: "Agenda", icon: CalendarDays },
-    ],
-  },
-  {
-    title: "Catálogo",
-    items: [
-      { href: "/admin/productos", label: "Productos", icon: Package },
-      { href: "/admin/categorias", label: "Categorías", icon: Layers },
-      { href: "/admin/marcas", label: "Marcas", icon: Tag },
-      { href: "/admin/vehiculos", label: "Vehículos", icon: Car },
-      { href: "/admin/servicios", label: "Servicios", icon: Wrench },
-      { href: "/admin/ramales", label: "Ramales", icon: Cable },
-    ],
-  },
-  {
-    title: "Tienda",
-    items: [
-      { href: "/admin/configuracion", label: "Configuración", icon: Settings },
-      { href: "/admin/usuarios", label: "Usuarios", icon: Users },
-      { href: "/admin/integraciones", label: "Integraciones", icon: Plug },
-      { href: "/admin/privacidad", label: "Privacidad", icon: ShieldCheck },
-    ],
-  },
-];
-
-function isActive(href: string, path: string | undefined) {
-  if (!path) return false;
-  if (href === "/admin") return path === "/admin";
-  return path === href || path.startsWith(`${href}/`);
-}
+export type { NavCounts };
 
 export function SidebarNav({
   activePath,
@@ -71,14 +16,18 @@ export function SidebarNav({
 }) {
   return (
     <nav aria-label="Panel" className="space-y-6">
-      {SECTIONS.map((section, index) => (
+      {ADMIN_NAV.map((section, index) => (
         <div key={section.title ?? index}>
           {section.title && (
-            <p className="mb-1.5 px-3 text-[11px] font-semibold tracking-wider text-muted uppercase">{section.title}</p>
+            <p className="mb-1.5 flex items-center gap-2 px-3 text-[11px] font-bold tracking-widest text-zinc-500 uppercase">
+              <span className="h-px flex-1 max-w-3 bg-brand-600" aria-hidden="true" />
+              {section.title}
+              <span className="h-px flex-1 bg-line" aria-hidden="true" />
+            </p>
           )}
           <ul className="space-y-0.5">
             {section.items.map((item) => {
-              const active = isActive(item.href, activePath);
+              const active = isNavActive(item.href, activePath);
               const count = item.count ? counts?.[item.count] : undefined;
               return (
                 <li key={item.href}>

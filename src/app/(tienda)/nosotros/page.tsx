@@ -45,7 +45,7 @@ export default async function AboutPage() {
       <Container className="py-14">
         <ul className="grid gap-4 md:grid-cols-3">
           {facts.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="flex gap-4 rounded-2xl border border-line bg-surface p-5">
+            <li key={title} className="flex gap-4 rounded-lg border border-line bg-surface p-5">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-600/15 text-brand-500">
                 <Icon className="size-5" />
               </span>

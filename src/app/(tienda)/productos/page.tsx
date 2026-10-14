@@ -85,7 +85,7 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
             : "Repuestos y accesorios de performance con despacho a todo Chile.")
         }
       >
-        <div className="mt-8 max-w-4xl rounded-2xl border border-white/10 bg-zinc-950/90 p-4 md:bg-zinc-950/70 md:backdrop-blur">
+        <div className="mt-8 max-w-4xl rounded-lg border border-white/10 bg-zinc-950/90 p-4 md:bg-zinc-950/70 md:backdrop-blur">
           <p className="mb-3 flex items-center gap-2 text-sm font-semibold">
             <Car className="size-4 text-brand-500" />
             {vehicleLabel ? "Cambiar auto" : "Filtra por tu auto"}
@@ -101,7 +101,7 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
 
       <Container className="grid gap-8 py-10 lg:grid-cols-[16rem_1fr]">
         <aside className="lg:sticky lg:top-32 lg:self-start">
-          <details className="group rounded-2xl border border-line bg-surface lg:hidden">
+          <details className="group rounded-lg border border-line bg-surface lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between p-4 font-semibold">
               <span className="flex items-center gap-2">
                 <SlidersHorizontal className="size-4" /> Filtros
@@ -153,8 +153,8 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
               <Pagination filters={filters} page={result.page} pageCount={result.pageCount} />
             </>
           ) : (
-            <div className="rounded-2xl border border-dashed border-line-strong bg-surface p-10 text-center">
-              <p className="font-display text-2xl font-bold uppercase italic">No encontramos productos</p>
+            <div className="rounded-lg border border-dashed border-line-strong bg-surface p-10 text-center">
+              <p className="font-display text-2xl font-bold uppercase">No encontramos productos</p>
               <p className="mx-auto mt-2 max-w-md text-sm text-muted">
                 Prueba con otros filtros o escríbenos: conseguimos repuestos de performance a pedido para tu auto.
               </p>
@@ -358,7 +358,7 @@ function CatalogSkeleton() {
         </div>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 8 }, (_, i) => (
-            <div key={i} className="aspect-[3/4] animate-pulse rounded-2xl bg-surface" />
+            <div key={i} className="aspect-[3/4] animate-pulse rounded-lg bg-surface" />
           ))}
         </div>
       </Container>

@@ -1,4 +1,4 @@
-import { ArrowRight, Cable, Gauge, Headset, PackageSearch, ShieldCheck, Star, Truck, Wrench, Zap } from "lucide-react";
+import { ArrowRight, Cable, Gauge, Headset, ShieldCheck, Star, Truck, Wrench } from "lucide-react";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
@@ -100,8 +100,8 @@ export default async function HomePage() {
             </p>
             <div className="mt-8 flex animate-rise flex-col gap-3 [animation-delay:460ms] sm:flex-row sm:flex-wrap">
               <span className="relative flex">
-                <span aria-hidden="true" className="neon-cta-glow absolute inset-0 rounded-xl" />
-                <span aria-hidden="true" className="neon-cta-glow neon-cta-glow--peak absolute inset-0 rounded-xl" />
+                <span aria-hidden="true" className="neon-cta-glow absolute inset-0 rounded-lg" />
+                <span aria-hidden="true" className="neon-cta-glow neon-cta-glow--peak absolute inset-0 rounded-lg" />
                 <Link
                   href={catalog.length > 0 ? "#catalogo" : "/productos"}
                   className={buttonClasses({ size: "lg", className: "neon-cta group w-full" })}
@@ -208,7 +208,7 @@ export default async function HomePage() {
                 className="flex items-center gap-6 px-6 font-display text-2xl font-extrabold tracking-wide uppercase italic sm:text-3xl"
               >
                 {perk}
-                <Zap className="size-5 fill-current text-signal-400" aria-hidden="true" />
+                <span aria-hidden="true" className="font-display text-2xl opacity-60">/</span>
               </span>
             ))}
           </Marquee>
@@ -221,8 +221,8 @@ export default async function HomePage() {
           <Container className="reveal">
             <SectionHeading
               eyebrow="Catálogo"
-              title="Todo para tu proyecto"
-              description={`${catalog.length} productos en ${shelves.length} categorías, listos para despacho o retiro en tienda.`}
+              title="Lo que tenemos en la tienda"
+              description={`${catalog.length} productos en ${shelves.length} categorías, para despacho o retiro en Antofagasta. Si no está acá, lo buscamos.`}
               action={{ href: "/productos", label: "Ver catálogo completo" }}
             />
             <CatalogTabs
@@ -262,15 +262,10 @@ export default async function HomePage() {
 
       {/* Pedido especial */}
       <Container className="cv-auto reveal pb-16">
-        <div className="flex flex-col gap-6 rounded-3xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-          <div className="flex items-center gap-5">
-            <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-brand-600/15 text-brand-500">
-              <PackageSearch className="size-7" />
-            </span>
-            <div>
-              <h2 className="font-display text-2xl font-extrabold uppercase italic sm:text-3xl">¿No encuentras tu repuesto?</h2>
-              <p className="mt-1 text-muted">Lo conseguimos por ti: dinos qué buscas y para qué auto, y te enviamos precio y plazo.</p>
-            </div>
+        <div className="flex flex-col gap-6 rounded-lg border border-line border-l-4 border-l-brand-600 bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-wide uppercase sm:text-3xl">¿No encuentras tu repuesto?</h2>
+            <p className="mt-1 max-w-xl text-muted">Cuéntanos qué buscas y para qué auto. Lo conseguimos y te mandamos precio y plazo.</p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-3">
             <Link href="/pedido-especial" className={buttonClasses({ size: "lg", className: "group" })}>
@@ -292,47 +287,43 @@ export default async function HomePage() {
 
       {/* Servicios */}
       {services.length > 0 && (
-        <section className="cv-auto relative overflow-hidden border-y border-line bg-zinc-950">
-          <div className="bg-checkered absolute inset-0 opacity-40" aria-hidden="true" />
-          <div className="glow-services absolute -bottom-32 -left-32 size-96 animate-glow" aria-hidden="true" />
-          <Container className="reveal relative py-16 sm:py-20">
+        <section className="cv-auto border-y border-line bg-surface">
+          <Container className="reveal py-16 sm:py-20">
             <SectionHeading
-              eyebrow="Servicios"
+              eyebrow="Taller"
               title="Programación e instalaciones"
-              description="Instalación y programación de FuelTech, arneses eléctricos a medida y sistemas de combustible para tu proyecto."
+              description="Instalamos y programamos tu FuelTech, armamos el arnés de tu motor y dejamos el combustible listo para la potencia que buscas."
               action={{ href: "/servicios", label: "Ver todos los servicios" }}
             />
             <Link
               href="/cotizador-ramal"
-              className="group mb-6 flex items-center justify-between gap-4 rounded-2xl border border-brand-600/40 bg-brand-600/10 px-5 py-4 transition-colors hover:border-brand-500"
+              className="group mb-8 flex items-center justify-between gap-4 rounded-lg border border-dashed border-zinc-600 px-5 py-4 transition-colors hover:border-brand-500"
             >
               <span>
-                <span className="block font-semibold">¿Ramal a medida para tu FuelTech?</span>
-                <span className="text-sm text-zinc-300">Cotízalo en línea y ve el valor aproximado al instante.</span>
+                <span className="block font-semibold">¿Necesitas un ramal a medida para tu FuelTech?</span>
+                <span className="text-sm text-muted">Cotízalo en línea y ve el valor aproximado al tiro.</span>
               </span>
               <ArrowRight className="size-5 shrink-0 text-brand-500 transition-transform group-hover:translate-x-1" />
             </Link>
-            <div className="grid gap-4 md:grid-cols-3">
-              {services.slice(0, 3).map((service) => (
-                <Link
-                  key={service.slug}
-                  href={`/servicios#${service.slug}`}
-                  className="group flex flex-col rounded-2xl border border-line bg-surface/95 p-6 transition duration-300 md:bg-surface/80 md:backdrop-blur hover:-translate-y-1 hover:border-brand-600/60 hover:shadow-xl hover:shadow-brand-950/40"
-                >
-                  <div className="flex size-12 items-center justify-center rounded-xl bg-brand-600/15 text-brand-500 transition duration-500 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white">
-                    <DynamicIcon name={service.icon} className="size-6" />
-                  </div>
-                  <h3 className="mt-5 font-display text-2xl font-bold uppercase italic">{service.name}</h3>
-                  <p className="mt-2 flex-1 text-sm text-muted">{service.summary}</p>
-                  <p className="mt-5 flex items-center justify-between text-sm">
-                    <span className="font-semibold text-fg">
-                      {service.priceFrom ? `Desde ${formatCLP(service.priceFrom)}` : "Cotiza sin costo"}
+            <ol className="grid gap-x-10 gap-y-8 md:grid-cols-3">
+              {services.slice(0, 3).map((service, index) => (
+                <li key={service.slug} className="border-t-2 border-zinc-700 pt-5">
+                  <Link href={`/servicios#${service.slug}`} className="group block">
+                    <span className="font-display text-5xl leading-none font-bold text-zinc-700 transition-colors group-hover:text-brand-600">
+                      {String(index + 1).padStart(2, "0")}
                     </span>
-                    <ArrowRight className="size-4 text-brand-500 transition-transform group-hover:translate-x-1" />
-                  </p>
-                </Link>
+                    <h3 className="mt-3 font-display text-2xl font-bold tracking-wide uppercase">{service.name}</h3>
+                    <p className="mt-2 text-sm text-muted">{service.summary}</p>
+                    <p className="mt-4 flex items-center justify-between text-sm">
+                      <span className="font-semibold text-fg">
+                        {service.priceFrom ? `Desde ${formatCLP(service.priceFrom)}` : "Cotiza sin costo"}
+                      </span>
+                      <ArrowRight className="size-4 text-brand-500 transition-transform group-hover:translate-x-1" />
+                    </p>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ol>
           </Container>
         </section>
       )}
@@ -342,8 +333,8 @@ export default async function HomePage() {
         <Container className="cv-auto reveal pt-16 sm:pt-20">
           <SectionHeading
             eyebrow="Quiénes somos"
-            title="Conoce Solis Racing Parts"
-            description="Lo que hacemos día a día en la tienda y el taller, directo desde nuestro Instagram."
+            title="Así trabajamos"
+            description="La tienda, el taller y los proyectos del día a día, tal como los subimos a Instagram."
             action={{ href: "/nosotros", label: "Conócenos" }}
           />
           <InstagramGallery posts={instagramPosts.slice(0, 3)} />
@@ -365,49 +356,43 @@ export default async function HomePage() {
 
       {/* Beneficios */}
       <Container className={onSale.length > 0 ? "cv-auto reveal pb-4" : "cv-auto reveal py-16 sm:py-20"}>
-        <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-8 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Truck, title: "Despacho a todo Chile", text: "Enviamos por courier o retira en nuestra tienda de Antofagasta." },
-            { icon: ShieldCheck, title: "Pago 100 % seguro", text: "Débito, crédito y prepago con Webpay, o transferencia." },
-            { icon: Headset, title: "Asesoría experta", text: "Te ayudamos a elegir la pieza correcta para tu auto." },
-            { icon: Wrench, title: "Instalación y programación", text: "Coordinamos la instalación y la programación de lo que compras." },
+            { icon: Truck, title: "Despacho a todo Chile", text: "Por courier hasta tu puerta, o retiras en la tienda de Antofagasta." },
+            { icon: ShieldCheck, title: "Pagas tranquilo", text: "Webpay con débito, crédito o prepago, o transferencia." },
+            { icon: Headset, title: "Te ayudamos a elegir", text: "Cuéntanos tu auto y te decimos qué pieza necesitas." },
+            { icon: Wrench, title: "Instalación y programación", text: "Si quieres, lo instalamos y lo dejamos programado nosotros." },
           ].map(({ icon: Icon, title, text }) => (
-            <div key={title} className="group flex gap-4 bg-surface p-6 transition-colors hover:bg-surface-2">
-              <Icon className="size-6 shrink-0 text-brand-500 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110" />
+            <li key={title} className="flex gap-4">
+              <Icon className="mt-0.5 size-6 shrink-0 text-brand-500" strokeWidth={1.6} />
               <div>
                 <p className="font-semibold">{title}</p>
                 <p className="mt-1 text-sm text-muted">{text}</p>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </Container>
 
       {/* Instagram */}
       {settings.instagram && (
         <Container className="cv-auto reveal pt-16">
-          <div className="relative overflow-hidden rounded-3xl border border-line bg-linear-to-br from-[#833ab4]/25 via-[#fd1d1d]/15 to-[#fcb045]/20 p-8 sm:p-10">
-            <div className="bg-speedlines absolute inset-0" aria-hidden="true" />
-            <div className="glow-instagram absolute -top-20 -right-20 size-64 animate-glow" aria-hidden="true" />
-            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-5">
-                <span className="flex size-16 shrink-0 animate-float items-center justify-center rounded-2xl bg-white/10">
-                  <InstagramIcon className="size-8" />
-                </span>
-                <div>
-                  <h2 className="font-display text-3xl font-extrabold uppercase italic">Síguenos en Instagram</h2>
-                  <p className="mt-1 text-zinc-300">Proyectos, instalaciones, productos nuevos y ofertas.</p>
-                </div>
+          <div className="flex flex-col gap-6 rounded-lg border border-line bg-surface p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+            <div className="flex items-center gap-5">
+              <InstagramIcon className="size-9 shrink-0 text-zinc-300" />
+              <div>
+                <h2 className="font-display text-3xl font-bold tracking-wide uppercase">Mira lo que estamos haciendo</h2>
+                <p className="mt-1 text-muted">Trabajos, instalaciones, productos nuevos y ofertas, todo en nuestro Instagram.</p>
               </div>
-              <a
-                href={settings.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonClasses({ variant: "light", size: "lg", className: "transition-transform hover:scale-105" })}
-              >
-                <InstagramIcon className="size-5" />@{instagramHandle(settings.instagram)}
-              </a>
             </div>
+            <a
+              href={settings.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClasses({ variant: "light", size: "lg" })}
+            >
+              <InstagramIcon className="size-5" />@{instagramHandle(settings.instagram)}
+            </a>
           </div>
         </Container>
       )}
@@ -415,7 +400,7 @@ export default async function HomePage() {
       {/* Marcas */}
       {brands.length > 0 && (
         <section aria-labelledby="marcas-titulo" className="cv-auto pt-16">
-          <p id="marcas-titulo" className="text-center text-xs font-bold tracking-[0.25em] text-muted uppercase">
+          <p id="marcas-titulo" className="text-center text-xs font-semibold tracking-[0.25em] text-muted uppercase">
             Marcas que trabajamos
           </p>
           <Marquee
@@ -426,7 +411,7 @@ export default async function HomePage() {
               <Link
                 key={brand.slug}
                 href={`/productos?marca=${brand.slug}`}
-                className="px-8 font-display text-3xl font-bold tracking-wide whitespace-nowrap text-zinc-500 uppercase italic transition-colors hover:text-white"
+                className="px-8 font-display text-3xl font-bold tracking-wide whitespace-nowrap text-zinc-600 uppercase transition-colors hover:text-fg"
               >
                 {brand.name}
               </Link>

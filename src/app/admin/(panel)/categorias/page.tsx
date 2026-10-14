@@ -45,7 +45,7 @@ export default async function CategoriesPage() {
       </Card>
       <Card title={`Categorías (${categories.length})`} bodyClassName="p-0">
         {categories.length === 0 ? (
-          <EmptyState title="Aún no hay categorías" />
+          <EmptyState title="Aún no hay categorías" description="Agrega la primera con el formulario de arriba." />
         ) : (
           <ul className="divide-y divide-line">
             {categories.map((category) => (

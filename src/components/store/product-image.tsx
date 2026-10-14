@@ -44,12 +44,10 @@ export function ProductImage({
       role="img"
       aria-label={alt}
       className={cn(
-        "relative flex items-center justify-center overflow-hidden bg-linear-to-br from-zinc-800 via-zinc-900 to-black",
+        "relative flex items-center justify-center overflow-hidden bg-surface-2",
         className,
       )}
     >
-      <div className="bg-speedlines absolute inset-0" />
-      <div className="glow-placeholder absolute -right-36 -bottom-36 size-92" />
       <DynamicIcon name={icon} className="relative size-1/3 text-zinc-300/80" strokeWidth={1.25} />
       <LogoBadge size={22} className="absolute bottom-3 left-3 opacity-70" />
     </div>

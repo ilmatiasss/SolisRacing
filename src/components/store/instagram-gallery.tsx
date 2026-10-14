@@ -12,7 +12,7 @@ export function InstagramGallery({ posts }: { posts: InstagramPostItem[] }) {
             {(post.tag || post.title) && (
               <div>
                 {post.tag && <p className="text-xs font-bold tracking-[0.15em] text-brand-500 uppercase">{post.tag}</p>}
-                {post.title && <p className="font-display text-xl font-bold uppercase italic">{post.title}</p>}
+                {post.title && <p className="font-display text-xl font-bold uppercase">{post.title}</p>}
               </div>
             )}
             <InstagramPost url={post.url} label={label} />

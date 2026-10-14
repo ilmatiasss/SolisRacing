@@ -26,7 +26,7 @@ export function ProductGallery({
         icon={icon}
         sizes="(min-width: 1024px) 50vw, 100vw"
         eager
-        className="aspect-square rounded-3xl border border-line"
+        className="aspect-square rounded-xl border border-line"
       />
       {images.length > 1 && (
         <div className="scrollbar-none flex gap-2 overflow-x-auto">

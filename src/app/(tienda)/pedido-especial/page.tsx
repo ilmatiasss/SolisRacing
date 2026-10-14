@@ -32,7 +32,7 @@ export default async function SpecialOrderPage() {
       <Container className="grid gap-10 py-14 lg:grid-cols-[1fr_1.3fr]">
         <div className="space-y-3">
           {STEPS.map(({ icon: Icon, title, text }, index) => (
-            <div key={title} className="flex gap-4 rounded-2xl border border-line bg-surface p-5">
+            <div key={title} className="flex gap-4 rounded-lg border border-line bg-surface p-5">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-600/15 text-brand-500">
                 <Icon className="size-5" />
               </span>
@@ -47,7 +47,7 @@ export default async function SpecialOrderPage() {
             href={whatsappLink(settings.whatsapp, "Hola, busco un repuesto que no está en la web.")}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 transition-colors hover:border-emerald-400/60"
+            className="flex items-center gap-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-5 transition-colors hover:border-emerald-400/60"
           >
             <WhatsAppIcon className="size-6 shrink-0 text-emerald-400" />
             <span className="text-sm">
@@ -56,8 +56,8 @@ export default async function SpecialOrderPage() {
             </span>
           </a>
         </div>
-        <section aria-labelledby="pedido-titulo" className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
-          <h2 id="pedido-titulo" className="font-display text-3xl font-extrabold uppercase italic">
+        <section aria-labelledby="pedido-titulo" className="rounded-lg border border-line bg-surface p-6 sm:p-8">
+          <h2 id="pedido-titulo" className="font-display text-3xl font-bold uppercase">
             Pide tu repuesto
           </h2>
           <p className="mt-1 mb-6 text-sm text-muted">Te respondemos lo antes posible, también por WhatsApp.</p>

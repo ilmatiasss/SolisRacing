@@ -24,7 +24,7 @@ export async function SiteFooter() {
 
   return (
     <footer className="mt-24 border-t border-line bg-zinc-950">
-      <div className="h-1 bg-linear-to-r from-brand-700 via-orange-500 to-brand-700" />
+      <div className="hazard h-1.5" aria-hidden="true" />
       <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logo />
@@ -38,7 +38,7 @@ export async function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex size-10 items-center justify-center rounded-xl border border-line text-zinc-300 transition-colors hover:border-brand-600 hover:text-white"
+                  className="flex size-10 items-center justify-center rounded-lg border border-line text-zinc-300 transition-colors hover:border-brand-600 hover:text-white"
                 >
                   <Icon className="size-4.5" />
                 </a>

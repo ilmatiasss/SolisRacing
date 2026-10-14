@@ -79,7 +79,7 @@ export function CartDrawer({ freeShippingThreshold }: { freeShippingThreshold: n
     >
       {items.length === 0 ? (
         <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-surface-2">
+          <div className="flex size-16 items-center justify-center rounded-lg bg-surface-2">
             <ShoppingCart className="size-7 text-muted" />
           </div>
           <div>

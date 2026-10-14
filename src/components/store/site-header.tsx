@@ -1,4 +1,4 @@
-import { Search, Zap } from "lucide-react";
+import { Search } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -20,15 +20,15 @@ export async function SiteHeader() {
   return (
     <>
       {settings.announcement && (
-        <div className="relative z-50 bg-brand-600 text-white shadow-[0_0_24px_rgba(255,30,30,0.5)]">
+        <div className="relative z-50 bg-brand-600 text-white">
           <Marquee
             repeat={4}
             mobileRepeat={2}
             className="h-9 items-center text-xs font-semibold tracking-wide sm:text-sm"
           >
-            <p className="flex items-center gap-6 px-6 whitespace-nowrap [text-shadow:0_0_10px_rgba(255,255,255,0.45)]">
+            <p className="flex items-center gap-6 px-6 whitespace-nowrap">
               {settings.announcement}
-              <Zap className="size-3.5 fill-current text-signal-400" aria-hidden="true" />
+              <span aria-hidden="true" className="opacity-50">/</span>
             </p>
           </Marquee>
         </div>

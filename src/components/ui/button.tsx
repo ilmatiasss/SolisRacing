@@ -6,7 +6,7 @@ export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-brand-600 text-white shadow-[0_8px_24px_-12px_rgb(225_6_0/0.8)] hover:bg-brand-500 active:bg-brand-700",
+    "bg-brand-600 text-white hover:bg-brand-500 active:bg-brand-700",
   secondary: "bg-fg text-bg hover:opacity-90",
   outline: "border border-line-strong bg-transparent text-fg hover:border-fg/60 hover:bg-fg/5",
   ghost: "bg-transparent text-fg hover:bg-fg/8",
@@ -16,9 +16,9 @@ const variants: Record<ButtonVariant, string> = {
 
 const sizes: Record<ButtonSize, string> = {
   sm: "h-9 gap-1.5 rounded-lg px-3 text-sm",
-  md: "h-11 gap-2 rounded-xl px-5 text-sm",
-  lg: "h-13 gap-2.5 rounded-xl px-7 text-base",
-  icon: "size-10 rounded-xl",
+  md: "h-11 gap-2 rounded-lg px-5 text-sm",
+  lg: "h-13 gap-2.5 rounded-lg px-7 text-base",
+  icon: "size-10 rounded-lg",
 };
 
 export function buttonClasses({
@@ -27,7 +27,7 @@ export function buttonClasses({
   className,
 }: { variant?: ButtonVariant; size?: ButtonSize; className?: string } = {}) {
   return cn(
-    "inline-flex shrink-0 cursor-pointer items-center justify-center font-semibold whitespace-nowrap transition-colors",
+    "inline-flex shrink-0 cursor-pointer items-center justify-center font-semibold whitespace-nowrap transition-colors active:translate-y-px",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500",
     "disabled:pointer-events-none disabled:opacity-50",
     variants[variant],

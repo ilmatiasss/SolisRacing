@@ -1,6 +1,7 @@
-import type { LucideIcon } from "lucide-react";
+import { Inbox, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { SectionTag } from "./section-tag";
 
 export function AdminPageHeader({
   title,
@@ -12,10 +13,11 @@ export function AdminPageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-8 flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-        {description && <p className="mt-1 text-sm text-muted">{description}</p>}
+        <SectionTag />
+        <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
+        {description && <p className="mt-1.5 max-w-2xl text-sm text-muted sm:text-base">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
     </div>
@@ -38,12 +40,15 @@ export function Card({
   children: ReactNode;
 }) {
   return (
-    <section className={cn("rounded-2xl border border-line bg-surface shadow-xs", className)}>
+    <section className={cn("overflow-hidden rounded-xl border border-line bg-surface shadow-xs", className)}>
       {(title || actions) && (
-        <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
-          <div>
-            {title && <h2 className="font-semibold">{title}</h2>}
-            {description && <p className="mt-0.5 text-sm text-muted">{description}</p>}
+        <div className="flex items-start justify-between gap-4 border-b border-line bg-surface-2/60 px-5 py-3.5">
+          <div className="flex items-start gap-3">
+            <span className="mt-1 h-4 w-1 shrink-0 rounded-full bg-brand-600" aria-hidden="true" />
+            <div>
+              {title && <h2 className="font-semibold">{title}</h2>}
+              {description && <p className="mt-0.5 text-sm text-muted">{description}</p>}
+            </div>
           </div>
           {actions}
         </div>
@@ -76,6 +81,9 @@ export function Td({ children, className }: { children?: ReactNode; className?: 
 export function EmptyState({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center px-6 py-14 text-center">
+      <span className="mb-4 flex size-12 items-center justify-center rounded-full border border-dashed border-zinc-600 text-zinc-500" aria-hidden="true">
+        <Inbox className="size-5" />
+      </span>
       <p className="font-semibold">{title}</p>
       {description && <p className="mt-1 max-w-sm text-sm text-muted">{description}</p>}
       {action && <div className="mt-5">{action}</div>}

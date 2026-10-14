@@ -14,9 +14,9 @@ export function PrivacyRequestForm() {
 
   if (state.ok) {
     return (
-      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center" role="status">
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-8 text-center" role="status">
         <CheckCircle2 className="mx-auto size-10 text-emerald-400" />
-        <p className="mt-4 font-display text-2xl font-bold uppercase italic">Solicitud recibida</p>
+        <p className="mt-4 font-display text-2xl font-bold uppercase">Solicitud recibida</p>
         <p className="mt-2 text-sm text-zinc-300">
           Te responderemos al correo que indicaste dentro de {PRIVACY_RESPONSE_DAYS} días corridos. Si necesitamos confirmar tu
           identidad, te lo pediremos por ese medio.

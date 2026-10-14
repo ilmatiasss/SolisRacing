@@ -42,9 +42,9 @@ export function HarnessQuote({ pricing, whatsapp }: { pricing: HarnessPricing; w
 
   if (state.ok) {
     return (
-      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center" role="status">
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-8 text-center" role="status">
         <CheckCircle2 className="mx-auto size-10 text-emerald-400" />
-        <p className="mt-4 font-display text-2xl font-bold uppercase italic">¡Cotización enviada!</p>
+        <p className="mt-4 font-display text-2xl font-bold uppercase">¡Cotización enviada!</p>
         <p className="mt-2 text-sm text-zinc-300">
           Revisamos tu configuración y te enviamos el valor final por WhatsApp o correo.
         </p>
@@ -95,7 +95,7 @@ export function HarnessQuote({ pricing, whatsapp }: { pricing: HarnessPricing; w
             className="sticky top-[4.5rem] z-30 flex items-center justify-between gap-3 rounded-xl border border-brand-600/50 bg-zinc-950 px-4 py-3 shadow-lg shadow-black/40 before:absolute before:inset-x-0 before:-top-[calc(0.5rem+1px)] before:h-2 before:bg-bg lg:hidden"
           >
             <span className="text-xs font-bold tracking-wider text-brand-500 uppercase">Aprox.</span>
-            <span className="font-display text-lg font-extrabold italic">
+            <span className="font-display text-lg font-bold">
               {formatCLP(estimate.min)} – {formatCLP(estimate.max)}
             </span>
           </a>
@@ -222,11 +222,11 @@ export function HarnessQuote({ pricing, whatsapp }: { pricing: HarnessPricing; w
       </div>
 
       <aside id="valor-ramal" className="scroll-mt-24 lg:sticky lg:top-32 lg:self-start">
-        <div className="rounded-2xl border border-brand-600/40 bg-zinc-950 p-6 shadow-[0_0_40px_rgba(255,30,30,0.15)]">
+        <div className="rounded-lg border border-brand-600/40 bg-surface p-6">
           <p className="text-xs font-bold tracking-[0.2em] text-brand-500 uppercase">Valor aproximado</p>
           {estimate ? (
             <>
-              <p className="mt-2 font-display text-3xl font-extrabold italic" aria-live="polite">
+              <p className="mt-2 font-display text-3xl font-bold" aria-live="polite">
                 {formatCLP(estimate.min)} – {formatCLP(estimate.max)}
               </p>
               <ul className="mt-4 space-y-1.5 border-t border-white/10 pt-4 text-sm text-zinc-300">
@@ -272,7 +272,7 @@ export function HarnessQuote({ pricing, whatsapp }: { pricing: HarnessPricing; w
 function Step({ number, title, children }: { number: number; title: string; children: ReactNode }) {
   return (
     <fieldset>
-      <legend className="mb-3 flex items-center gap-3 font-display text-xl font-bold uppercase italic">
+      <legend className="mb-3 flex items-center gap-3 font-display text-xl font-bold uppercase">
         <span className="flex size-7 items-center justify-center rounded-full bg-brand-600 text-sm not-italic text-white">
           {number}
         </span>

@@ -13,9 +13,9 @@ export function WebpayRedirect({ url, token }: { url: string; token: string }) {
   }, []);
 
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-line bg-surface px-6 py-16 text-center">
+    <div className="flex flex-col items-center rounded-lg border border-line bg-surface px-6 py-16 text-center">
       <LoaderCircle className="size-10 animate-spin text-brand-500" />
-      <p className="mt-4 font-display text-2xl font-bold uppercase italic">Redirigiendo a Webpay…</p>
+      <p className="mt-4 font-display text-2xl font-bold uppercase">Redirigiendo a Webpay…</p>
       <p className="mt-2 text-sm text-muted">No cierres esta ventana. Si no avanza en unos segundos, presiona el botón.</p>
       <form ref={formRef} method="POST" action={url} className="mt-6">
         <input type="hidden" name="token_ws" value={token} />

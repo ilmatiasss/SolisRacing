@@ -74,8 +74,8 @@ export function InstagramPost({ url, label }: { url: string; label: string }) {
 
 function InstagramPlaceholder({ url, label }: { url: string; label: string }) {
   return (
-    <div className="mx-auto flex aspect-[4/5] w-full max-w-[540px] flex-col items-center justify-center gap-4 rounded-2xl border border-line bg-[radial-gradient(circle_at_30%_20%,rgb(131_58_180/0.25),transparent_55%),radial-gradient(circle_at_80%_90%,rgb(252_176_69/0.18),transparent_50%)] bg-surface p-6 text-center">
-      <span className="flex size-14 items-center justify-center rounded-2xl bg-white/10">
+    <div className="mx-auto flex aspect-[4/5] w-full max-w-[540px] flex-col items-center justify-center gap-4 rounded-lg border border-dashed border-zinc-600 bg-surface p-6 text-center">
+      <span className="flex size-14 items-center justify-center rounded-full border border-line-strong">
         <InstagramIcon className="size-7" />
       </span>
       <p className="font-semibold">{label}</p>

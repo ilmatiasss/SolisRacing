@@ -85,7 +85,7 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
           </Button>
         </form>
         {rows.length === 0 ? (
-          <EmptyState title="No hay pedidos con estos filtros" />
+          <EmptyState title="No hay pedidos con estos filtros" description="Prueba con otro estado o borra la búsqueda para ver todos." />
         ) : (
           <Table>
             <thead>

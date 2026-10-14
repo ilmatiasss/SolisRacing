@@ -21,7 +21,7 @@ export default function PrivacyRightsPage() {
       />
       <Container className="py-12">
         <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">
-          <div className="rounded-2xl border border-line bg-surface p-5 sm:p-8">
+          <div className="rounded-lg border border-line bg-surface p-5 sm:p-8">
             <PrivacyRequestForm />
           </div>
           <aside className="space-y-4 text-sm text-zinc-300">

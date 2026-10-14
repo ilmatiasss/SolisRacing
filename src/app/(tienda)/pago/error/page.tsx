@@ -10,7 +10,7 @@ export default function PaymentErrorPage() {
   return (
     <Container className="flex flex-col items-center py-24 text-center">
       <TriangleAlert className="size-12 text-signal-400" />
-      <h1 className="mt-6 font-display text-4xl font-extrabold uppercase italic">No pudimos procesar el pago</h1>
+      <h1 className="mt-6 font-display text-4xl font-bold uppercase">No pudimos procesar el pago</h1>
       <p className="mt-3 max-w-md text-muted">
         La respuesta de Webpay no corresponde a ningún pedido activo. Si se realizó un cargo en tu tarjeta, escríbenos
         con el comprobante y lo revisamos de inmediato.
