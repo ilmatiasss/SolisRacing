@@ -14,13 +14,9 @@ test("la portada muestra los destacados y el catálogo por categoría", async ({
   await expect(page.getByRole("tabpanel").getByRole("link", { name: "Aceite Race 60WT Red Line" })).toBeVisible();
 });
 
-test("el buscador por auto filtra repuestos compatibles", async ({ page }) => {
-  await page.goto("/productos");
-  await page.locator("#finder-make").selectOption("honda");
-  await page.locator("#finder-model").selectOption("civic");
-  await page.locator("#finder-year").selectOption("1998");
-  await page.getByRole("button", { name: "Buscar repuestos" }).click();
-  await expect(page).toHaveURL(/\/productos\?auto=honda&modelo=civic&anio=1998/);
+test("el filtro por auto muestra solo repuestos compatibles", async ({ page }) => {
+  // El buscador por marca/modelo/año está oculto del catálogo por ahora; el filtro sigue vigente por URL.
+  await page.goto("/productos?auto=honda&modelo=civic&anio=1998");
   await expect(page.getByRole("heading", { name: "Repuestos para Honda Civic 1998" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Pieza de prueba para Honda Civic" })).toBeVisible();
   // Una pieza solo compatible con otro auto no aparece.

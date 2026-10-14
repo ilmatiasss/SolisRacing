@@ -48,6 +48,7 @@ export function PageHeader({
   description,
   children,
   aside,
+  compact,
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -55,15 +56,24 @@ export function PageHeader({
   children?: ReactNode;
   /** Panel a la derecha del título en pantallas grandes (por ejemplo, un buscador). */
   aside?: ReactNode;
+  /** Encabezado bajo, para páginas donde lo importante es el contenido que sigue (el catálogo). */
+  compact?: boolean;
 }) {
   return (
     <div className="relative border-b border-line bg-surface">
-      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", compact ? "py-5 sm:py-6" : "py-8 sm:py-10")}>
         <div className={aside ? "grid items-center gap-6 lg:grid-cols-[1fr_minmax(0,34rem)] lg:gap-12" : undefined}>
           <div>
-            {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-            <h1 className="title-mark font-display text-4xl font-bold tracking-wide text-balance uppercase sm:text-5xl">{title}</h1>
-            {description && <p className="mt-4 max-w-2xl text-muted">{description}</p>}
+            {eyebrow && <Eyebrow className={compact ? "mb-1.5" : "mb-3"}>{eyebrow}</Eyebrow>}
+            <h1
+              className={cn(
+                "title-mark font-display font-bold tracking-wide text-balance uppercase",
+                compact ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl",
+              )}
+            >
+              {title}
+            </h1>
+            {description && <p className={cn("max-w-2xl text-muted", compact ? "mt-3 text-sm" : "mt-4")}>{description}</p>}
             {children}
           </div>
           {aside}

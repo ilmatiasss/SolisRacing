@@ -1,4 +1,4 @@
-import { Car, ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -6,7 +6,6 @@ import { DynamicIcon, WhatsAppIcon } from "@/components/icons";
 import { ProductGrid } from "@/components/store/product-card";
 import { PageHeader } from "@/components/store/section-heading";
 import { SortSelect } from "@/components/store/sort-select";
-import { VehicleFinder } from "@/components/store/vehicle-finder";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { catalogHref, parseCatalogFilters, type CatalogFilters } from "@/lib/catalog-filters";
@@ -15,12 +14,10 @@ import {
   getBrands,
   getFeaturedProducts,
   getCategories,
-  getVehicleTree,
   searchProducts,
   type CategoryData,
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
-import { getCurrentYear } from "@/lib/data/time";
 import { whatsappLink } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -40,12 +37,10 @@ export default function ProductsPage({ searchParams }: PageProps<"/productos">) 
 
 async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">["searchParams"] }) {
   const filters = parseCatalogFilters(await searchParams);
-  const [result, categories, brands, makes, currentYear, settings] = await Promise.all([
+  const [result, categories, brands, settings] = await Promise.all([
     searchProducts(filters),
     getCategories(),
     getBrands(),
-    getVehicleTree(),
-    getCurrentYear(),
     getStoreSettings(),
   ]);
 
@@ -91,24 +86,10 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
             ? "Mostramos primero las piezas específicas para tu auto y luego las universales."
             : "Repuestos y accesorios de performance con despacho a todo Chile.")
         }
-        aside={
-          <div className="rounded-lg border border-line-strong bg-surface-2 p-4">
-            <p className="mb-3 flex items-center gap-2 text-sm font-semibold">
-              <Car className="size-4 text-brand-500" />
-              {vehicleLabel ? "Cambiar auto" : "Filtra por tu auto"}
-            </p>
-            <VehicleFinder
-              compact
-              key={`${filters.auto}-${filters.modelo}-${filters.anio}`}
-              makes={makes}
-              currentYear={currentYear}
-              initial={filters}
-            />
-          </div>
-        }
+        compact
       />
 
-      <Container className="grid gap-8 py-10 lg:grid-cols-[16rem_1fr]">
+      <Container className="grid gap-6 py-6 lg:grid-cols-[15rem_1fr] lg:gap-8 lg:py-8">
         <aside className="lg:sticky lg:top-32 lg:self-start">
           <details className="group rounded-lg border border-line bg-surface lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between p-4 font-semibold">
@@ -128,7 +109,7 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
         </aside>
 
         <section aria-label="Resultados">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted">
               {result.total === 0
                 ? "Sin resultados"
@@ -137,8 +118,8 @@ async function Catalog({ searchParams }: { searchParams: PageProps<"/productos">
             <SortSelect filters={filters} />
           </div>
 
-          {chips.length > 0 && (
-            <div className="mb-6 flex flex-wrap items-center gap-2">
+          {chips.length > (category ? 1 : 0) && (
+            <div className="mb-4 flex flex-wrap items-center gap-2">
               {chips.map((chip) => (
                 <Link
                   key={chip.label}
