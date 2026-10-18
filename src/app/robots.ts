@@ -6,7 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/carrito", "/checkout", "/pedido", "/pago"],
+      // "/pedido/" con barra: sin ella también bloquearía /pedido-especial.
+      disallow: ["/admin", "/carrito", "/checkout", "/pedido/", "/pago"],
     },
     sitemap: `${siteUrl()}/sitemap.xml`,
   };

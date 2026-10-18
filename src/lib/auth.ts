@@ -1,5 +1,5 @@
 import "server-only";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { jwtVerify, SignJWT } from "jose";
@@ -12,6 +12,14 @@ export const SESSION_COOKIE = "sr_admin";
 const SESSION_DAYS = 7;
 
 export type AdminUser = { id: number; email: string; name: string };
+
+/**
+ * Huella de la contraseña que va dentro de la sesión: al cambiar la contraseña cambia la huella
+ * y se cierran las sesiones abiertas en otros equipos.
+ */
+function passwordFingerprint(passwordHash: string) {
+  return createHash("sha256").update(passwordHash).digest("base64url").slice(0, 16);
+}
 
 let secretPromise: Promise<Uint8Array> | null = null;
 
@@ -51,7 +59,11 @@ export async function verifyCredentials(email: string, password: string): Promis
 }
 
 export async function createSession(user: AdminUser) {
-  const token = await new SignJWT({ email: user.email, name: user.name })
+  const [row] = await db
+    .select({ passwordHash: adminUsers.passwordHash })
+    .from(adminUsers)
+    .where(eq(adminUsers.id, user.id));
+  const token = await new SignJWT({ email: user.email, name: user.name, pwd: passwordFingerprint(row?.passwordHash ?? "") })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(String(user.id))
     .setIssuedAt()
@@ -81,10 +93,11 @@ export async function getCurrentAdmin(): Promise<AdminUser | null> {
     const id = Number(payload.sub);
     if (!Number.isInteger(id)) return null;
     const [user] = await db
-      .select({ id: adminUsers.id, email: adminUsers.email, name: adminUsers.name })
+      .select({ id: adminUsers.id, email: adminUsers.email, name: adminUsers.name, passwordHash: adminUsers.passwordHash })
       .from(adminUsers)
       .where(eq(adminUsers.id, id));
-    return user ?? null;
+    if (!user || payload.pwd !== passwordFingerprint(user.passwordHash)) return null;
+    return { id: user.id, email: user.email, name: user.name };
   } catch {
     return null;
   }

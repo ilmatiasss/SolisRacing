@@ -20,12 +20,41 @@ import {
 import { getStoreSettings } from "@/lib/data/settings";
 import { whatsappLink } from "@/lib/format";
 
-export const metadata: Metadata = {
-  title: "Catálogo de repuestos y accesorios",
-  description:
-    "FuelTech y electrónica, sistemas de combustible, sensores, fittings, relojería y más. Busca por marca, modelo y año de tu auto.",
-  alternates: { canonical: "/productos" },
-};
+const CATALOG_DESCRIPTION =
+  "FuelTech y electrónica, sistemas de combustible, sensores, fittings, relojería y lubricantes Red Line y VP. Tienda en Antofagasta y despachos a todo Chile.";
+
+/**
+ * Cada categoría (y cada marca) tiene su propio título y URL canónica; las búsquedas y las
+ * combinaciones de filtros no se indexan.
+ */
+export async function generateMetadata({ searchParams }: PageProps<"/productos">): Promise<Metadata> {
+  const filters = parseCatalogFilters(await searchParams);
+  const [categories, brands] = await Promise.all([getCategories(), getBrands()]);
+  const category = categories.find((c) => c.slug === filters.categoria);
+  const brand = brands.find((b) => b.slug === filters.marca);
+  const extraFilters = Boolean(filters.q || filters.auto || filters.oferta || filters.stock || (category && brand));
+
+  if (!extraFilters && category) {
+    return {
+      title: category.name,
+      description: category.description ?? `${category.name} en Solis Racing Parts, con despacho a todo Chile.`,
+      alternates: { canonical: `/productos?categoria=${category.slug}` },
+    };
+  }
+  if (!extraFilters && brand) {
+    return {
+      title: `${brand.name}: repuestos y accesorios`,
+      description: `Productos ${brand.name} en Solis Racing Parts, con despacho a todo Chile.`,
+      alternates: { canonical: `/productos?marca=${brand.slug}` },
+    };
+  }
+  return {
+    title: filters.q ? `Resultados para “${filters.q}”` : filters.oferta ? "Ofertas" : "Catálogo de repuestos y accesorios",
+    description: CATALOG_DESCRIPTION,
+    alternates: { canonical: "/productos" },
+    robots: extraFilters ? { index: false, follow: true } : undefined,
+  };
+}
 
 export default function ProductsPage({ searchParams }: PageProps<"/productos">) {
   return (
@@ -303,12 +332,14 @@ function ToggleLink({ href, active, children }: { href: string; active: boolean;
     <Link
       href={href}
       scroll={false}
-      role="switch"
-      aria-checked={active}
       className="flex items-center justify-between rounded-lg px-2.5 py-2 text-sm text-zinc-300 hover:bg-white/5"
     >
-      {children}
+      <span>
+        {children}
+        <span className="sr-only">{active ? " (activado)" : " (desactivado)"}</span>
+      </span>
       <span
+        aria-hidden="true"
         className={cn(
           "relative h-5 w-9 rounded-full transition-colors",
           active ? "bg-brand-600" : "bg-zinc-700",

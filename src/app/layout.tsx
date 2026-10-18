@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s · Solis Racing Parts",
   },
   description:
-    "Autopartes de performance en Antofagasta: FuelTech, sistemas de combustible, sensores, fittings, relojería y programación. Despachos a todo Chile y pago con Webpay.",
+    "Autopartes de performance en Antofagasta: FuelTech, sistemas de combustible, sensores, fittings, relojería y programación. Tienda física en Antofagasta y despachos a todo Chile.",
   applicationName: "Solis Racing Parts",
   openGraph: {
     type: "website",

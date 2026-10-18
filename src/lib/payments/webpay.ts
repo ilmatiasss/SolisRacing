@@ -2,6 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { Environment, IntegrationApiKeys, IntegrationCommerceCodes, Options, WebpayPlus } from "transbank-sdk";
 import type { WebpayCommitData } from "../db/schema";
+import type { StoreSettings } from "../settings";
 
 /**
  * Webpay Plus (Transbank).
@@ -22,6 +23,27 @@ export function webpayEnvironment(): WebpayEnvironment {
 export function isMockAllowed() {
   // Nunca se permite el simulador en el sitio publicado en Vercel (producción).
   return process.env.VERCEL_ENV !== "production";
+}
+
+/**
+ * Webpay solo se ofrece a los clientes cuando puede cobrar de verdad. En el sitio publicado
+ * (Vercel producción) exige WEBPAY_ENVIRONMENT=production con sus credenciales; con el ambiente
+ * de pruebas se podría "pagar" con las tarjetas de prueba públicas de Transbank y el pedido
+ * quedaría como pagado sin cobro real.
+ */
+export function isWebpayAvailable() {
+  if (webpayEnvironment() === "production") {
+    return Boolean(process.env.WEBPAY_COMMERCE_CODE && process.env.WEBPAY_API_KEY);
+  }
+  return process.env.VERCEL_ENV !== "production";
+}
+
+/** Medios de pago que ve el cliente: lo activado en el panel y que además puede operar. */
+export function availablePayments(settings: Pick<StoreSettings, "payments">) {
+  return {
+    webpayEnabled: settings.payments.webpayEnabled && isWebpayAvailable(),
+    transferEnabled: settings.payments.transferEnabled,
+  };
 }
 
 function transaction() {
@@ -96,6 +118,7 @@ export async function createWebpayTransaction(params: {
   returnUrl: string;
   origin: string;
 }): Promise<{ token: string; url: string }> {
+  if (!isWebpayAvailable()) throw new Error("Webpay no está habilitado para cobros reales en este sitio.");
   if (webpayEnvironment() === "mock") {
     if (!isMockAllowed()) throw new Error("El simulador de Webpay no está permitido en producción.");
     const token = `mock${randomBytes(24).toString("hex")}`;

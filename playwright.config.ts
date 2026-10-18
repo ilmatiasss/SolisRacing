@@ -37,6 +37,8 @@ export default defineConfig({
       NEXT_DIST_DIR: ".next-e2e",
       NEXT_PUBLIC_SITE_URL: `http://localhost:${PORT}`,
       WEBPAY_ENVIRONMENT: "mock",
+      // Las pruebas hacen muchos pedidos y logins seguidos desde la misma IP.
+      RATE_LIMIT: "off",
       ADMIN_EMAIL: E2E_ADMIN.email,
       ADMIN_PASSWORD: E2E_ADMIN.password,
       AUTH_SECRET: "secreto-solo-para-pruebas-e2e-0123456789",

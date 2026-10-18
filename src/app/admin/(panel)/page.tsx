@@ -12,11 +12,11 @@ import { getDashboardData } from "@/lib/data/admin";
 import { listUpcomingBookings } from "@/lib/data/booking";
 import { purgeExpiredPersonalData } from "@/lib/data/privacy";
 import { readStoreSettings } from "@/lib/data/settings";
-import { DEFAULT_SETTINGS } from "@/lib/settings";
+import { DEFAULT_SETTINGS, hasTransferAccount } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
 import { inquiryTitle, ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
 import { expireAbandonedWebpayOrders } from "@/lib/orders";
-import { webpayEnvironment } from "@/lib/payments/webpay";
+import { isWebpayAvailable, webpayEnvironment } from "@/lib/payments/webpay";
 
 export const metadata: Metadata = { title: "Resumen" };
 
@@ -41,7 +41,7 @@ export default async function DashboardPage() {
       label: "Datos bancarios para transferencias",
       hint: "Banco, cuenta y titular que verá el cliente al pagar por transferencia.",
       href: "/admin/configuracion",
-      done: settings.payments.transferAccountNumber !== DEFAULT_SETTINGS.payments.transferAccountNumber,
+      done: hasTransferAccount(settings.payments),
     },
     {
       label: "Razón social y RUT de la empresa",
@@ -89,8 +89,11 @@ export default async function DashboardPage() {
         <Notice tone="warning" className="mb-6 flex gap-3">
           <TriangleAlert className="mt-0.5 size-4.5 shrink-0" />
           <span>
-            <strong>Webpay está en modo {env === "mock" ? "simulador" : "de pruebas (integración)"}.</strong> Los pagos con
-            tarjeta no son reales. Cuando Transbank te entregue tu código de comercio y API Key, configura{" "}
+            <strong>Webpay está en modo {env === "mock" ? "simulador" : "de pruebas (integración)"}.</strong>{" "}
+            {isWebpayAvailable()
+              ? "Los pagos con tarjeta no son reales."
+              : "Por eso los clientes solo ven el pago por transferencia."}{" "}
+            Cuando Transbank te entregue tu código de comercio y API Key, configura{" "}
             <code className="font-mono">WEBPAY_ENVIRONMENT=production</code> (ver README).
           </span>
         </Notice>

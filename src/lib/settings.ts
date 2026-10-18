@@ -158,7 +158,8 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     transferEnabled: true,
     transferBank: "Banco de Chile",
     transferAccountType: "Cuenta corriente",
-    transferAccountNumber: "00-000-00000-00",
+    // Vacío hasta que la tienda ingrese su cuenta (Panel → Configuración).
+    transferAccountNumber: "",
     transferHolder: "Solis Racing Parts",
     transferRut: "",
     transferEmail: "",
@@ -178,6 +179,15 @@ export const DEFAULT_SETTINGS: StoreSettings = {
       "Ideal para piezas grandes o pesadas (bidones de combustible, kits completos). Pagas el envío al recibir.",
   },
 };
+
+/** Número de cuenta de ejemplo que traían versiones anteriores: no se le muestra al cliente. */
+const PLACEHOLDER_ACCOUNT = "00-000-00000-00";
+
+/** Si ya hay datos bancarios reales para mostrarle al cliente que paga por transferencia. */
+export function hasTransferAccount(payments: Pick<PaymentSettings, "transferAccountNumber">) {
+  const number = payments.transferAccountNumber.trim();
+  return number !== "" && number !== PLACEHOLDER_ACCOUNT;
+}
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 

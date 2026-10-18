@@ -73,7 +73,7 @@ export function PrivacyRequestForm() {
         <Input id="privacy-phone" name="phone" type="tel" autoComplete="tel" placeholder="+56 9 …" />
       </Field>
       <Field label="RUT" htmlFor="privacy-rut" optional error={errors.rut} hint="Nos ayuda a encontrar tus compras.">
-        <Input id="privacy-rut" name="rut" placeholder="12.345.678-9" aria-invalid={!!errors.rut} />
+        <Input id="privacy-rut" name="rut" placeholder="12.345.678-5" aria-invalid={!!errors.rut} />
       </Field>
       <Field label="Detalle de tu solicitud" htmlFor="privacy-message" error={errors.message} className="sm:col-span-2">
         <Textarea

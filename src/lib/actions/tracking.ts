@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { orders } from "@/lib/db/schema";
 import { parseOrderNumber } from "@/lib/format";
+import { RATE_LIMIT_MESSAGE, rateLimit } from "@/lib/rate-limit";
 
 export type TrackingState = { error?: string };
 
@@ -13,6 +14,7 @@ export async function trackOrder(_prev: TrackingState, formData: FormData): Prom
   const orderId = parseOrderNumber(String(formData.get("number") ?? ""));
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   if (!orderId || !email) return { error: "Ingresa tu número de pedido y el correo con que compraste." };
+  if (!(await rateLimit("tracking"))) return { error: RATE_LIMIT_MESSAGE };
 
   const [order] = await db
     .select({ id: orders.id, publicToken: orders.publicToken })

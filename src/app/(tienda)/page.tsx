@@ -1,4 +1,5 @@
 import { ArrowRight, Cable, Gauge, Headset, ShieldCheck, Star, Truck, Wrench } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
@@ -10,6 +11,7 @@ import { ProductGrid } from "@/components/store/product-card";
 import { ProductImage } from "@/components/store/product-image";
 import { Rotator } from "@/components/store/rotator";
 import { Eyebrow, SectionHeading } from "@/components/store/section-heading";
+import { StoreJsonLd } from "@/components/store/store-json-ld";
 import { Tachometer } from "@/components/store/tachometer";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -24,7 +26,10 @@ import {
   type ProductCardData,
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
+import { availablePayments } from "@/lib/payments/webpay";
 import { formatCLP, whatsappLink } from "@/lib/format";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
   const [categories, featured, onSale, catalog, services, brands, settings] = await Promise.all([
@@ -41,13 +46,18 @@ export default async function HomePage() {
     .map((category) => ({ category, products: catalog.filter((product) => product.categorySlug === category.slug) }))
     .filter((shelf) => shelf.products.length > 0);
   const freeShipping = settings.shipping.freeShippingThreshold;
+  const payments = availablePayments(settings);
+  const payText = payments.webpayEnabled
+    ? `Webpay con débito, crédito o prepago${payments.transferEnabled ? ", o transferencia" : ""}.`
+    : "Pagas por transferencia y te confirmamos el pedido apenas llega.";
 
   return (
     <>
+      <StoreJsonLd settings={settings} />
       {/* Portada */}
       <section className="relative overflow-hidden">
         <div
-          className="glow-hero-a absolute top-1/2 right-[-10%] size-[42rem] -translate-y-1/2 animate-glow opacity-50"
+          className="glow-hero-a absolute top-[22rem] right-[-10%] size-[42rem] -translate-y-1/2 animate-glow opacity-50"
           aria-hidden="true"
         />
         <div className="glow-hero-b absolute -top-48 left-[-15%] size-[30rem] animate-glow opacity-60 [animation-delay:-3s]" aria-hidden="true" />
@@ -105,11 +115,6 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
-          <dl className="grid max-w-lg animate-rise grid-cols-3 gap-6 self-start border-t border-white/10 pt-6 [grid-area:stats] [animation-delay:580ms]">
-            <Stat value={catalog.length} label="Productos" />
-            <Stat value={brands.length} label="Marcas" />
-            <Stat value={REGIONS.length} label="Regiones con despacho" />
-          </dl>
 
           {spotlight.length > 0 && (
             <div className="relative animate-rise [grid-area:show] [animation-delay:260ms]">
@@ -144,6 +149,12 @@ export default async function HomePage() {
               </div>
             </div>
           )}
+          {/* Después de la tarjeta en el HTML: en el celular, al cargar por partes, nada se corre hacia abajo. */}
+          <dl className="grid max-w-lg animate-rise grid-cols-3 gap-6 self-start border-t border-white/10 pt-6 [grid-area:stats] [animation-delay:580ms]">
+            <Stat value={catalog.length} label="Productos" />
+            <Stat value={brands.length} label="Marcas" />
+            <Stat value={REGIONS.length} label="Regiones con despacho" />
+          </dl>
         </Container>
       </section>
 
@@ -286,7 +297,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Ofertas"
             title="Precios en boxes"
-            description="Descuentos por tiempo limitado o hasta agotar stock."
+            description="Precios rebajados hasta agotar stock."
             action={{ href: "/productos?oferta=1", label: "Ver todas las ofertas" }}
           />
           <ProductGrid products={onSale} />
@@ -298,7 +309,7 @@ export default async function HomePage() {
         <ul className="grid gap-8 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: Truck, title: "Despacho a todo Chile", text: "Por courier hasta tu puerta, o retiras en la tienda de Antofagasta." },
-            { icon: ShieldCheck, title: "Pagas tranquilo", text: "Webpay con débito, crédito o prepago, o transferencia." },
+            { icon: ShieldCheck, title: "Pagas tranquilo", text: payText },
             { icon: Headset, title: "Te ayudamos a elegir", text: "Cuéntanos tu auto y te decimos qué pieza necesitas." },
             { icon: Wrench, title: "Instalación y programación", text: "Si quieres, lo instalamos y lo dejamos programado nosotros." },
           ].map(({ icon: Icon, title, text }) => (

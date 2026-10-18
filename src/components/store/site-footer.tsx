@@ -12,6 +12,7 @@ import { Container } from "@/components/ui/container";
 import { getCategories } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { whatsappLink } from "@/lib/format";
+import { availablePayments } from "@/lib/payments/webpay";
 
 export async function SiteFooter() {
   const [settings, categories] = await Promise.all([getStoreSettings(), getCategories()]);
@@ -21,6 +22,7 @@ export async function SiteFooter() {
     { href: settings.tiktok, label: "TikTok", Icon: TikTokIcon },
     { href: settings.youtube, label: "YouTube", Icon: YouTubeIcon },
   ].filter((social) => social.href);
+  const payments = availablePayments(settings);
 
   return (
     <footer className="mt-24 border-t border-line bg-zinc-950">
@@ -113,11 +115,17 @@ export async function SiteFooter() {
             © {settings.legalName}
             {settings.legalRut && ` · RUT ${settings.legalRut}`} · Precios en pesos chilenos con IVA incluido.
           </p>
-          <p className="flex items-center gap-2">
-            <span>Pagos seguros con</span>
-            <span className="rounded bg-white px-1.5 py-0.5 font-bold text-zinc-900">Webpay</span>
-            <span className="rounded border border-line px-1.5 py-0.5 font-semibold text-zinc-300">Transferencia</span>
-          </p>
+          {(payments.webpayEnabled || payments.transferEnabled) && (
+            <p className="flex items-center gap-2">
+              <span>Pagos seguros con</span>
+              {payments.webpayEnabled && (
+                <span className="rounded bg-white px-1.5 py-0.5 font-bold text-zinc-900">Webpay</span>
+              )}
+              {payments.transferEnabled && (
+                <span className="rounded border border-line px-1.5 py-0.5 font-semibold text-zinc-300">Transferencia</span>
+              )}
+            </p>
+          )}
         </Container>
       </div>
     </footer>

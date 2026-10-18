@@ -467,7 +467,7 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
             </Link>{" "}
             y la{" "}
             <Link href="/despachos-y-devoluciones" target="_blank" className="text-brand-400 hover:underline">
-              política de despachos
+              política de despachos, cambios y devoluciones
             </Link>
             .
           </span>

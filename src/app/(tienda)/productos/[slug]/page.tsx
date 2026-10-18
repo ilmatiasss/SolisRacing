@@ -32,6 +32,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `/productos/${product.slug}` },
     openGraph: {
+      // openGraph de la página reemplaza al del layout: se repiten nombre del sitio e idioma.
+      siteName: "Solis Racing Parts",
+      locale: "es_CL",
       title: product.name,
       description,
       images: product.images[0] ? [{ url: product.images[0].url, alt: product.images[0].alt ?? product.name }] : undefined,
@@ -201,7 +204,11 @@ async function ProductView({ params }: { params: Props["params"] }) {
             Descripción
           </h2>
           <RichText
-            text={product.description || product.shortDescription || "Sin descripción."}
+            text={
+              product.description ||
+              product.shortDescription ||
+              "Escríbenos por WhatsApp y te contamos los detalles y la compatibilidad de este producto."
+            }
             className="mt-4 text-zinc-300"
           />
         </section>
@@ -287,7 +294,7 @@ function ProductJsonLd({ product }: { product: ProductDetail }) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.shortDescription ?? undefined,
+    description: product.shortDescription ?? product.description ?? undefined,
     sku: product.sku ?? undefined,
     image: product.images.map((image) => (image.url.startsWith("http") ? image.url : `${siteUrl()}${image.url}`)),
     brand: product.brand ? { "@type": "Brand", name: product.brand.name } : undefined,

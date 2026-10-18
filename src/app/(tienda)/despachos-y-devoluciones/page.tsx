@@ -6,6 +6,7 @@ import { formatCLP } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Despachos y devoluciones",
+  description: "Costos y plazos de despacho a todo Chile, retiro en Antofagasta, garantía legal de 6 meses y derecho a retracto.",
   alternates: { canonical: "/despachos-y-devoluciones" },
 };
 
@@ -52,18 +53,25 @@ export default async function ShippingPolicyPage() {
       <section>
         <h2>Garantía legal</h2>
         <p>
-          Si un producto presenta fallas de fabricación, tienes derecho a elegir entre su reparación, cambio o la
-          devolución del dinero dentro de los plazos de la garantía legal que establece la Ley N° 19.496. Las piezas
-          deben haber sido instaladas correctamente; los daños por instalación inadecuada, uso en competición o
-          modificaciones no están cubiertos por la garantía del fabricante.
+          Si un producto nuevo presenta fallas o defectos de fabricación, o no corresponde a lo que compraste, dentro de
+          los <strong>6 meses</strong> siguientes a que lo recibes puedes elegir libremente entre su reparación gratuita,
+          su cambio o la devolución de lo pagado (garantía legal de la Ley N° 19.496). Solo necesitas tu boleta, factura
+          o número de pedido.
+        </p>
+        <p>
+          La garantía cubre fallas del producto, no daños causados por una instalación incorrecta o por un uso distinto
+          al indicado por el fabricante. Algunos productos tienen además garantía del fabricante, con sus propias
+          condiciones, que se suma a la garantía legal y no la reemplaza.
         </p>
       </section>
       <section>
         <h2>Derecho a retracto</h2>
         <p>
-          En compras a distancia puedes ejercer tu derecho a retracto dentro de los 10 días siguientes a la recepción del
-          producto, siempre que no haya sido usado ni instalado y se devuelva en su embalaje original. Los costos de
-          envío de la devolución pueden ser de cargo del cliente.
+          En compras hechas en este sitio puedes retractarte dentro de los <strong>10 días</strong> siguientes a la
+          recepción del producto, sin necesidad de dar un motivo. El producto debe estar sin uso ni instalar, en su
+          embalaje original y con sus accesorios. Te devolvemos lo pagado sin descuentos ni retención de gastos, a la
+          brevedad y a más tardar dentro de 45 días desde que nos avisas. Coordinamos contigo la devolución, que también
+          puedes hacer directamente en la tienda.
         </p>
       </section>
       <section>

@@ -3,7 +3,7 @@
 import { count, eq } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { z } from "zod";
-import { checkPassword, hashPassword, requireAdmin } from "@/lib/auth";
+import { checkPassword, createSession, hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { adminUsers } from "@/lib/db/schema";
 
@@ -55,5 +55,7 @@ export async function changeOwnPassword(_prev: UserActionState, formData: FormDa
     .update(adminUsers)
     .set({ passwordHash: await hashPassword(parsed.data.password) })
     .where(eq(adminUsers.id, admin.id));
-  return { ok: true, message: "Contraseña actualizada." };
+  // La sesión de este equipo se renueva; las de otros equipos quedan cerradas.
+  await createSession(admin);
+  return { ok: true, message: "Contraseña actualizada. Cerramos tu sesión en los demás equipos." };
 }

@@ -3,7 +3,7 @@ import { getRegion } from "./chile";
 import type { DeliveryMethod, InquiryKind, OrderStatus, PaymentMethod } from "./db/schema";
 import { formatCLP, formatOrderNumber } from "./format";
 import { inquiryTitle, orderStatusLabel } from "./order-status";
-import type { StoreSettings } from "./settings";
+import { hasTransferAccount, type StoreSettings } from "./settings";
 import { DELIVERY_METHOD_LABELS } from "./shipping";
 import { siteUrl } from "./site";
 
@@ -116,13 +116,16 @@ function deliveryText(order: EmailOrder, settings: StoreSettings) {
 
 function transferBlock(settings: StoreSettings, order: EmailOrder) {
   const p = settings.payments;
-  return `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:16px;margin:16px 0;font-size:14px;line-height:1.7">
-    <strong>Datos para la transferencia</strong><br>
-    Banco: ${e(p.transferBank)}<br>
+  const account = hasTransferAccount(p)
+    ? `Banco: ${e(p.transferBank)}<br>
     Tipo de cuenta: ${e(p.transferAccountType)}<br>
     N° de cuenta: ${e(p.transferAccountNumber)}<br>
     Titular: ${e(p.transferHolder)}${p.transferRut ? `<br>RUT: ${e(p.transferRut)}` : ""}<br>
-    ${p.transferEmail ? `Correo: ${e(p.transferEmail)}<br>` : ""}
+    ${p.transferEmail ? `Correo: ${e(p.transferEmail)}<br>` : ""}`
+    : "Te enviaremos los datos de la cuenta por WhatsApp o correo a la brevedad.<br>";
+  return `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:16px;margin:16px 0;font-size:14px;line-height:1.7">
+    <strong>Datos para la transferencia</strong><br>
+    ${account}
     Monto: <strong>${formatCLP(order.total)}</strong><br>
     Asunto o comentario: <strong>${formatOrderNumber(order.id)}</strong>
     ${p.transferInstructions ? `<br><br>${e(p.transferInstructions)}` : ""}

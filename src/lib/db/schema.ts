@@ -360,6 +360,16 @@ export const settings = pgTable("settings", {
     .$onUpdate(() => new Date()),
 });
 
+/**
+ * Límite de intentos por origen (login del panel, compras y formularios públicos). La clave es
+ * un hash de la acción y la IP: no se guarda la IP en claro.
+ */
+export const rateLimits = pgTable("rate_limits", {
+  key: text().primaryKey(),
+  count: integer().notNull(),
+  resetAt: timestamp({ withTimezone: true }).notNull(),
+});
+
 export const adminUsers = pgTable("admin_users", {
   id: serial().primaryKey(),
   /** Siempre en minúsculas. */

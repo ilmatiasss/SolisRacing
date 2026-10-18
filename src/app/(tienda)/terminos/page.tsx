@@ -2,15 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/store/legal-page";
 import { getStoreSettings } from "@/lib/data/settings";
+import { availablePayments } from "@/lib/payments/webpay";
 
 export const metadata: Metadata = {
   title: "Términos y condiciones",
+  description: "Condiciones de compra en Solis Racing Parts: precios, medios de pago, despacho, garantía y retracto.",
   alternates: { canonical: "/terminos" },
 };
+
+/** Horas que se reserva el stock de un pedido por transferencia mientras llega el pago. */
+const TRANSFER_HOLD_HOURS = 48;
 
 // Texto base: revísalo con un asesor legal y complétalo con los datos de tu empresa.
 export default async function TermsPage() {
   const s = await getStoreSettings();
+  const payments = availablePayments(s);
+  const methods = [
+    payments.webpayEnabled && "tarjetas de débito, crédito y prepago a través de Webpay (Transbank)",
+    payments.transferEnabled && "transferencia bancaria",
+  ].filter(Boolean);
   return (
     <LegalPage
       title="Términos y condiciones"
@@ -32,10 +42,17 @@ export default async function TermsPage() {
       </section>
       <section>
         <h2>3. Medios de pago</h2>
+        {methods.length > 0 && <p>Aceptamos pagos con {methods.join(" y ")}.</p>}
+        {payments.transferEnabled && (
+          <p>
+            Los pedidos pagados por transferencia se confirman una vez acreditado el pago. Reservamos el stock por{" "}
+            {TRANSFER_HOLD_HOURS} horas desde que haces el pedido; si en ese plazo no recibimos la transferencia, podemos
+            anular el pedido y liberar el stock, avisándote antes.
+          </p>
+        )}
         <p>
-          Aceptamos pagos con tarjetas de débito, crédito y prepago a través de Webpay (Transbank) y transferencia
-          bancaria. Los pedidos pagados por transferencia se confirman una vez acreditado el pago; reservamos el stock
-          por el plazo indicado en las instrucciones de pago.
+          Cuando confirmamos el pago te enviamos un correo con el detalle de tu compra: productos, precios, despacho y
+          total pagado.
         </p>
       </section>
       <section>

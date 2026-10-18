@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { ComingSoonOverlay } from "@/components/store/coming-soon";
 import { SiteFooter, WhatsAppFloatingButton } from "@/components/store/site-footer";
 import { SiteHeader } from "@/components/store/site-header";
 import { PREVIEW_SCRIPT, SETTLE_SCRIPT } from "@/lib/coming-soon";
 import { getStoreSettings } from "@/lib/data/settings";
+
+/** Con el aviso «Próximamente» activo, que Google no indexe la tienda provisoria que queda de fondo. */
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getStoreSettings();
+  return settings.comingSoon.enabled ? { robots: { index: false, follow: true } } : {};
+}
 
 export default async function StoreLayout({ children }: LayoutProps<"/">) {
   const settings = await getStoreSettings();

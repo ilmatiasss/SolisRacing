@@ -15,6 +15,7 @@ import { sendEmail } from "@/lib/email";
 import { inquiryAdminEmail } from "@/lib/email-templates";
 import { PRIVACY_RIGHTS, privacyRightLabel, type PrivacyRight } from "@/lib/privacy";
 import { formatRut, isValidRut } from "@/lib/rut";
+import { RATE_LIMIT_MESSAGE, rateLimit } from "@/lib/rate-limit";
 
 export type InquiryFormState = {
   ok?: boolean;
@@ -65,6 +66,7 @@ export async function submitInquiry(_prev: InquiryFormState, formData: FormData)
   if (!parsed.success) {
     return { error: "Revisa los campos marcados.", fieldErrors: z.flattenError(parsed.error).fieldErrors };
   }
+  if (!(await rateLimit("inquiry"))) return { error: RATE_LIMIT_MESSAGE };
   const data = parsed.data;
   if (data.kind === "contact" && !data.message) {
     return { error: "Revisa los campos marcados.", fieldErrors: { message: ["Escribe tu mensaje"] } };
@@ -169,6 +171,7 @@ export async function submitHarnessQuote(_prev: InquiryFormState, formData: Form
   if (!parsed.success) {
     return { error: "Revisa los campos marcados.", fieldErrors: z.flattenError(parsed.error).fieldErrors };
   }
+  if (!(await rateLimit("inquiry"))) return { error: RATE_LIMIT_MESSAGE };
   const data = parsed.data;
   const settings = await readStoreSettings();
   const pricing = harnessPricing(settings);
@@ -250,6 +253,7 @@ export async function submitPrivacyRequest(_prev: InquiryFormState, formData: Fo
   if (!parsed.success) {
     return { error: "Revisa los campos marcados.", fieldErrors: z.flattenError(parsed.error).fieldErrors };
   }
+  if (!(await rateLimit("inquiry"))) return { error: RATE_LIMIT_MESSAGE };
   const data = parsed.data;
   const [inquiry] = await db
     .insert(inquiries)

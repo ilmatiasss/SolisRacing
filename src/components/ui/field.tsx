@@ -1,3 +1,4 @@
+import { cloneElement, isValidElement } from "react";
 import type {
   InputHTMLAttributes,
   ReactNode,
@@ -91,7 +92,10 @@ export function Field({
       <Label htmlFor={htmlFor} optional={optional}>
         {label}
       </Label>
-      {children}
+      {/* Con error, el control lo anuncia a los lectores de pantalla (aria-describedby). */}
+      {error && isValidElement<{ "aria-describedby"?: string }>(children)
+        ? cloneElement(children, { "aria-describedby": `${htmlFor}-error` })
+        : children}
       {hint && !error && <FieldHint>{hint}</FieldHint>}
       <FieldError id={`${htmlFor}-error`} message={error} />
     </div>

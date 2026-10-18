@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createSession, destroySession, verifyCredentials } from "@/lib/auth";
+import { RATE_LIMIT_MESSAGE, rateLimit } from "@/lib/rate-limit";
 
 export type LoginState = { error?: string };
 
@@ -15,6 +16,9 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
   if (!email || !password) return { error: "Ingresa tu correo y contraseña." };
+  // Frena la fuerza bruta: intentos por IP y por correo.
+  const [byIp, byEmail] = await Promise.all([rateLimit("login"), rateLimit("loginEmail", email.trim())]);
+  if (!byIp || !byEmail) return { error: RATE_LIMIT_MESSAGE };
   const user = await verifyCredentials(email, password);
   if (!user) {
     // Pequeña pausa para frenar intentos automatizados.

@@ -1,5 +1,6 @@
 import { getStoreSettings } from "@/lib/data/settings";
 import { maskQuery, pickHeaders, recordIntegrationRequest } from "@/lib/data/integration";
+import { rateLimit } from "@/lib/rate-limit";
 import { siteUrl } from "@/lib/site";
 
 /*
@@ -10,13 +11,15 @@ import { siteUrl } from "@/lib/site";
  */
 
 async function handle(request: Request, { params }: RouteContext<"/api/jumpseller/[...path]">) {
+  // Es público: se limita para que nadie llene el registro ni gaste la base de datos.
+  if (!(await rateLimit("integration"))) return Response.json({ error: "Too many requests" }, { status: 429 });
   const { path } = await params;
   const url = new URL(request.url);
   let body = "";
   if (request.method !== "GET" && request.method !== "HEAD") {
     body = await request.text().catch(() => "");
     // Si el cuerpo trae credenciales en JSON, se enmascaran.
-    body = body.replace(/("?(?:authtoken|token|password)"?\s*[:=]\s*"?)([^"&,}\s]+)/gi, "$1***");
+    body = body.replace(/("?(?:\w*token|password|secret|api_?key)"?\s*[:=]\s*"?)([^"&,}\s]+)/gi, "$1***");
   }
   await recordIntegrationRequest({
     method: request.method,

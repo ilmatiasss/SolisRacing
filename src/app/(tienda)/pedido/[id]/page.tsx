@@ -11,6 +11,7 @@ import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { getRegion } from "@/lib/chile";
 import { getStoreSettings } from "@/lib/data/settings";
+import { hasTransferAccount } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber, whatsappLink } from "@/lib/format";
 import {
   ORDER_STATUS_TONES,
@@ -131,13 +132,23 @@ async function OrderView({ params, searchParams }: Props) {
             <h2 className="flex items-center gap-2 font-display text-2xl font-bold uppercase">
               <Landmark className="size-6 text-signal-400" /> Datos para transferir
             </h2>
+            {!hasTransferAccount(settings.payments) && (
+              <p className="mt-3 text-sm text-zinc-300">
+                Te enviaremos los datos de la cuenta por WhatsApp o correo a la brevedad. Si prefieres, pídelos ahora con
+                el botón de WhatsApp.
+              </p>
+            )}
             <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
-              <DataRow label="Banco" value={settings.payments.transferBank} />
-              <DataRow label="Tipo de cuenta" value={settings.payments.transferAccountType} />
-              <DataRow label="N° de cuenta" value={settings.payments.transferAccountNumber} />
-              <DataRow label="Titular" value={settings.payments.transferHolder} />
-              {settings.payments.transferRut && <DataRow label="RUT" value={settings.payments.transferRut} />}
-              {settings.payments.transferEmail && <DataRow label="Correo" value={settings.payments.transferEmail} />}
+              {hasTransferAccount(settings.payments) && (
+                <>
+                  <DataRow label="Banco" value={settings.payments.transferBank} />
+                  <DataRow label="Tipo de cuenta" value={settings.payments.transferAccountType} />
+                  <DataRow label="N° de cuenta" value={settings.payments.transferAccountNumber} />
+                  <DataRow label="Titular" value={settings.payments.transferHolder} />
+                  {settings.payments.transferRut && <DataRow label="RUT" value={settings.payments.transferRut} />}
+                  {settings.payments.transferEmail && <DataRow label="Correo" value={settings.payments.transferEmail} />}
+                </>
+              )}
               <DataRow label="Monto a transferir" value={formatCLP(order.total)} strong />
               <DataRow label="Comentario" value={number} strong />
             </dl>

@@ -72,7 +72,7 @@ La tienda parte en el **ambiente de integración** de Transbank: puedes hacer co
 - VISA `4051 8856 0044 6623`, CVV `123`, cualquier fecha futura → **aprobada**
 - Cuando pida autenticación: RUT `11.111.111-1`, clave `123`
 
-Mientras Webpay no esté en producción, la tienda y el panel muestran un aviso, y los pedidos pagados en pruebas se marcan como **PRUEBA** en el panel (no los despaches).
+En el sitio publicado (Vercel, ambiente *Production*) **Webpay no se le muestra a los clientes** hasta configurar `WEBPAY_ENVIRONMENT=production` con su código de comercio y API Key: así nadie puede "pagar" con las tarjetas de prueba. Mientras tanto se vende solo por transferencia, y el panel lo avisa. Las pruebas de integración se hacen en local o en los deploys de vista previa (*Preview*), donde los pedidos pagados en pruebas se marcan como **PRUEBA** en el panel (no los despaches).
 
 **Para cobrar de verdad:**
 
@@ -83,6 +83,11 @@ Mientras Webpay no esté en producción, la tienda y el panel muestran un aviso,
    - `WEBPAY_COMMERCE_CODE=<tu código de comercio>`
    - `WEBPAY_API_KEY=<tu API Key secreta>`
 4. Vuelve a desplegar y haz una compra real de bajo monto para confirmar.
+
+## Seguridad
+
+- El login del panel, el checkout, el seguimiento de pedidos y los formularios públicos tienen un límite de intentos por IP (y el login también por correo), guardado en la tabla `rate_limits`. Los límites están en `src/lib/rate-limit.ts`; las pruebas e2e lo apagan con `RATE_LIMIT=off`.
+- Al cambiar la contraseña en *Panel → Usuarios* se cierran las sesiones abiertas en otros equipos.
 
 ## Correos
 

@@ -20,7 +20,8 @@ import {
   webpaySessionId,
   type StockIssue,
 } from "@/lib/orders";
-import { createWebpayTransaction } from "@/lib/payments/webpay";
+import { availablePayments, createWebpayTransaction } from "@/lib/payments/webpay";
+import { RATE_LIMIT_MESSAGE, rateLimit } from "@/lib/rate-limit";
 import { formatRut, isValidRut } from "@/lib/rut";
 import { quoteShipping } from "@/lib/shipping";
 
@@ -124,13 +125,15 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   }
   const data = parsed.data;
   const settings = await readStoreSettings();
+  const payments = availablePayments(settings);
 
-  if (data.paymentMethod === "webpay" && !settings.payments.webpayEnabled) {
+  if (data.paymentMethod === "webpay" && !payments.webpayEnabled) {
     return { error: "El pago con Webpay no está disponible en este momento." };
   }
-  if (data.paymentMethod === "transfer" && !settings.payments.transferEnabled) {
+  if (data.paymentMethod === "transfer" && !payments.transferEnabled) {
     return { error: "El pago por transferencia no está disponible en este momento." };
   }
+  if (!(await rateLimit("checkout"))) return { error: RATE_LIMIT_MESSAGE };
 
   // Limpieza oportunista: libera el stock de pagos con Webpay abandonados.
   await expireAbandonedWebpayOrders().catch((error) => console.error("No se pudieron expirar pedidos:", error));

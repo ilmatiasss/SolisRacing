@@ -86,7 +86,7 @@ export function CartView({ freeShippingThreshold }: { freeShippingThreshold: num
           Continuar al pago
           <ArrowRight className="size-5" />
         </Link>
-        <p className="text-center text-xs text-muted">Pago seguro con Webpay o transferencia bancaria.</p>
+        <p className="text-center text-xs text-muted">Pago seguro: eliges cómo pagar en el siguiente paso.</p>
       </aside>
     </div>
   );
