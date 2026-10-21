@@ -57,6 +57,13 @@
       "when": 1792298896000,
       "tag": "0007_limite_intentos",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792626321186,
+      "tag": "0008_corregir_nombre_aceite_caja",
+      "breakpoints": true
     }
   ]
 }

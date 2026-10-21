@@ -382,7 +382,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
     specs: [{ label: "Viscosidad", value: "50WT" }],
   },
   {
-    name: "Aceite de caja ShockProof Red Line",
+    name: "Aceite de caja Lightweight ShockProof Red Line",
     image: "/catalogo/aceite-gear-clanes-red-line.webp",
     sku: "SR-RL-007",
     brand: "Red Line",
@@ -390,7 +390,7 @@ const INITIAL_PRODUCTS: InitialProduct[] = [
     price: 28100,
     stock: PROVISIONAL_STOCK,
     universal: true,
-    shortDescription: "Aceite Red Line ShockProof para caja de cambios.",
+    shortDescription: "Aceite Red Line Lightweight ShockProof para caja de cambios y diferencial.",
     description: "Aceite Red Line para caja de cambios.",
     specs: [],
   },

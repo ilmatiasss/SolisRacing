@@ -20,6 +20,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/nosotros" },
 };
 
+/** Fotos de la tienda física en Antofagasta (public/tienda). */
+const STORE_PHOTOS = [
+  { src: "/tienda/vitrina.webp", alt: "Vitrina de Solis Racing Parts con colectores de escape" },
+  { src: "/tienda/ft550.webp", alt: "FuelTech FT550 en exhibición en la tienda" },
+  { src: "/tienda/redline.webp", alt: "Aceites Red Line en la tienda" },
+  { src: "/tienda/fueltech.webp", alt: "Computadoras FuelTech en vitrina" },
+];
+
 export default async function AboutPage() {
   const settings = await getStoreSettings();
   const { about } = settings;
@@ -62,6 +70,31 @@ export default async function AboutPage() {
             </li>
           ))}
         </ul>
+
+        <section className="mt-16" aria-labelledby="tienda-titulo">
+          <SectionHeading
+            eyebrow="La tienda"
+            title={<span id="tienda-titulo">Ven a conocernos</span>}
+            description={
+              location
+                ? `Estamos en ${location}: ven a ver las piezas, resolver tus dudas o retirar tu pedido.`
+                : "Ven a ver las piezas, resolver tus dudas o retirar tu pedido."
+            }
+          />
+          <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {STORE_PHOTOS.map((photo) => (
+              <li key={photo.src} className="relative aspect-square overflow-hidden rounded-lg border border-line bg-surface-2">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                  className="object-cover transition-transform duration-500 hover:scale-105"
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
 
         {about.projects.length > 0 && (
           <section className="mt-16" aria-labelledby="proyectos-titulo">
