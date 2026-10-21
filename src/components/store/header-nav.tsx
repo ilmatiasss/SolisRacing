@@ -10,6 +10,11 @@ export const MAIN_NAV = [
   { href: "/contacto", label: "Contacto" },
 ] as const;
 
+/** «Ofertas» solo aparece si hay productos rebajados (si no, llevaría a una página vacía). */
+export function mainNav(hasOffers: boolean) {
+  return MAIN_NAV.filter((item) => hasOffers || item.label !== "Ofertas");
+}
+
 function isActive(href: string, activePath: string | undefined) {
   if (!activePath) return false;
   const path = href.split("?")[0];
@@ -20,10 +25,10 @@ function isActive(href: string, activePath: string | undefined) {
  * Links del menú principal. Se usa tal cual como fallback del prerender y, una vez
  * conocida la ruta, con `activePath` para marcar la sección actual.
  */
-export function HeaderNavLinks({ activePath }: { activePath?: string }) {
+export function HeaderNavLinks({ activePath, hasOffers = false }: { activePath?: string; hasOffers?: boolean }) {
   return (
     <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
-      {MAIN_NAV.map((item) => {
+      {mainNav(hasOffers).map((item) => {
         const active = !("match" in item) && isActive(item.href, activePath);
         return (
           <Link

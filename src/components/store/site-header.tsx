@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { DynamicIcon } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui/container";
-import { getCategories } from "@/lib/data/catalog";
+import { getCategories, getOnSaleProducts } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { CartButton, CartDrawer } from "./cart/cart-drawer";
 import { HeaderNavLinks } from "./header-nav";
@@ -14,7 +14,8 @@ import { ActiveHeaderNav } from "./header-nav-active";
 import { MobileMenu } from "./mobile-menu";
 
 export async function SiteHeader() {
-  const [categories, settings] = await Promise.all([getCategories(), getStoreSettings()]);
+  const [categories, settings, onSale] = await Promise.all([getCategories(), getStoreSettings(), getOnSaleProducts(1)]);
+  const hasOffers = onSale.length > 0;
   const menuCategories = categories.map(({ name, slug, icon }) => ({ name, slug, icon }));
 
   return (
@@ -35,12 +36,12 @@ export async function SiteHeader() {
       )}
       <header className="sticky top-0 z-40 border-b border-white/8 bg-zinc-950/97 md:bg-zinc-950/85 md:backdrop-blur-md">
         <Container className="flex h-16 items-center gap-2 lg:gap-6">
-          <MobileMenu categories={menuCategories} />
+          <MobileMenu categories={menuCategories} hasOffers={hasOffers} />
           <Link href="/" aria-label="Solis Racing Parts, ir al inicio" className="shrink-0">
             <Logo eager glow turbo />
           </Link>
-          <Suspense fallback={<HeaderNavLinks />}>
-            <ActiveHeaderNav />
+          <Suspense fallback={<HeaderNavLinks hasOffers={hasOffers} />}>
+            <ActiveHeaderNav hasOffers={hasOffers} />
           </Suspense>
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
             <Form action="/productos" className="relative hidden md:block">

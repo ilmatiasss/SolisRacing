@@ -7,7 +7,6 @@ import { REGIONS } from "@/lib/chile";
 import { readStoreSettings, saveStoreSettings, SETTINGS_TAG } from "@/lib/data/settings";
 import { parseCLP } from "@/lib/format";
 import { invalidPricedLines, parseAmount, parsePricedOptions } from "@/lib/harness";
-import { invalidInstagramLines } from "@/lib/instagram";
 import { isValidRut, formatRut } from "@/lib/rut";
 import type { StoreSettings } from "@/lib/settings";
 
@@ -85,10 +84,6 @@ export async function saveSettings(_prev: SettingsState, formData: FormData): Pr
   }
   if (settings.comingSoon.enabled && !settings.comingSoon.title) {
     return { error: "Escribe el mensaje del aviso «Próximamente» o desactívalo." };
-  }
-  const badPost = invalidInstagramLines(settings.instagramPosts)[0];
-  if (badPost) {
-    return { error: `Videos de Instagram: «${badPost.slice(0, 60)}» no es un link de publicación de Instagram.` };
   }
   for (const field of ["legalRut", "payments.transferRut"] as const) {
     const value = field === "legalRut" ? settings.legalRut : settings.payments.transferRut;

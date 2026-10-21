@@ -92,22 +92,14 @@ export default async function SettingsPage() {
           </p>
         </Card>
 
-        <Card title="Videos de Instagram (Quiénes somos)">
-          <Field
-            label="Publicaciones"
-            htmlFor="instagramPosts"
-            optional
-            hint="Uno por línea: link de la publicación o reel | título | etiqueta. Ej: https://www.instagram.com/reel/ABC123/ | Programación FuelTech FT550 | Honda Civic 1998. Se muestran en la portada y en /nosotros."
-          >
-            <Textarea
-              id="instagramPosts"
-              name="instagramPosts"
-              rows={6}
-              defaultValue={s.instagramPosts}
-              placeholder="https://www.instagram.com/reel/… | Título | Etiqueta"
-              className="font-mono text-xs"
-            />
-          </Field>
+        <Card title="Quiénes somos">
+          <p className="text-sm text-muted">
+            Tu foto, tu historia, los proyectos y los videos de Instagram ahora se editan en{" "}
+            <Link href="/admin/nosotros" className="font-semibold text-brand-500 hover:underline">
+              Quiénes somos
+            </Link>
+            .
+          </p>
         </Card>
 
         <Card title="Aviso «Próximamente»">

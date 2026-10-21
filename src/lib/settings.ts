@@ -1,3 +1,4 @@
+import { DEFAULT_ABOUT, normalizeProjects, type AboutSettings } from "./about";
 import { DEFAULT_BOOKING, normalizeBookingConfig, parseServiceLocations, weeklyLocation, type BookingConfig } from "./booking";
 import type { RegionCode } from "./chile";
 import type { HarnessSettings } from "./harness";
@@ -54,6 +55,8 @@ export type StoreSettings = HarnessSettings & {
   booking: BookingConfig;
   /** Videos de Instagram de «Quiénes somos»: uno por línea, `link | título | etiqueta` (ver lib/instagram). */
   instagramPosts: string;
+  /** La persona detrás de la tienda, su historia y proyectos (Panel → Quiénes somos; ver lib/about). */
+  about: AboutSettings;
   legalName: string;
   legalRut: string;
   comingSoon: ComingSoonSettings;
@@ -146,6 +149,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     "https://www.instagram.com/reel/DbJhGT2OKmF/",
     "https://www.instagram.com/reel/DcckYUPRPH0/",
   ].join("\n"),
+  about: DEFAULT_ABOUT,
   legalName: "Solis Racing Parts",
   legalRut: "",
   comingSoon: {
@@ -218,6 +222,7 @@ export function mergeSettings(stored: unknown): StoreSettings {
     if (legacy.length > 0) settings.booking = { ...settings.booking, locations: legacy.map(({ name, detail }) => weeklyLocation(name, detail)) };
   }
   settings.booking = normalizeBookingConfig(settings.booking);
+  settings.about = { ...settings.about, projects: normalizeProjects(settings.about.projects) };
   return settings;
 }
 

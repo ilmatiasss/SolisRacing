@@ -143,6 +143,7 @@ e2e/, tests/unit/    Pruebas
 - El logo está recortado de la foto de perfil de Instagram: cuando tengas el archivo original en buena resolución, reemplaza `src/assets/logo-solis-racing-parts.png`, `src/app/icon.png`, `src/app/apple-icon.png` y la imagen para compartir `src/app/opengraph-image.jpg`.
 - Revisa el catálogo inicial: ajusta el stock real (viene en 5 unidades por producto), ponle precio y publica los borradores sin precio (Fitting ORB y abrazaderas dobles), reemplaza las fotos recortadas de las capturas de WhatsApp por las originales (`public/catalogo/`; ideal: cuadradas y con el mismo fondo oscuro) y revisa los textos de los servicios.
 - Completa la configuración de la tienda: correo (viene vacío y ahí llegan los avisos de pedidos), confirma dirección y horario (vienen de Instagram: Ausonia 244, Antofagasta), razón social, RUT, datos bancarios y tarifas de despacho. El resumen del panel te recuerda lo que falta.
+- Completa **Panel → Quiénes somos**: foto, historia, logros (solo datos reales) y proyectos con foto. La sección de la persona aparece en la tienda (y un adelanto en la portada) apenas tenga historia o foto.
 - Revisa con un asesor los textos de **términos, privacidad y despachos y devoluciones** (son una base general y deben ajustarse a tu empresa).
 - Activa Webpay en producción y configura el correo SMTP.
 

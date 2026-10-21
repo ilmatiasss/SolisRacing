@@ -9,13 +9,13 @@ import {
 } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui/container";
-import { getCategories } from "@/lib/data/catalog";
+import { getCategories, getOnSaleProducts } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
 import { whatsappLink } from "@/lib/format";
 import { availablePayments } from "@/lib/payments/webpay";
 
 export async function SiteFooter() {
-  const [settings, categories] = await Promise.all([getStoreSettings(), getCategories()]);
+  const [settings, categories, onSale] = await Promise.all([getStoreSettings(), getCategories(), getOnSaleProducts(1)]);
   const socials = [
     { href: settings.instagram, label: "Instagram", Icon: InstagramIcon },
     { href: settings.facebook, label: "Facebook", Icon: FacebookIcon },
@@ -51,7 +51,7 @@ export async function SiteFooter() {
 
         <FooterColumn title="Tienda" className="lg:col-span-2">
           <FooterLink href="/productos">Catálogo completo</FooterLink>
-          <FooterLink href="/productos?oferta=1">Ofertas</FooterLink>
+          {onSale.length > 0 && <FooterLink href="/productos?oferta=1">Ofertas</FooterLink>}
           <FooterLink href="/pedido-especial">Pedido especial de repuestos</FooterLink>
           {categories.slice(0, 5).map((category) => (
             <FooterLink key={category.slug} href={`/productos?categoria=${category.slug}`}>
@@ -76,11 +76,19 @@ export async function SiteFooter() {
           <ul className="space-y-3 text-sm text-zinc-400">
             <li className="flex gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-500" />
-              <span>
+              <a
+                href={
+                  settings.mapsUrl ||
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${settings.address}, ${settings.city}`)}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white"
+              >
                 {settings.address}
                 <br />
                 {settings.city}
-              </span>
+              </a>
             </li>
             <li className="flex gap-3">
               <WhatsAppIcon className="mt-0.5 size-4 shrink-0 text-brand-500" />

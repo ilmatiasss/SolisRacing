@@ -1,7 +1,7 @@
 import { ArrowRight, Cable, Gauge, Headset, ShieldCheck, Star, Truck, Wrench } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import type { CSSProperties } from "react";
 import { DynamicIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
 import { CatalogTabs } from "@/components/store/catalog-tabs";
 import { Marquee } from "@/components/store/marquee";
@@ -15,7 +15,7 @@ import { StoreJsonLd } from "@/components/store/store-json-ld";
 import { Tachometer } from "@/components/store/tachometer";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { REGIONS } from "@/lib/chile";
+import { hasOwnerSection, isImageUrl, parseHighlights, storyParagraphs } from "@/lib/about";
 import {
   getActiveServices,
   getBrands,
@@ -34,7 +34,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 export default async function HomePage() {
   const [categories, featured, onSale, catalog, services, brands, settings] = await Promise.all([
     getCategories(),
-    getFeaturedProducts(8),
+    getFeaturedProducts(12),
     getOnSaleProducts(4),
     getCatalogPreview(),
     getActiveServices(),
@@ -42,6 +42,20 @@ export default async function HomePage() {
     getStoreSettings(),
   ]);
   const spotlight = (featured.length > 0 ? featured : catalog).slice(0, 8);
+  // Pestaña «Destacados»: 12 (filas completas con 2, 3, 4 o 6 columnas), completando con el catálogo.
+  const highlighted = [...featured, ...catalog.filter((product) => !featured.some((f) => f.id === product.id))].slice(0, 12);
+  const about = settings.about;
+  const showOwner = hasOwnerSection(about);
+  // Datos bajo el título: los logros reales del panel si hay 3 o más; si no, lo que distingue a la tienda.
+  const highlights = parseHighlights(about.highlights);
+  const heroFacts =
+    highlights.length >= 3
+      ? highlights.slice(0, 3)
+      : [
+          { value: "Antofagasta", label: "Tienda física" },
+          { value: "Todo Chile", label: "Despachos" },
+          { value: "FuelTech", label: "Programación" },
+        ];
   const shelves = categories
     .map((category) => ({ category, products: catalog.filter((product) => product.categorySlug === category.slug) }))
     .filter((shelf) => shelf.products.length > 0);
@@ -150,10 +164,14 @@ export default async function HomePage() {
             </div>
           )}
           {/* Después de la tarjeta en el HTML: en el celular, al cargar por partes, nada se corre hacia abajo. */}
-          <dl className="grid max-w-lg animate-rise grid-cols-3 gap-6 self-start border-t border-white/10 pt-6 [grid-area:stats] [animation-delay:580ms]">
-            <Stat value={catalog.length} label="Productos" />
-            <Stat value={brands.length} label="Marcas" />
-            <Stat value={REGIONS.length} label="Regiones con despacho" />
+          <dl className="grid max-w-lg animate-rise grid-cols-3 gap-3 self-start border-t border-white/10 pt-6 [grid-area:stats] [animation-delay:580ms] sm:gap-6">
+            {heroFacts.map((fact) => (
+              <div key={fact.label} className="grid min-w-0 content-start">
+                {/* El valor arriba (alineado entre columnas) aunque en el HTML vaya después del nombre. */}
+                <dt className="order-last mt-1 text-[11px] leading-snug tracking-wide text-muted uppercase sm:text-xs">{fact.label}</dt>
+                <dd className="truncate font-display text-xl font-bold sm:text-3xl">{fact.value}</dd>
+              </div>
+            ))}
           </dl>
         </Container>
       </section>
@@ -200,7 +218,7 @@ export default async function HomePage() {
                       Destacados
                     </>
                   ),
-                  productIds: spotlight.map((product) => product.id),
+                  productIds: highlighted.map((product) => product.id),
                   href: "/productos",
                   linkLabel: "Ver todo el catálogo",
                 },
@@ -210,12 +228,11 @@ export default async function HomePage() {
                     <>
                       <DynamicIcon name={category.icon} className="size-4" />
                       {category.name}
-                      <span className="text-xs opacity-60">{products.length}</span>
                     </>
                   ),
-                  productIds: products.slice(0, 8).map((product) => product.id),
+                  productIds: products.slice(0, 12).map((product) => product.id),
                   href: `/productos?categoria=${category.slug}`,
-                  linkLabel: products.length > 8 ? `Ver los ${products.length} de ${category.name}` : `Ver ${category.name}`,
+                  linkLabel: products.length > 12 ? `Ver los ${products.length} de ${category.name}` : `Ver ${category.name}`,
                 })),
               ]}
             />
@@ -260,7 +277,7 @@ export default async function HomePage() {
             />
             <Link
               href="/cotizador-ramal"
-              className="group mb-8 flex items-center justify-between gap-4 rounded-lg border border-dashed border-zinc-600 px-5 py-4 transition-colors hover:border-brand-500"
+              className="group mb-10 flex items-center justify-between gap-4 rounded-lg border border-line-strong bg-bg/40 px-5 py-4 transition-colors hover:border-brand-500"
             >
               <span>
                 <span className="block font-semibold">¿Necesitas un ramal a medida para tu FuelTech?</span>
@@ -305,7 +322,7 @@ export default async function HomePage() {
       )}
 
       {/* Beneficios */}
-      <Container className={onSale.length > 0 ? "cv-auto reveal pb-4" : "cv-auto reveal py-16 sm:py-20"}>
+      <Container className={onSale.length > 0 ? "cv-auto reveal" : "cv-auto reveal pt-16 sm:pt-20"}>
         <ul className="grid gap-8 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: Truck, title: "Despacho a todo Chile", text: "Por courier hasta tu puerta, o retiras en la tienda de Antofagasta." },
@@ -323,6 +340,34 @@ export default async function HomePage() {
           ))}
         </ul>
       </Container>
+
+      {/* Detrás de la tienda (solo cuando el panel tiene la historia o la foto) */}
+      {showOwner && (
+        <Container className="cv-auto reveal pt-16">
+          <Link
+            href="/nosotros"
+            className="group grid items-center gap-6 rounded-lg border border-line bg-surface p-6 transition-colors hover:border-line-strong sm:grid-cols-[auto_1fr_auto] sm:p-8"
+          >
+            {isImageUrl(about.photo) && (
+              <span className="relative block size-24 overflow-hidden rounded-full border-2 border-brand-600 sm:size-28">
+                <Image src={about.photo} alt={about.name} fill sizes="112px" className="object-cover" />
+              </span>
+            )}
+            <span className="min-w-0">
+              <Eyebrow className="mb-2">Detrás de la tienda</Eyebrow>
+              <span className="block font-display text-3xl font-bold tracking-wide uppercase">{about.name}</span>
+              {about.role && <span className="mt-1 block text-sm font-semibold text-brand-400">{about.role}</span>}
+              {storyParagraphs(about.story)[0] && (
+                <span className="mt-3 line-clamp-2 block max-w-2xl text-muted">{storyParagraphs(about.story)[0]}</span>
+              )}
+            </span>
+            <span className="flex items-center gap-2 text-sm font-semibold whitespace-nowrap">
+              Conoce la historia
+              <ArrowRight className="size-4 text-brand-500 transition-transform group-hover:translate-x-1" />
+            </span>
+          </Link>
+        </Container>
+      )}
 
       {/* Instagram */}
       {settings.instagram && (
@@ -347,18 +392,6 @@ export default async function HomePage() {
         </Container>
       )}
     </>
-  );
-}
-
-function Stat({ value, label }: { value: number; label: string }) {
-  return (
-    <div>
-      <dt className="text-xs tracking-wide text-muted uppercase">{label}</dt>
-      <dd className="mt-1 font-display text-3xl font-bold">
-        <span className="sr-only">{value}</span>
-        <span aria-hidden="true" className="count-up tabular-nums" style={{ "--to": value } as CSSProperties} />
-      </dd>
-    </div>
   );
 }
 

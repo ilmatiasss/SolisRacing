@@ -79,15 +79,15 @@ test("un borrador sin precio no se puede publicar", async ({ page }) => {
 
 test("los videos de Instagram del panel aparecen en Quiénes somos", async ({ page }) => {
   await loginAsAdmin(page);
-  await page.goto("/admin/configuracion");
+  await page.goto("/admin/nosotros");
   await page.locator("#instagramPosts").fill("https://www.instagram.com/solis_racingparts/");
-  await page.getByRole("button", { name: "Guardar configuración" }).click();
+  await page.getByRole("button", { name: "Guardar «Quiénes somos»" }).click();
   await expect(page.getByText("no es un link de publicación de Instagram")).toBeVisible();
   await page
     .locator("#instagramPosts")
     .fill("https://www.instagram.com/p/C0ProyectoE2E/ | Programación FuelTech | Nissan Skyline R34");
-  await page.getByRole("button", { name: "Guardar configuración" }).click();
-  await expect(page.getByText("Configuración guardada")).toBeVisible();
+  await page.getByRole("button", { name: "Guardar «Quiénes somos»" }).click();
+  await expect(page.getByText("«Quiénes somos» ya muestra los cambios")).toBeVisible();
   await page.goto("/proyectos");
   await expect(page).toHaveURL(/\/nosotros$/);
   await expect(page.getByText("Nissan Skyline R34", { exact: true })).toBeVisible();
@@ -95,6 +95,34 @@ test("los videos de Instagram del panel aparecen en Quiénes somos", async ({ pa
     "href",
     "https://www.instagram.com/p/C0ProyectoE2E/",
   );
+});
+
+test("la historia, los logros y los proyectos del panel se ven en Quiénes somos", async ({ page }) => {
+  await loginAsAdmin(page);
+  await page.goto("/admin/nosotros");
+  await page.locator("#about-role").fill("Preparador y programador FuelTech");
+  await page.locator("#about-story").fill("Empecé preparando autos de amigos.\n\nHoy programo FuelTech en todo Chile.");
+  await page.locator("#about-highlights").fill("sin separador");
+  await page.getByRole("button", { name: "Agregar proyecto" }).click();
+  await page.locator("#project-title-0").fill("Subaru WRX STI · FT600");
+  await page.getByRole("button", { name: "Guardar «Quiénes somos»" }).click();
+  await expect(page.getByText("Proyecto 1: necesita una foto y un título")).toBeVisible();
+
+  await page.locator('input[type="file"]').last().setInputFiles("public/catalogo/fueltech-ft550.webp");
+  await expect(page.getByRole("button", { name: "Cambiar foto del proyecto" })).toBeVisible();
+  await page.getByRole("button", { name: "Guardar «Quiénes somos»" }).click();
+  await expect(page.getByText("Logros: «sin separador» debe ser «valor | texto»")).toBeVisible();
+  await page.locator("#about-highlights").fill("+10 | años preparando autos");
+  await page.getByRole("button", { name: "Guardar «Quiénes somos»" }).click();
+  await expect(page.getByText("«Quiénes somos» ya muestra los cambios")).toBeVisible();
+
+  await page.goto("/nosotros");
+  await expect(page.getByRole("heading", { name: "Diego Solis" })).toBeVisible();
+  await expect(page.getByText("Preparador y programador FuelTech")).toBeVisible();
+  await expect(page.getByText("Hoy programo FuelTech en todo Chile.")).toBeVisible();
+  await expect(page.getByText("años preparando autos")).toBeVisible();
+  await expect(page.getByText("Subaru WRX STI · FT600")).toBeVisible();
+  await expect(page.getByRole("img", { name: "Subaru WRX STI · FT600" })).toBeVisible();
 });
 
 test("la agenda del panel define fechas de visita y no repite horas pedidas", async ({ page }) => {

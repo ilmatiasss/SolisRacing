@@ -11,7 +11,7 @@ export type ManagedImage = { url: string; alt: string | null };
 const MAX_SIDE = 1600;
 
 /** Reduce y convierte a WebP en el navegador para subir fotos livianas (máx. 1600 px). */
-async function compressImage(file: File): Promise<File> {
+export async function compressImage(file: File): Promise<File> {
   if (!file.type.startsWith("image/") || file.type === "image/gif") return file;
   try {
     const bitmap = await createImageBitmap(file);

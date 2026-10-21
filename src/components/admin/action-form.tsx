@@ -66,16 +66,19 @@ export function ActionSubmit({
   variant,
   size = "sm",
   className,
+  disabled = false,
 }: {
   children: ReactNode;
   pendingText?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
   className?: string;
+  /** Por ejemplo, mientras se suben fotos. */
+  disabled?: boolean;
 }) {
   const pending = use(PendingContext);
   return (
-    <Button type="submit" variant={variant} size={size} className={className} disabled={pending}>
+    <Button type="submit" variant={variant} size={size} className={className} disabled={pending || disabled}>
       {pending ? (
         <>
           <LoaderCircle className="size-4 animate-spin" />

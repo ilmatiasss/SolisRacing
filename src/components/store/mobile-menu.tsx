@@ -6,11 +6,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { DynamicIcon } from "@/components/icons";
 import { Drawer } from "@/components/ui/drawer";
-import { MAIN_NAV } from "./header-nav";
+import { mainNav } from "./header-nav";
 
 type MenuCategory = { name: string; slug: string; icon: string };
 
-export function MobileMenu({ categories }: { categories: MenuCategory[] }) {
+export function MobileMenu({ categories, hasOffers }: { categories: MenuCategory[]; hasOffers: boolean }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   return (
@@ -36,7 +36,7 @@ export function MobileMenu({ categories }: { categories: MenuCategory[] }) {
             />
           </Form>
           <nav aria-label="Menú móvil" className="grid gap-1">
-            {MAIN_NAV.map((item) => (
+            {mainNav(hasOffers).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

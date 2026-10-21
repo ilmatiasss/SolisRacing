@@ -150,13 +150,11 @@ export default async function ServicesPage() {
 
       <Container className="py-14">
         <section id="agendar" className="scroll-mt-32" aria-labelledby="agendar-titulo">
-          <h2 id="agendar-titulo" className="font-display text-3xl font-bold uppercase sm:text-4xl">
-            Agenda tu hora
-          </h2>
-          <p className="mt-2 mb-6 max-w-2xl text-muted">
-            Atendemos en Antofagasta y también en la Región de Valparaíso. Elige el lugar, el día y la hora, y te
-            confirmamos por WhatsApp.
-          </p>
+          <SectionHeading
+            eyebrow="Agenda"
+            title={<span id="agendar-titulo">Agenda tu hora</span>}
+            description="Atendemos en Antofagasta y también en la Región de Valparaíso. Elige el lugar, el día y la hora, y te confirmamos por WhatsApp."
+          />
           <div className="rounded-lg border border-line bg-surface p-5 sm:p-8">
             {services.length > 0 ? (
               <ServiceBooking
@@ -174,10 +172,8 @@ export default async function ServicesPage() {
 
       <Container className="max-w-3xl pb-14">
         <section aria-labelledby="faq-titulo">
-          <h2 id="faq-titulo" className="font-display text-3xl font-bold uppercase">
-            Preguntas frecuentes
-          </h2>
-          <div className="mt-6 divide-y divide-line rounded-lg border border-line bg-surface">
+          <SectionHeading eyebrow="Dudas" title={<span id="faq-titulo">Preguntas frecuentes</span>} />
+          <div className="divide-y divide-line rounded-lg border border-line bg-surface">
             {FAQ.map((item) => (
               <details key={item.q} className="group p-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">

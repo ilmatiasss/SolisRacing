@@ -11,6 +11,7 @@ import {
   Settings,
   ShieldCheck,
   Tag,
+  UserRound,
   Users,
   Wrench,
   type LucideIcon,
@@ -51,6 +52,7 @@ export const ADMIN_NAV: NavGroup[] = [
     title: "Mi tienda",
     items: [
       { href: "/admin/configuracion", label: "Configuración", icon: Settings },
+      { href: "/admin/nosotros", label: "Quiénes somos", icon: UserRound },
       { href: "/admin/usuarios", label: "Usuarios", icon: Users },
     ],
   },

@@ -14,6 +14,7 @@ import {
   lte,
   gte,
   ne,
+  notInArray,
   or,
   sql,
   type SQL,
@@ -352,15 +353,28 @@ export async function getProductBySlug(slug: string) {
   return { ...product, fitments };
 }
 
-export async function getRelatedProducts(productId: number, categoryId: number | null, limit = 4) {
+/**
+ * Productos de la misma categoría; si son pocos, se completa con otros del catálogo para que la
+ * fila de «relacionados» no quede a medias.
+ */
+export async function getRelatedProducts(productId: number, categoryId: number | null, limit = 6) {
   "use cache";
   cacheLife("hours");
   cacheTag(CATALOG_TAG);
-  if (!categoryId) return [];
-  const rows = await cardQuery()
-    .where(and(isActive, eq(products.categoryId, categoryId), ne(products.id, productId)))
-    .orderBy(desc(gt(products.stock, 0)), desc(products.featured), desc(products.createdAt))
-    .limit(limit);
+  const order = [desc(gt(products.stock, 0)), desc(products.featured), desc(products.createdAt)] as const;
+  const rows = categoryId
+    ? await cardQuery()
+        .where(and(isActive, eq(products.categoryId, categoryId), ne(products.id, productId)))
+        .orderBy(...order)
+        .limit(limit)
+    : [];
+  if (rows.length < limit) {
+    const others = await cardQuery()
+      .where(and(isActive, notInArray(products.id, [productId, ...rows.map((row) => row.id)])))
+      .orderBy(...order)
+      .limit(limit - rows.length);
+    rows.push(...others);
+  }
   return attachMainImages(rows);
 }
 

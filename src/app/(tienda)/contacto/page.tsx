@@ -33,6 +33,7 @@ export default async function ContactPage() {
         settings.mapsUrl ||
         `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${settings.address}, ${settings.city}`)}`,
       external: true,
+      hint: "Cómo llegar en Google Maps",
     },
   ];
   const cards = allCards.filter((card) => card.value.trim());
@@ -46,7 +47,7 @@ export default async function ContactPage() {
       />
       <Container className="grid gap-10 py-14 lg:grid-cols-[1fr_1.3fr]">
         <div className="space-y-3">
-          {cards.map(({ icon: Icon, title, value, href, external }) => (
+          {cards.map(({ icon: Icon, title, value, href, external, hint }) => (
             <a
               key={title}
               href={href}
@@ -60,6 +61,7 @@ export default async function ContactPage() {
               <span>
                 <span className="block text-xs font-semibold tracking-wider text-muted uppercase">{title}</span>
                 <span className="font-medium">{value}</span>
+                {hint && <span className="mt-0.5 block text-xs font-semibold text-brand-400">{hint} ↗</span>}
               </span>
             </a>
           ))}

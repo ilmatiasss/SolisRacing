@@ -54,7 +54,7 @@ export function CatalogTabs({ tabs, products, label }: { tabs: Tab[]; products: 
       <div
         role="tablist"
         aria-label={label}
-        className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+        className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0"
       >
         {tabs.map((tab, index) => {
           const selected = index === active;
@@ -73,7 +73,7 @@ export function CatalogTabs({ tabs, products, label }: { tabs: Tab[]; products: 
               onClick={() => select(index)}
               onKeyDown={onKeyDown}
               className={cn(
-                "flex shrink-0 items-center gap-2 rounded-md border px-4 py-2 text-sm font-semibold transition-colors duration-200",
+                "flex shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-sm font-semibold whitespace-nowrap transition-colors duration-200",
                 selected
                   ? "border-brand-600 bg-brand-600 text-white"
                   : "border-line bg-surface text-zinc-300 hover:border-line-strong hover:text-white",
@@ -91,7 +91,8 @@ export function CatalogTabs({ tabs, products, label }: { tabs: Tab[]; products: 
         aria-labelledby={`${baseId}-tab-${current.id}`}
         className="mt-6"
       >
-        <ProductGrid products={shelf} animate />
+        {/* En el celular bastan 6 (3 filas); desde tablet se ven todos. */}
+        <ProductGrid products={shelf} animate className="max-sm:[&>*:nth-child(n+7)]:hidden" />
         <div className="mt-8 flex justify-center">
           <Link href={current.href} className={buttonClasses({ variant: "outline", size: "lg", className: "group" })}>
             {current.linkLabel}

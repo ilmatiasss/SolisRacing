@@ -1,5 +1,6 @@
 "use client";
 
+import { ExternalLink, Play } from "lucide-react";
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { InstagramIcon } from "@/components/icons";
 
@@ -67,38 +68,64 @@ function giveConsent() {
  * script solo se descarga cuando la publicación está por aparecer en pantalla.
  */
 export function InstagramPost({ url, label }: { url: string; label: string }) {
-  const consent = useSyncExternalStore(subscribeConsent, readConsent, () => false);
+  const consent = useInstagramConsent();
   if (!consent) return <InstagramPlaceholder url={url} label={label} />;
   return <InstagramEmbed url={url} label={label} />;
 }
 
-function InstagramPlaceholder({ url, label }: { url: string; label: string }) {
+function useInstagramConsent() {
+  return useSyncExternalStore(subscribeConsent, readConsent, () => false);
+}
+
+/** Aviso único sobre la galería (en vez de repetirlo en cada video) hasta que se acepta. */
+export function InstagramConsentNote() {
+  const consent = useInstagramConsent();
+  if (consent) return null;
   return (
-    <div className="mx-auto flex aspect-[4/5] w-full max-w-[540px] flex-col items-center justify-center gap-4 rounded-lg border border-dashed border-zinc-600 bg-surface p-6 text-center">
-      <span className="flex size-14 items-center justify-center rounded-full border border-line-strong">
-        <InstagramIcon className="size-7" />
-      </span>
-      <p className="font-semibold">{label}</p>
+    <div className="mb-5 flex flex-col gap-3 rounded-lg border border-line bg-surface px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-muted">
+        Los videos se cargan desde Instagram (Meta), que puede usar sus propias cookies.
+      </p>
       <button
         type="button"
         onClick={giveConsent}
-        className="cursor-pointer rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
+        className="shrink-0 cursor-pointer rounded-lg bg-white px-4 py-2 font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
       >
-        Ver el video aquí
+        Mostrar los videos
       </button>
-      <p className="max-w-xs text-xs text-muted">
-        Se cargará contenido de Instagram (Meta), que puede usar sus propias cookies.{" "}
+    </div>
+  );
+}
+
+function InstagramPlaceholder({ url, label }: { url: string; label: string }) {
+  return (
+    <div className="relative flex aspect-[4/5] w-full flex-col overflow-hidden rounded-lg border border-line-strong bg-[radial-gradient(circle_at_50%_40%,rgba(220,38,38,0.22),transparent_65%)] bg-surface">
+      <button
+        type="button"
+        onClick={giveConsent}
+        aria-label={`Ver «${label}» aquí (carga contenido de Instagram)`}
+        className="group flex flex-1 cursor-pointer flex-col items-center justify-center gap-3"
+      >
+        <span className="flex size-16 items-center justify-center rounded-full bg-white text-zinc-900 shadow-[0_0_40px_rgba(255,255,255,0.15)] transition-transform group-hover:scale-105">
+          <Play className="ml-1 size-7 fill-current" />
+        </span>
+        <span className="text-sm font-semibold">Ver el video</span>
+      </button>
+      <div className="flex items-center justify-between gap-3 border-t border-line bg-black/30 px-4 py-3 text-xs">
+        <span className="flex min-w-0 items-center gap-2 text-zinc-300">
+          <InstagramIcon className="size-4 shrink-0" />
+          <span className="truncate">{label}</span>
+        </span>
         <a
           href={url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Abrir «${label}» en Instagram`}
-          className="underline hover:text-fg"
+          className="flex shrink-0 items-center gap-1 font-semibold text-zinc-300 hover:text-white"
         >
-          O ábrelo en Instagram
+          Instagram <ExternalLink className="size-3.5" />
         </a>
-        .
-      </p>
+      </div>
     </div>
   );
 }

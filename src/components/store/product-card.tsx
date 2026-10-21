@@ -83,17 +83,21 @@ export function ProductGrid({
   products,
   animate = false,
   withSidebar = false,
+  className,
 }: {
   products: ProductCardData[];
   animate?: boolean;
   /** En el catálogo hay un panel de filtros al lado: una columna menos. */
   withSidebar?: boolean;
+  /** Para ajustar columnas (ej: que una cantidad fija llene filas completas). */
+  className?: string;
 }) {
   return (
     <div
       className={cn(
         "grid grid-cols-2 gap-3",
-        withSidebar ? "sm:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6",
+        withSidebar ? "sm:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6",
+        className,
       )}
     >
       {products.map((product, index) => (

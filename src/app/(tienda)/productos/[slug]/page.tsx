@@ -1,4 +1,4 @@
-import { CheckCircle2, ChevronRight, MessageCircle, Store, Truck, Wrench } from "lucide-react";
+import { CheckCircle2, ChevronRight, MessageCircle, ShieldCheck, Store, Truck, Wrench } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -186,6 +186,15 @@ async function ProductView({ params }: { params: Props["params"] }) {
               </li>
             )}
             <li className="flex gap-3">
+              <ShieldCheck className="size-5 shrink-0 text-brand-500" />
+              <span>
+                Garantía legal de 6 meses y 10 días para arrepentirte.{" "}
+                <Link href="/despachos-y-devoluciones" className="text-brand-400 hover:underline">
+                  Ver condiciones
+                </Link>
+              </span>
+            </li>
+            <li className="flex gap-3">
               <Wrench className="size-5 shrink-0 text-brand-500" />
               <span>
                 ¿Necesitas instalación o programación?{" "}
@@ -274,7 +283,8 @@ async function ProductView({ params }: { params: Props["params"] }) {
       {related.length > 0 && (
         <Container className="border-t border-line pt-12">
           <SectionHeading eyebrow="También te puede interesar" title="Productos relacionados" />
-          <ProductGrid products={related} withSidebar />
+          {/* 6 productos: filas completas con 2, 3 o 6 columnas. */}
+          <ProductGrid products={related} className="lg:grid-cols-3 xl:grid-cols-6" />
         </Container>
       )}
     </>
