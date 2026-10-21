@@ -5,7 +5,6 @@ export const MAIN_NAV = [
   { href: "/productos", label: "Catálogo" },
   { href: "/productos?oferta=1", label: "Ofertas", match: false },
   { href: "/servicios", label: "Servicios y programación" },
-  { href: "/seguimiento", label: "Seguimiento" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ] as const;

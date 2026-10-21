@@ -64,7 +64,7 @@ export function OrderStatusForm({
         optional
         hint={status === "cancelled" ? "Se mostrará como motivo de la cancelación. El stock se repone automáticamente." : undefined}
       >
-        <Textarea id="note" name="note" rows={2} placeholder="Se muestra al cliente en el seguimiento" />
+        <Textarea id="note" name="note" rows={2} placeholder="Se muestra al cliente en la página de su pedido" />
       </Field>
       <Checkbox name="notify" defaultChecked label="Avisar al cliente por correo" />
       <ActionSubmit size="md" className="w-full" variant={status === "cancelled" ? "danger" : "primary"}>

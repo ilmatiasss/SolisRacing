@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { addProductToCart, fillCheckout, placeTransferOrder, visible } from "./helpers";
+import { addProductToCart, fillCheckout, visible } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
@@ -75,7 +75,7 @@ test("pago anulado en Webpay también cancela el pedido", async ({ page }) => {
   await expect(visible(page.getByText("¡Última unidad!"))).toBeVisible();
 });
 
-test("compra por transferencia con factura, despacho pagado y seguimiento", async ({ page }) => {
+test("compra por transferencia con factura y despacho pagado", async ({ page }) => {
   await addProductToCart(page, "riel-para-union-de-2-bombas-externas-epman");
   await fillCheckout(page, { payment: "transfer" });
   await page.locator("label:has(input[name=documentType][value=factura])").click();
@@ -90,23 +90,11 @@ test("compra por transferencia con factura, despacho pagado y seguimiento", asyn
   await expect(page.getByText("Factura a Taller Rojas SpA (76.086.428-5)")).toBeVisible();
   // $38.000 + despacho a Valparaíso ($7.990)
   await expect(visible(page.getByText("$45.990")).first()).toBeVisible();
-  const orderNumber = (await page.getByRole("heading", { level: 1 }).innerText()).trim();
-
-  await page.goto("/seguimiento");
-  await page.locator("#number").fill(orderNumber);
-  await page.locator("#email").fill("CAMILA@example.com");
-  await page.getByRole("button", { name: "Ver mi pedido" }).click();
-  await page.waitForURL(/\/pedido\/\d+\?t=/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(orderNumber);
 });
 
-test("el seguimiento no muestra pedidos con un correo distinto", async ({ page }) => {
-  const orderNumber = await placeTransferOrder(page, "bujia-ngk-bkr7e");
+test("el antiguo seguimiento de pedidos lleva a contacto", async ({ page }) => {
   await page.goto("/seguimiento");
-  await page.locator("#number").fill(orderNumber);
-  await page.locator("#email").fill("otra-persona@example.com");
-  await page.getByRole("button", { name: "Ver mi pedido" }).click();
-  await expect(page.getByText("No encontramos un pedido con esos datos")).toBeVisible();
+  await expect(page).toHaveURL(/\/contacto$/);
 });
 
 test("el checkout valida los datos sin borrar lo escrito", async ({ page }) => {

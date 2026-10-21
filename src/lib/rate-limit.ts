@@ -17,7 +17,6 @@ export const RATE_LIMITS = {
   checkout: { limit: 10, windowSeconds: 60 * 60 },
   /** Contacto, agenda, pedido especial, cotizador de ramal y derechos sobre datos. */
   inquiry: { limit: 8, windowSeconds: 10 * 60 },
-  tracking: { limit: 20, windowSeconds: 10 * 60 },
   /** Prueba de integración con Fullpyme (dirección pública que imita a Jumpseller). */
   integration: { limit: 60, windowSeconds: 10 * 60 },
 } as const;

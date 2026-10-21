@@ -74,7 +74,9 @@ test("un borrador sin precio no se puede publicar", async ({ page }) => {
   await page.getByRole("button", { name: "Guardar cambios" }).click();
   await expect(page.getByText("Para publicar el producto, ingresa un precio mayor a $0.")).toBeVisible();
   await page.goto("/productos?q=fitting orb");
-  await expect(page.getByRole("link", { name: "Fitting ORB" })).toHaveCount(0);
+  const results = page.getByRole("region", { name: "Resultados" });
+  await expect(results.getByText("No encontramos productos")).toBeVisible();
+  await expect(results.getByRole("link", { name: "Fitting ORB", exact: true })).toHaveCount(0);
 });
 
 test("los videos de Instagram del panel aparecen en Quiénes somos", async ({ page }) => {

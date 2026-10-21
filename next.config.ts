@@ -31,7 +31,11 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     // La galería de Instagram partió como "Proyectos" y pasó a ser "Quiénes somos".
-    return [{ source: "/proyectos", destination: "/nosotros", permanent: true }];
+    // El seguimiento de pedidos se quitó: cada cliente recibe el link de su pedido por correo.
+    return [
+      { source: "/proyectos", destination: "/nosotros", permanent: true },
+      { source: "/seguimiento", destination: "/contacto", permanent: false },
+    ];
   },
   async headers() {
     return [

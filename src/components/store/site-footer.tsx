@@ -64,7 +64,6 @@ export async function SiteFooter() {
           <FooterLink href="/servicios">Servicios y programación</FooterLink>
           <FooterLink href="/cotizador-ramal">Cotizador de ramales</FooterLink>
           <FooterLink href="/nosotros">Quiénes somos</FooterLink>
-          <FooterLink href="/seguimiento">Seguimiento de pedidos</FooterLink>
           <FooterLink href="/despachos-y-devoluciones">Despachos y devoluciones</FooterLink>
           <FooterLink href="/terminos">Términos y condiciones</FooterLink>
           <FooterLink href="/privacidad">Política de privacidad</FooterLink>
