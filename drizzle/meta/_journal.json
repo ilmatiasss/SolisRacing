@@ -64,6 +64,13 @@
       "when": 1792626321186,
       "tag": "0008_corregir_nombre_aceite_caja",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792627108003,
+      "tag": "0009_segunda_foto_lsu_42",
+      "breakpoints": true
     }
   ]
 }
