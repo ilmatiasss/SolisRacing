@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
-const { availablePayments, isWebpayAvailable } = await import("@/lib/payments/webpay");
+const { availablePayments, isWebpayAvailable, isWebpaySandboxForAdmins } = await import("@/lib/payments/webpay");
 const { DEFAULT_SETTINGS, hasTransferAccount } = await import("@/lib/settings");
 
 const enabled = { payments: { ...DEFAULT_SETTINGS.payments, webpayEnabled: true, transferEnabled: true } };
@@ -10,11 +10,13 @@ const enabled = { payments: { ...DEFAULT_SETTINGS.payments, webpayEnabled: true,
 describe("Webpay en el sitio publicado", () => {
   afterEach(() => vi.unstubAllEnvs());
 
-  it("no se ofrece en producción con el ambiente de pruebas de Transbank", () => {
+  it("en producción con el ambiente de pruebas no se ofrece a clientes, solo a administradores", () => {
     vi.stubEnv("VERCEL_ENV", "production");
     vi.stubEnv("WEBPAY_ENVIRONMENT", "integration");
     expect(isWebpayAvailable()).toBe(false);
     expect(availablePayments(enabled)).toEqual({ webpayEnabled: false, transferEnabled: true });
+    expect(isWebpaySandboxForAdmins()).toBe(true);
+    expect(availablePayments(enabled, { admin: true })).toEqual({ webpayEnabled: true, transferEnabled: true });
   });
 
   it("tampoco con el simulador ni con un valor mal escrito", () => {
@@ -22,6 +24,8 @@ describe("Webpay en el sitio publicado", () => {
     for (const value of ["mock", "Production", ""]) {
       vi.stubEnv("WEBPAY_ENVIRONMENT", value);
       expect(isWebpayAvailable()).toBe(false);
+      // Un valor mal escrito cae en «integration»: el administrador puede probar; el simulador, nunca.
+      expect(isWebpayAvailable({ admin: true })).toBe(value !== "mock");
     }
   });
 

@@ -25,23 +25,35 @@ export function isMockAllowed() {
   return process.env.VERCEL_ENV !== "production";
 }
 
+/** Quién está comprando: un administrador con sesión iniciada puede probar Webpay en el sitio publicado. */
+export type WebpayViewer = { admin?: boolean };
+
 /**
- * Webpay solo se ofrece a los clientes cuando puede cobrar de verdad. En el sitio publicado
- * (Vercel producción) exige WEBPAY_ENVIRONMENT=production con sus credenciales; con el ambiente
- * de pruebas se podría "pagar" con las tarjetas de prueba públicas de Transbank y el pedido
- * quedaría como pagado sin cobro real.
+ * En el sitio publicado (Vercel producción) con el ambiente de pruebas de Transbank, Webpay solo
+ * lo ven los administradores con sesión iniciada: así pueden probar pagos con las tarjetas de
+ * prueba en el sitio real, y ningún cliente "paga" sin cobro real.
  */
-export function isWebpayAvailable() {
+export function isWebpaySandboxForAdmins() {
+  return process.env.VERCEL_ENV === "production" && webpayEnvironment() === "integration";
+}
+
+/**
+ * Webpay se ofrece cuando puede cobrar de verdad (producción con sus credenciales). Con el
+ * ambiente de pruebas: siempre en local y en las vistas previas; en el sitio publicado, solo a
+ * los administradores. El simulador (mock) nunca en el sitio publicado.
+ */
+export function isWebpayAvailable(viewer: WebpayViewer = {}) {
   if (webpayEnvironment() === "production") {
     return Boolean(process.env.WEBPAY_COMMERCE_CODE && process.env.WEBPAY_API_KEY);
   }
-  return process.env.VERCEL_ENV !== "production";
+  if (process.env.VERCEL_ENV !== "production") return true;
+  return isWebpaySandboxForAdmins() && Boolean(viewer.admin);
 }
 
-/** Medios de pago que ve el cliente: lo activado en el panel y que además puede operar. */
-export function availablePayments(settings: Pick<StoreSettings, "payments">) {
+/** Medios de pago que se ofrecen: lo activado en el panel y que además puede operar. */
+export function availablePayments(settings: Pick<StoreSettings, "payments">, viewer: WebpayViewer = {}) {
   return {
-    webpayEnabled: settings.payments.webpayEnabled && isWebpayAvailable(),
+    webpayEnabled: settings.payments.webpayEnabled && isWebpayAvailable(viewer),
     transferEnabled: settings.payments.transferEnabled,
   };
 }
@@ -117,8 +129,8 @@ export async function createWebpayTransaction(params: {
   amount: number;
   returnUrl: string;
   origin: string;
-}): Promise<{ token: string; url: string }> {
-  if (!isWebpayAvailable()) throw new Error("Webpay no está habilitado para cobros reales en este sitio.");
+}, viewer: WebpayViewer = {}): Promise<{ token: string; url: string }> {
+  if (!isWebpayAvailable(viewer)) throw new Error("Webpay no está habilitado para cobros reales en este sitio.");
   if (webpayEnvironment() === "mock") {
     if (!isMockAllowed()) throw new Error("El simulador de Webpay no está permitido en producción.");
     const token = `mock${randomBytes(24).toString("hex")}`;

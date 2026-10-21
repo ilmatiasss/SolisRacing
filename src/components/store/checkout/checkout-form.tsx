@@ -65,6 +65,8 @@ export type CheckoutConfig = {
   shipping: ShippingSettings;
   payments: Pick<PaymentSettings, "webpayEnabled" | "transferEnabled">;
   webpayEnvironment: "integration" | "production" | "mock";
+  /** Sitio publicado en modo de pruebas: solo el administrador con sesión ve Webpay. */
+  adminSandbox?: boolean;
 };
 
 export function CheckoutForm(props: CheckoutConfig) {
@@ -73,7 +75,7 @@ export function CheckoutForm(props: CheckoutConfig) {
   return <CheckoutFormInner {...props} />;
 }
 
-function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutConfig) {
+function CheckoutFormInner({ shipping, payments, webpayEnvironment, adminSandbox = false }: CheckoutConfig) {
   const items = useCartItems();
   const { notices, refresh, refreshing } = useCartRefresh();
   const [draft] = useState(readDraft);
@@ -161,12 +163,26 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment }: CheckoutCo
         {webpayEnvironment !== "production" && paymentOptions.includes("webpay") && (
           <div className="flex gap-3 rounded-lg border border-signal-400/30 bg-signal-400/10 p-4 text-sm" role="note">
             <TriangleAlert className="mt-0.5 size-4.5 shrink-0 text-signal-400" />
-            <p>
-              <strong>Webpay está en modo de prueba</strong>
-              {webpayEnvironment === "mock"
-                ? " (simulador local): no se realizan cobros."
-                : ": usa las tarjetas de prueba de Transbank, no se realizan cobros reales."}
-            </p>
+            <div className="space-y-1.5">
+              <p>
+                <strong>Webpay está en modo de prueba</strong>
+                {webpayEnvironment === "mock"
+                  ? " (simulador local): no se realizan cobros."
+                  : ": usa las tarjetas de prueba de Transbank, no se realizan cobros reales."}
+              </p>
+              {webpayEnvironment === "integration" && (
+                <p className="text-muted">
+                  Tarjeta aprobada: VISA 4051 8856 0044 6623, CVV 123, cualquier fecha futura. Si pide autenticación: RUT
+                  11.111.111-1, clave 123. Para probar un rechazo: Mastercard 5186 0595 5959 0568.
+                </p>
+              )}
+              {adminSandbox && (
+                <p className="text-muted">
+                  Solo tú ves Webpay porque iniciaste sesión en el panel; los clientes ven solo transferencia. Anula los
+                  pedidos de prueba en el panel para devolver el stock.
+                </p>
+              )}
+            </div>
           </div>
         )}
 

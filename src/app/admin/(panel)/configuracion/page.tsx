@@ -8,7 +8,7 @@ import { saveSettings } from "@/lib/actions/admin/settings";
 import { requireAdmin } from "@/lib/auth";
 import { REGIONS } from "@/lib/chile";
 import { readStoreSettings } from "@/lib/data/settings";
-import { isWebpayAvailable, webpayEnvironment } from "@/lib/payments/webpay";
+import { isWebpayAvailable, isWebpaySandboxForAdmins, webpayEnvironment } from "@/lib/payments/webpay";
 
 export const metadata: Metadata = { title: "Configuración" };
 
@@ -132,9 +132,11 @@ export default async function SettingsPage() {
                   ? isWebpayAvailable()
                     ? "Conectado a Transbank en modo producción."
                     : "Faltan WEBPAY_COMMERCE_CODE y WEBPAY_API_KEY: los clientes no ven Webpay hasta configurarlas."
-                  : isWebpayAvailable()
-                    ? `Modo actual: ${env === "mock" ? "simulador" : "integración (pruebas)"}. Las credenciales se configuran en las variables de entorno.`
-                    : "Modo de pruebas: en el sitio publicado los clientes no ven Webpay hasta configurar las credenciales de producción de Transbank."
+                  : isWebpaySandboxForAdmins()
+                    ? "Modo de pruebas de Transbank: los clientes no ven Webpay; tú, con la sesión iniciada, puedes probarlo en la tienda con las tarjetas de prueba."
+                    : isWebpayAvailable()
+                      ? `Modo actual: ${env === "mock" ? "simulador" : "integración (pruebas)"}. Las credenciales se configuran en las variables de entorno.`
+                      : "El simulador no funciona en el sitio publicado: usa WEBPAY_ENVIRONMENT=integration para probar o production para cobrar."
               }
             />
             <Checkbox

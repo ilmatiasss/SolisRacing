@@ -16,7 +16,7 @@ import { DEFAULT_SETTINGS, hasTransferAccount } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
 import { inquiryTitle, ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
 import { expireAbandonedWebpayOrders } from "@/lib/orders";
-import { isWebpayAvailable, webpayEnvironment } from "@/lib/payments/webpay";
+import { isWebpayAvailable, isWebpaySandboxForAdmins, webpayEnvironment } from "@/lib/payments/webpay";
 
 export const metadata: Metadata = { title: "Resumen" };
 
@@ -90,9 +90,11 @@ export default async function DashboardPage() {
           <TriangleAlert className="mt-0.5 size-4.5 shrink-0" />
           <span>
             <strong>Webpay está en modo {env === "mock" ? "simulador" : "de pruebas (integración)"}.</strong>{" "}
-            {isWebpayAvailable()
-              ? "Los pagos con tarjeta no son reales."
-              : "Por eso los clientes solo ven el pago por transferencia."}{" "}
+            {isWebpaySandboxForAdmins()
+              ? "Los clientes solo ven transferencia; tú, con la sesión del panel iniciada, puedes probar Webpay en la tienda con las tarjetas de prueba (los pedidos quedan marcados como PRUEBA)."
+              : isWebpayAvailable()
+                ? "Los pagos con tarjeta no son reales."
+                : "Por eso los clientes solo ven el pago por transferencia."}{" "}
             Cuando Transbank te entregue tu código de comercio y API Key, configura{" "}
             <code className="font-mono">WEBPAY_ENVIRONMENT=production</code> (ver README).
           </span>

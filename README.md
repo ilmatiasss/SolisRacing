@@ -72,7 +72,7 @@ La tienda parte en el **ambiente de integración** de Transbank: puedes hacer co
 - VISA `4051 8856 0044 6623`, CVV `123`, cualquier fecha futura → **aprobada**
 - Cuando pida autenticación: RUT `11.111.111-1`, clave `123`
 
-En el sitio publicado (Vercel, ambiente *Production*) **Webpay no se le muestra a los clientes** hasta configurar `WEBPAY_ENVIRONMENT=production` con su código de comercio y API Key: así nadie puede "pagar" con las tarjetas de prueba. Mientras tanto se vende solo por transferencia, y el panel lo avisa. Las pruebas de integración se hacen en local o en los deploys de vista previa (*Preview*), donde los pedidos pagados en pruebas se marcan como **PRUEBA** en el panel (no los despaches).
+En el sitio publicado (Vercel, ambiente *Production*) con `WEBPAY_ENVIRONMENT=integration`, **Webpay no se le muestra a los clientes** (nadie puede "pagar" con las tarjetas de prueba): ellos ven solo transferencia. En cambio, **un administrador con la sesión del panel iniciada sí ve Webpay** en el checkout, con las tarjetas de prueba a la vista, y puede hacer compras de prueba de punta a punta en el sitio real. Esos pedidos quedan marcados como **PRUEBA** en el panel: no los despaches y anúlalos para devolver el stock. En local y en los deploys de vista previa (*Preview*) Webpay de pruebas se ve para todos.
 
 **Para cobrar de verdad:**
 

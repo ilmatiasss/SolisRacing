@@ -20,6 +20,7 @@ import {
   webpaySessionId,
   type StockIssue,
 } from "@/lib/orders";
+import { getCurrentAdmin } from "@/lib/auth";
 import { availablePayments, createWebpayTransaction } from "@/lib/payments/webpay";
 import { RATE_LIMIT_MESSAGE, rateLimit } from "@/lib/rate-limit";
 import { formatRut, isValidRut } from "@/lib/rut";
@@ -125,7 +126,9 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   }
   const data = parsed.data;
   const settings = await readStoreSettings();
-  const payments = availablePayments(settings);
+  // Un administrador con sesión puede probar Webpay (ambiente de pruebas) en el sitio publicado.
+  const viewer = { admin: Boolean(await getCurrentAdmin()) };
+  const payments = availablePayments(settings, viewer);
 
   if (data.paymentMethod === "webpay" && !payments.webpayEnabled) {
     return { error: "El pago con Webpay no está disponible en este momento." };
@@ -204,7 +207,7 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
       amount: order.total,
       returnUrl: `${origin}/pago/webpay/retorno`,
       origin,
-    });
+    }, viewer);
     await setWebpayToken(order.id, transaction.token);
     return { webpay: transaction };
   } catch (error) {
