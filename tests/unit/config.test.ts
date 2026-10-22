@@ -3,6 +3,11 @@ import { databaseEnvNames, databaseUrl } from "@/lib/db/url";
 import { siteUrl } from "@/lib/site";
 
 describe("conexión a la base de datos", () => {
+  it("APP_DATABASE_URL manda sobre las variables de la integración", () => {
+    expect(databaseUrl({ APP_DATABASE_URL: " postgres://nueva ", DATABASE_URL: "postgres://vieja" })).toBe("postgres://nueva");
+    expect(databaseUrl({ APP_DATABASE_URL: "", DATABASE_URL: "postgres://vieja" })).toBe("postgres://vieja");
+  });
+
   it("usa DATABASE_URL y, si falta, POSTGRES_URL", () => {
     expect(databaseUrl({ DATABASE_URL: "postgres://a", POSTGRES_URL: "postgres://b" })).toBe("postgres://a");
     expect(databaseUrl({ POSTGRES_URL: " postgres://b " })).toBe("postgres://b");

@@ -65,6 +65,10 @@ Abre el deploy fallido en *Deployments* y mira las últimas líneas del registro
 - **"ADMIN_PASSWORD debe tener al menos 8 caracteres"**: cambia la variable y vuelve a desplegar.
 - **`relation "…" does not exist`**: el comando de build fue reemplazado. En *Settings → Build and Deployment*, deja el *Build Command* sin override (`npm run build`).
 
+### Cambiar de base de datos en Vercel
+
+Si la base se conectó con la integración de Neon, Vercel no deja editar `DATABASE_URL`. Agrega la variable `APP_DATABASE_URL` con la dirección nueva (manda sobre las de la integración) y vuelve a desplegar.
+
 ## Publicar en Hostinger (Business Web Hosting o Cloud)
 
 La tienda es una app Node.js (Next.js), y esos planes de Hostinger la pueden ejecutar. La base de datos (Neon/PostgreSQL) y las fotos (Vercel Blob) se quedan donde están: funcionan desde cualquier servidor.

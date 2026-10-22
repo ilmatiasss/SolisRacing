@@ -1,10 +1,11 @@
 /**
- * URL de conexión a PostgreSQL. Además de DATABASE_URL acepta las variantes que crean las
- * integraciones de Vercel: POSTGRES_URL, o un prefijo propio (por ejemplo STORAGE_DATABASE_URL)
- * cuando la base de datos se conecta al proyecto con "Custom Prefix".
+ * URL de conexión a PostgreSQL. APP_DATABASE_URL manda sobre todo lo demás: sirve para cambiar de
+ * base aunque una integración de Vercel haya creado DATABASE_URL y no se pueda editar. Si no está,
+ * acepta DATABASE_URL y las variantes de las integraciones: POSTGRES_URL, o un prefijo propio
+ * (por ejemplo STORAGE_DATABASE_URL) cuando la base se conecta con "Custom Prefix".
  */
 export function databaseUrl(env: Record<string, string | undefined> = process.env): string | undefined {
-  const direct = env.DATABASE_URL?.trim() || env.POSTGRES_URL?.trim();
+  const direct = env.APP_DATABASE_URL?.trim() || env.DATABASE_URL?.trim() || env.POSTGRES_URL?.trim();
   if (direct) return direct;
   const prefixed = Object.keys(env)
     .filter((key) => /^[A-Z][A-Z0-9_]*_(DATABASE_URL|POSTGRES_URL)$/.test(key) && key !== "E2E_DATABASE_URL")
