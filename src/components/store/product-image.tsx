@@ -4,8 +4,8 @@ import { LogoBadge } from "@/components/logo";
 import { cn } from "@/lib/cn";
 
 /**
- * Imagen de producto. Las fotos de la tienda son cuadradas y con fondo oscuro, así que
- * llenan el recuadro; si una foto no es cuadrada, se ve completa sobre fondo oscuro.
+ * Imagen de producto. Las fotos de la tienda son cuadradas: por defecto llenan el recuadro
+ * (`cover`, sin bordes); con `fit="contain"` la foto se ve completa aunque no sea cuadrada.
  * Sin foto, se muestra un placeholder con el ícono de la categoría.
  */
 export function ProductImage({
@@ -14,6 +14,7 @@ export function ProductImage({
   icon,
   sizes,
   eager,
+  fit = "cover",
   className,
 }: {
   src: string | null;
@@ -22,11 +23,12 @@ export function ProductImage({
   sizes: string;
   /** Imagen principal sobre el pliegue (LCP): se carga de inmediato. */
   eager?: boolean;
+  fit?: "cover" | "contain";
   className?: string;
 }) {
   if (src) {
     return (
-      <div className={cn("relative overflow-hidden bg-zinc-800", className)}>
+      <div className={cn("relative overflow-hidden bg-surface-2", className)}>
         <Image
           src={src}
           alt={alt}
@@ -34,7 +36,7 @@ export function ProductImage({
           sizes={sizes}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
-          className="object-contain"
+          className={fit === "cover" ? "object-cover" : "object-contain"}
         />
       </div>
     );

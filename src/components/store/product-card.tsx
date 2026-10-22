@@ -32,7 +32,7 @@ export function ProductCard({
           alt={product.imageAlt ?? product.name}
           icon={product.categoryIcon}
           sizes="(min-width: 1280px) 200px, (min-width: 768px) 25vw, 50vw"
-          className="aspect-[4/3] transition-transform duration-500 group-hover:scale-[1.03]"
+          className="aspect-square transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </Link>
       <div className="pointer-events-none absolute top-2 left-2 flex flex-col items-start gap-1.5">
