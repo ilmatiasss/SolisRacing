@@ -2,6 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { Environment, IntegrationApiKeys, IntegrationCommerceCodes, Options, WebpayPlus } from "transbank-sdk";
 import type { WebpayCommitData } from "../db/schema";
+import { isLiveSite } from "../deploy";
 import type { StoreSettings } from "../settings";
 
 /**
@@ -21,20 +22,20 @@ export function webpayEnvironment(): WebpayEnvironment {
 }
 
 export function isMockAllowed() {
-  // Nunca se permite el simulador en el sitio publicado en Vercel (producción).
-  return process.env.VERCEL_ENV !== "production";
+  // Nunca se permite el simulador en el sitio publicado.
+  return !isLiveSite();
 }
 
 /** Quién está comprando: un administrador con sesión iniciada puede probar Webpay en el sitio publicado. */
 export type WebpayViewer = { admin?: boolean };
 
 /**
- * En el sitio publicado (Vercel producción) con el ambiente de pruebas de Transbank, Webpay solo
+ * En el sitio publicado (ver lib/deploy) con el ambiente de pruebas de Transbank, Webpay solo
  * lo ven los administradores con sesión iniciada: así pueden probar pagos con las tarjetas de
  * prueba en el sitio real, y ningún cliente "paga" sin cobro real.
  */
 export function isWebpaySandboxForAdmins() {
-  return process.env.VERCEL_ENV === "production" && webpayEnvironment() === "integration";
+  return isLiveSite() && webpayEnvironment() === "integration";
 }
 
 /**
@@ -46,7 +47,7 @@ export function isWebpayAvailable(viewer: WebpayViewer = {}) {
   if (webpayEnvironment() === "production") {
     return Boolean(process.env.WEBPAY_COMMERCE_CODE && process.env.WEBPAY_API_KEY);
   }
-  if (process.env.VERCEL_ENV !== "production") return true;
+  if (!isLiveSite()) return true;
   return isWebpaySandboxForAdmins() && Boolean(viewer.admin);
 }
 

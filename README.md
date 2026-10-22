@@ -65,6 +65,20 @@ Abre el deploy fallido en *Deployments* y mira las últimas líneas del registro
 - **"ADMIN_PASSWORD debe tener al menos 8 caracteres"**: cambia la variable y vuelve a desplegar.
 - **`relation "…" does not exist`**: el comando de build fue reemplazado. En *Settings → Build and Deployment*, deja el *Build Command* sin override (`npm run build`).
 
+## Publicar en Hostinger (Business Web Hosting o Cloud)
+
+La tienda es una app Node.js (Next.js), y esos planes de Hostinger la pueden ejecutar. La base de datos (Neon/PostgreSQL) y las fotos (Vercel Blob) se quedan donde están: funcionan desde cualquier servidor.
+
+1. En hPanel: **Websites → Add website → Node.js Apps → Import Git repository**, conecta GitHub y elige este repositorio y la rama que se publica.
+2. Revisa la configuración que Hostinger detecta: framework **Next.js**, Node **22**, build `npm run build`, inicio `npm start` (salida `.next`).
+3. Variables de entorno (antes del primer deploy; se pueden importar desde un `.env`): copia desde Vercel (*Settings → Environment Variables*) `DATABASE_URL` (o la de Neon que tenga prefijo), `BLOB_READ_WRITE_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `AUTH_SECRET` y las de Webpay y SMTP si las usas. Agrega:
+   - `NEXT_PUBLIC_SITE_URL=https://solisracingparts.cl`
+   - `APP_ENV=production`
+4. **Deploy**. El build aplica las migraciones de la base de datos igual que en Vercel. Si la app no responde, revisa *Runtime logs* (casi siempre es una variable faltante).
+5. **Dominio**: agrega `solisracingparts.cl` al sitio en Hostinger y cambia los DNS en NIC Chile según te indique Hostinger (o los registros A/CNAME que muestre). Cuando el dominio apunte a Hostinger, quítalo del proyecto de Vercel.
+
+> Con `APP_ENV=production`, Webpay en modo de pruebas solo lo ve el administrador con sesión iniciada, igual que en Vercel. La dirección temporal de Hostinger (`*.hostingersite.com`) muestra la tienda completa, como `*.vercel.app`: sirve para probar sin abrir el dominio `.cl`, que sigue mostrando «Próximamente» mientras esté activo.
+
 ## Webpay Plus (Transbank)
 
 La tienda parte en el **ambiente de integración** de Transbank: puedes hacer compras de prueba de punta a punta sin dinero real. En el pago usa las [tarjetas de prueba de Transbank](https://www.transbankdevelopers.cl/documentacion/como_empezar#tarjetas-de-prueba), por ejemplo:

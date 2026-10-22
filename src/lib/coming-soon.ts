@@ -1,12 +1,12 @@
 /*
  * Aviso «Próximamente»: se muestra sobre la tienda (desenfocada) a quien entra por el dominio
- * público. Los dominios de prueba (*.vercel.app, localhost) ven la tienda completa, para seguir
+ * público. Los dominios de prueba (*.vercel.app, el temporal de Hostinger, localhost) ven la tienda completa, para seguir
  * trabajando en paralelo. Con ?preview=1 cualquier navegador ve la tienda (queda guardado) y con
  * ?preview=0 ve el aviso como visitante.
  */
 
 /** Dominios donde se ve la tienda directamente, sin el aviso. */
-export const PREVIEW_HOSTS = String.raw`(^|\.)vercel\.app$|^localhost$|^127\.0\.0\.1$`;
+export const PREVIEW_HOSTS = String.raw`(^|\.)vercel\.app$|(^|\.)hostingersite\.com$|^localhost$|^127\.0\.0\.1$`;
 export const PREVIEW_STORAGE_KEY = "solis-preview";
 /** Segundos tras los cuales se congelan las animaciones de fondo (ahorra batería detrás del desenfoque). */
 export const COMING_SOON_SETTLE_MS = 3500;

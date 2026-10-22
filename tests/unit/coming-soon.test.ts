@@ -28,6 +28,7 @@ describe("aviso Próximamente: vista previa", () => {
   it("los dominios de prueba ven la tienda", () => {
     expect(isPreview("solis-racing.vercel.app").preview).toBe(true);
     expect(isPreview("solis-racing-git-rama-equipo.vercel.app").preview).toBe(true);
+    expect(isPreview("lightblue-owl-123456.hostingersite.com").preview).toBe(true);
     expect(isPreview("localhost").preview).toBe(true);
     expect(isPreview("127.0.0.1").preview).toBe(true);
   });
@@ -35,6 +36,7 @@ describe("aviso Próximamente: vista previa", () => {
   it("no confunde dominios parecidos", () => {
     expect(isPreview("vercel.app.malo.cl").preview).toBe(false);
     expect(isPreview("notvercel.app").preview).toBe(false);
+    expect(isPreview("hostingersite.com.malo.cl").preview).toBe(false);
   });
 
   it("?preview=1 se guarda y muestra la tienda en el dominio público", () => {

@@ -27,8 +27,9 @@ export const RATE_LIMIT_MESSAGE = "Demasiados intentos seguidos. Espera unos min
 
 async function clientIp() {
   const h = await headers();
-  // En Vercel ambos encabezados los pone la plataforma (no se pueden falsificar desde el navegador).
-  return h.get("x-real-ip") ?? h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  // x-real-ip lo pone la plataforma (Vercel, o el proxy del hosting). Si solo hay x-forwarded-for,
+  // se usa la última IP: la agregó nuestro proxy; las primeras las puede inventar el navegador.
+  return h.get("x-real-ip") ?? h.get("x-forwarded-for")?.split(",").at(-1)?.trim() ?? null;
 }
 
 /**
