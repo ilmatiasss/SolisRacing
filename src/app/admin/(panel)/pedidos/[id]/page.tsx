@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActionForm, ActionSubmit } from "@/components/admin/action-form";
+import { OrderNextStep } from "@/components/admin/order-next-step";
 import { OrderStatusForm } from "@/components/admin/order-status-form";
 import { AdminPageHeader, Card, Notice } from "@/components/admin/ui";
 import { WhatsAppIcon } from "@/components/icons";
@@ -41,7 +42,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
   const number = formatOrderNumber(order.id);
   const pickup = order.deliveryMethod === "pickup";
   const webpay = order.webpayResponse;
-  const testPayment = webpay?.environment && webpay.environment !== "production";
+  const testPayment = Boolean(webpay?.environment && webpay.environment !== "production");
   const customerLink = `${siteUrl()}/pedido/${order.id}?t=${order.publicToken}`;
   const region = getRegion(order.shippingRegion);
 
@@ -78,18 +79,13 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
       />
 
       {order.adminNotes?.startsWith("⚠️") && <Notice tone="danger" className="mb-4">{order.adminNotes}</Notice>}
-      {testPayment && (
-        <Notice tone="warning" className="mb-4">
-          Este pago se hizo en el ambiente de <strong>{webpay?.environment === "mock" ? "simulación" : "pruebas de Transbank"}</strong>:
-          no corresponde a dinero real. No despaches este pedido.
-        </Notice>
-      )}
-      {order.status === "pending" && order.paymentMethod === "transfer" && (
-        <Notice tone="info" className="mb-4">
-          Esperando transferencia por <strong>{formatCLP(order.total)}</strong>. Cuando confirmes el depósito en tu banco, cambia el
-          estado a «Pagado».
-        </Notice>
-      )}
+      <OrderNextStep
+        status={order.status}
+        paymentMethod={order.paymentMethod}
+        deliveryMethod={order.deliveryMethod}
+        total={order.total}
+        testPayment={testPayment}
+      />
 
       <div className="grid gap-6 xl:grid-cols-[1fr_24rem]">
         <div className="space-y-6">

@@ -3,12 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SalesChart } from "@/components/admin/sales-chart";
 import { SetupChecklist, type SetupStep } from "@/components/admin/setup-checklist";
+import { TodayTasks } from "@/components/admin/today-tasks";
 import { AdminPageHeader, Card, EmptyState, Notice, StatCard, Table, Td, Th } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/auth";
-import { formatBookingDate } from "@/lib/booking";
-import { getDashboardData } from "@/lib/data/admin";
+import { formatBookingDate, todayInChile } from "@/lib/booking";
+import { getDashboardData, getNavCounts } from "@/lib/data/admin";
 import { listUpcomingBookings } from "@/lib/data/booking";
 import { purgeExpiredPersonalData } from "@/lib/data/privacy";
 import { readStoreSettings } from "@/lib/data/settings";
@@ -28,7 +29,13 @@ export default async function DashboardPage() {
   await expireAbandonedWebpayOrders().catch(() => 0);
   // Plazos de conservación de la política de privacidad (borra o anonimiza lo vencido).
   await purgeExpiredPersonalData().catch(() => null);
-  const [data, settings, bookings] = await Promise.all([getDashboardData(), readStoreSettings(), listUpcomingBookings()]);
+  const [data, settings, bookings, navCounts] = await Promise.all([
+    getDashboardData(),
+    readStoreSettings(),
+    listUpcomingBookings(),
+    getNavCounts(),
+  ]);
+  const today = todayInChile();
   const env = webpayEnvironment();
   const steps: SetupStep[] = [
     {
@@ -76,7 +83,7 @@ export default async function DashboardPage() {
     <>
       <AdminPageHeader
         title={`Hola, ${user.name.split(" ")[0]}`}
-        description="Así va la tienda."
+        description="Lo que pide atención hoy y cómo va la tienda."
         actions={
           <Link href="/admin/productos/nuevo" className={buttonClasses({ size: "sm" })}>
             <Plus className="size-4" />
@@ -100,6 +107,16 @@ export default async function DashboardPage() {
           </span>
         </Notice>
       )}
+
+      <TodayTasks
+        counts={{
+          pendingTransfers: data.pendingTransfers,
+          toPrepare: data.toPrepare,
+          preparing: data.preparing,
+          newInquiries: navCounts.inquiries,
+          bookingsToday: bookings.filter((booking) => booking.date === today).length,
+        }}
+      />
 
       <SetupChecklist steps={steps} />
 

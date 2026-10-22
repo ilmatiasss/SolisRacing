@@ -1,6 +1,7 @@
 import { Inbox, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { PageGuide } from "./page-guide";
 import { SectionTag } from "./section-tag";
 
 export function AdminPageHeader({
@@ -18,6 +19,7 @@ export function AdminPageHeader({
         <SectionTag />
         <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
         {description && <p className="mt-1.5 max-w-2xl text-sm text-muted sm:text-base">{description}</p>}
+        <PageGuide />
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
     </div>

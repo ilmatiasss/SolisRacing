@@ -5,6 +5,7 @@ import {
   Inbox,
   Layers,
   LayoutDashboard,
+  LifeBuoy,
   Package,
   Plug,
   Receipt,
@@ -23,7 +24,12 @@ export type NavGroup = { title?: string; items: NavItem[] };
 
 /** Menú del panel: las secciones agrupadas por lo que se hace en ellas. */
 export const ADMIN_NAV: NavGroup[] = [
-  { items: [{ href: "/admin", label: "Resumen", icon: LayoutDashboard }] },
+  {
+    items: [
+      { href: "/admin", label: "Resumen", icon: LayoutDashboard },
+      { href: "/admin/ayuda", label: "Guía de uso", icon: LifeBuoy },
+    ],
+  },
   {
     title: "Ventas y clientes",
     items: [

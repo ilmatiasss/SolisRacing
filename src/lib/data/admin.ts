@@ -104,6 +104,8 @@ export async function getDashboardData() {
     monthOrders: month?.orders ?? 0,
     last30Sales: last30Row?.total ?? 0,
     toShip: countBy((row) => row.status === "paid" || row.status === "processing"),
+    toPrepare: countBy((row) => row.status === "paid"),
+    preparing: countBy((row) => row.status === "processing"),
     pendingTransfers: countBy((row) => row.status === "pending" && row.paymentMethod === "transfer"),
     recentOrders,
     lowStock,
