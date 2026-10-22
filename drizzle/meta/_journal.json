@@ -92,6 +92,13 @@
       "when": 1792627834161,
       "tag": "0012_arreglar_url_foto_fitting_orb",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792627995593,
+      "tag": "0013_segunda_foto_reloj_combustible",
+      "breakpoints": true
     }
   ]
 }
