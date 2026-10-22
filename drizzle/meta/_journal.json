@@ -85,6 +85,13 @@
       "when": 1792627797611,
       "tag": "0011_segunda_foto_fitting_orb",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792627834161,
+      "tag": "0012_arreglar_url_foto_fitting_orb",
+      "breakpoints": true
     }
   ]
 }
