@@ -26,7 +26,6 @@ import {
   type ProductCardData,
 } from "@/lib/data/catalog";
 import { getStoreSettings } from "@/lib/data/settings";
-import { availablePayments } from "@/lib/payments/webpay";
 import { formatCLP, whatsappLink } from "@/lib/format";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -60,10 +59,6 @@ export default async function HomePage() {
     .map((category) => ({ category, products: catalog.filter((product) => product.categorySlug === category.slug) }))
     .filter((shelf) => shelf.products.length > 0);
   const freeShipping = settings.shipping.freeShippingThreshold;
-  const payments = availablePayments(settings);
-  const payText = payments.webpayEnabled
-    ? `Webpay con débito, crédito o prepago${payments.transferEnabled ? ", o transferencia" : ""}.`
-    : "Pagas por transferencia y te confirmamos el pedido apenas llega.";
 
   return (
     <>
@@ -326,7 +321,7 @@ export default async function HomePage() {
         <ul className="grid gap-8 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: Truck, title: "Despacho a todo Chile", text: "Por courier hasta tu puerta, o retiras en la tienda de Antofagasta." },
-            { icon: ShieldCheck, title: "Pagas tranquilo", text: payText },
+            { icon: ShieldCheck, title: "Pagas tranquilo", text: "Webpay con débito, crédito o prepago." },
             { icon: Headset, title: "Te ayudamos a elegir", text: "Cuéntanos tu auto y te decimos qué pieza necesitas." },
             { icon: Wrench, title: "Instalación y programación", text: "Si quieres, lo instalamos y lo dejamos programado nosotros." },
           ].map(({ icon: Icon, title, text }) => (

@@ -3,21 +3,19 @@ import { orderNextStep, orderStages } from "@/lib/order-guide";
 import { SECTION_GUIDES, HELP_TOPICS } from "@/components/admin/guides";
 import { ADMIN_NAV } from "@/components/admin/nav";
 
-const base = { paymentMethod: "transfer", deliveryMethod: "shipping", total: 45990 } as const;
+const base = { deliveryMethod: "shipping" } as const;
 
 describe("Qué hacer ahora en un pedido", () => {
-  it("pide confirmar la transferencia con el monto", () => {
-    const step = orderNextStep({ ...base, status: "pending" });
-    expect(step.tone).toBe("action");
-    expect(step.text).toContain("$45.990");
+  it("un pago con Webpay pendiente no requiere acción", () => {
+    expect(orderNextStep({ ...base, status: "pending" }).tone).toBe("wait");
   });
 
-  it("un pago con Webpay pendiente no requiere acción", () => {
-    expect(orderNextStep({ ...base, paymentMethod: "webpay", status: "pending" }).tone).toBe("wait");
+  it("un pedido pagado pide prepararlo", () => {
+    expect(orderNextStep({ ...base, status: "paid" }).tone).toBe("action");
   });
 
   it("un pedido de prueba avisa que no se despache", () => {
-    const step = orderNextStep({ ...base, paymentMethod: "webpay", status: "paid", testPayment: true });
+    const step = orderNextStep({ ...base, status: "paid", testPayment: true });
     expect(step.tone).toBe("warning");
     expect(orderNextStep({ ...base, status: "cancelled", testPayment: true }).tone).toBe("done");
   });

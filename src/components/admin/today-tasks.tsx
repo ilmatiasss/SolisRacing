@@ -1,10 +1,9 @@
-import { ArrowRight, CalendarClock, CircleCheck, Inbox, PackageCheck, Truck, Wallet, type LucideIcon } from "lucide-react";
+import { ArrowRight, CalendarClock, CircleCheck, Inbox, PackageCheck, Truck, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { Card } from "./ui";
 
 export type TodayCounts = {
-  pendingTransfers: number;
   toPrepare: number;
   preparing: number;
   newInquiries: number;
@@ -18,14 +17,6 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 /** «Para hoy»: lo que pide atención ahora, en el orden en que conviene hacerlo, con un enlace para resolverlo. */
 export function TodayTasks({ counts }: { counts: TodayCounts }) {
   const tasks: Task[] = [
-    {
-      count: counts.pendingTransfers,
-      title: plural(counts.pendingTransfers, "transferencia por confirmar", "transferencias por confirmar"),
-      hint: "Revisa tu banco. Si llegó el dinero, abre el pedido y cámbialo a «Pagado».",
-      href: "/admin/pedidos?estado=pending&pago=transfer",
-      icon: Wallet,
-      urgent: true,
-    },
     {
       count: counts.toPrepare,
       title: plural(counts.toPrepare, "pedido pagado por preparar", "pedidos pagados por preparar"),

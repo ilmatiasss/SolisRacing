@@ -1,9 +1,8 @@
-import { CheckCircle2, CircleX, Clock, Landmark, TriangleAlert } from "lucide-react";
+import { CheckCircle2, CircleX, Clock, TriangleAlert } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
-import { WhatsAppIcon } from "@/components/icons";
 import { ClearCartOnMount, PrintButton } from "@/components/store/order/clear-cart";
 import { ProductImage } from "@/components/store/product-image";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +10,6 @@ import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { getRegion } from "@/lib/chile";
 import { getStoreSettings } from "@/lib/data/settings";
-import { hasTransferAccount } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber, whatsappLink } from "@/lib/format";
 import {
   ORDER_STATUS_TONES,
@@ -80,10 +78,7 @@ async function OrderView({ params, searchParams }: Props) {
   const number = formatOrderNumber(order.id);
   const pickup = order.deliveryMethod === "pickup";
   const result = typeof query.pago === "string" ? RESULT_MESSAGES[query.pago] : undefined;
-  const confirmed =
-    ["paid", "processing", "shipped", "delivered"].includes(order.status) ||
-    (order.status === "pending" && order.paymentMethod === "transfer");
-  const awaitingTransfer = order.status === "pending" && order.paymentMethod === "transfer";
+  const confirmed = ["paid", "processing", "shipped", "delivered"].includes(order.status);
   const webpay = order.webpayResponse;
   const region = getRegion(order.shippingRegion);
 
@@ -107,11 +102,6 @@ async function OrderView({ params, searchParams }: Props) {
             )}
           </Banner>
         )}
-        {!result && awaitingTransfer && (
-          <Banner tone="warning" title="¡Pedido recibido! Falta tu transferencia">
-            Reservamos tus productos. Transfiere el total con los datos de abajo para confirmar tu compra.
-          </Banner>
-        )}
 
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -126,46 +116,6 @@ async function OrderView({ params, searchParams }: Props) {
             <PrintButton />
           </div>
         </div>
-
-        {awaitingTransfer && (
-          <section className="rounded-lg border border-signal-400/30 bg-surface p-6">
-            <h2 className="flex items-center gap-2 font-display text-2xl font-bold uppercase">
-              <Landmark className="size-6 text-signal-400" /> Datos para transferir
-            </h2>
-            {!hasTransferAccount(settings.payments) && (
-              <p className="mt-3 text-sm text-zinc-300">
-                Te enviaremos los datos de la cuenta por WhatsApp o correo a la brevedad. Si prefieres, pídelos ahora con
-                el botón de WhatsApp.
-              </p>
-            )}
-            <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
-              {hasTransferAccount(settings.payments) && (
-                <>
-                  <DataRow label="Banco" value={settings.payments.transferBank} />
-                  <DataRow label="Tipo de cuenta" value={settings.payments.transferAccountType} />
-                  <DataRow label="N° de cuenta" value={settings.payments.transferAccountNumber} />
-                  <DataRow label="Titular" value={settings.payments.transferHolder} />
-                  {settings.payments.transferRut && <DataRow label="RUT" value={settings.payments.transferRut} />}
-                  {settings.payments.transferEmail && <DataRow label="Correo" value={settings.payments.transferEmail} />}
-                </>
-              )}
-              <DataRow label="Monto a transferir" value={formatCLP(order.total)} strong />
-              <DataRow label="Comentario" value={number} strong />
-            </dl>
-            {settings.payments.transferInstructions && (
-              <p className="mt-4 text-sm text-muted">{settings.payments.transferInstructions}</p>
-            )}
-            <a
-              href={whatsappLink(settings.whatsapp, `Hola, envío el comprobante de transferencia del pedido ${number}.`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonClasses({ size: "sm", className: "mt-5 bg-[#25d366] hover:bg-[#1fb757] print:hidden" })}
-            >
-              <WhatsAppIcon className="size-4" />
-              Enviar comprobante por WhatsApp
-            </a>
-          </section>
-        )}
 
         {webpay && order.paymentMethod === "webpay" && order.status !== "cancelled" && webpay.response_code === 0 && (
           <section className="rounded-lg border border-line bg-surface p-6">

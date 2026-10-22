@@ -29,6 +29,7 @@ export const orderStatusEnum = pgEnum("order_status", [
   "cancelled",
 ]);
 
+// La tienda cobra solo con Webpay; «transfer» queda para leer pedidos antiguos.
 export const paymentMethodEnum = pgEnum("payment_method", ["webpay", "transfer"]);
 
 /** pickup = retiro en tienda, shipping = despacho pagado, shipping_collect = envío por pagar. */

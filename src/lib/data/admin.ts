@@ -29,12 +29,7 @@ export async function getNavCounts() {
     db
       .select({ value: count() })
       .from(orders)
-      .where(
-        or(
-          inArray(orders.status, ["paid", "processing"]),
-          and(eq(orders.status, "pending"), eq(orders.paymentMethod, "transfer")),
-        ),
-      ),
+      .where(inArray(orders.status, ["paid", "processing"])),
     db.select({ value: count() }).from(inquiries).where(eq(inquiries.status, "new")),
   ]);
   return { orders: ordersRow?.value ?? 0, inquiries: inquiriesRow?.value ?? 0 };
@@ -106,7 +101,6 @@ export async function getDashboardData() {
     toShip: countBy((row) => row.status === "paid" || row.status === "processing"),
     toPrepare: countBy((row) => row.status === "paid"),
     preparing: countBy((row) => row.status === "processing"),
-    pendingTransfers: countBy((row) => row.status === "pending" && row.paymentMethod === "transfer"),
     recentOrders,
     lowStock,
     newInquiries,

@@ -3,9 +3,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 
 const { availablePayments, isWebpayAvailable, isWebpaySandboxForAdmins } = await import("@/lib/payments/webpay");
-const { DEFAULT_SETTINGS, hasTransferAccount } = await import("@/lib/settings");
+const { DEFAULT_SETTINGS } = await import("@/lib/settings");
 
-const enabled = { payments: { ...DEFAULT_SETTINGS.payments, webpayEnabled: true, transferEnabled: true } };
+const enabled = { payments: { ...DEFAULT_SETTINGS.payments, webpayEnabled: true } };
 
 describe("Webpay en el sitio publicado", () => {
   afterEach(() => vi.unstubAllEnvs());
@@ -14,9 +14,9 @@ describe("Webpay en el sitio publicado", () => {
     vi.stubEnv("VERCEL_ENV", "production");
     vi.stubEnv("WEBPAY_ENVIRONMENT", "integration");
     expect(isWebpayAvailable()).toBe(false);
-    expect(availablePayments(enabled)).toEqual({ webpayEnabled: false, transferEnabled: true });
+    expect(availablePayments(enabled)).toEqual({ webpayEnabled: false });
     expect(isWebpaySandboxForAdmins()).toBe(true);
-    expect(availablePayments(enabled, { admin: true })).toEqual({ webpayEnabled: true, transferEnabled: true });
+    expect(availablePayments(enabled, { admin: true })).toEqual({ webpayEnabled: true });
   });
 
   it("tampoco con el simulador ni con un valor mal escrito", () => {
@@ -49,13 +49,5 @@ describe("Webpay en el sitio publicado", () => {
   it("respeta lo desactivado en el panel", () => {
     vi.stubEnv("VERCEL_ENV", "");
     expect(availablePayments({ payments: { ...enabled.payments, webpayEnabled: false } }).webpayEnabled).toBe(false);
-  });
-});
-
-describe("datos para transferir", () => {
-  it("no muestra la cuenta de ejemplo ni una vacía", () => {
-    expect(hasTransferAccount({ transferAccountNumber: "" })).toBe(false);
-    expect(hasTransferAccount({ transferAccountNumber: " 00-000-00000-00 " })).toBe(false);
-    expect(hasTransferAccount({ transferAccountNumber: "12345678" })).toBe(true);
   });
 });

@@ -1,5 +1,4 @@
-import type { DeliveryMethod, OrderStatus, PaymentMethod } from "./db/schema";
-import { formatCLP } from "./format";
+import type { DeliveryMethod, OrderStatus } from "./db/schema";
 
 /*
  * «Qué hacer ahora» en el detalle de un pedido del panel: en qué etapa va y cuál es el siguiente
@@ -8,9 +7,7 @@ import { formatCLP } from "./format";
 
 export type OrderGuideInput = {
   status: OrderStatus;
-  paymentMethod: PaymentMethod;
   deliveryMethod: DeliveryMethod;
-  total: number;
   /** Pagado en el ambiente de pruebas o simulación de Webpay (no es dinero real). */
   testPayment?: boolean;
 };
@@ -31,7 +28,7 @@ export function orderStages({ status, deliveryMethod }: Pick<OrderGuideInput, "s
   }));
 }
 
-export function orderNextStep({ status, paymentMethod, deliveryMethod, total, testPayment }: OrderGuideInput): OrderNextStep {
+export function orderNextStep({ status, deliveryMethod, testPayment }: OrderGuideInput): OrderNextStep {
   const pickup = deliveryMethod === "pickup";
   if (testPayment && status !== "cancelled") {
     return {
@@ -42,17 +39,11 @@ export function orderNextStep({ status, paymentMethod, deliveryMethod, total, te
   }
   switch (status) {
     case "pending":
-      return paymentMethod === "transfer"
-        ? {
-            tone: "action",
-            title: "Confirma la transferencia",
-            text: `Revisa en tu banco si llegó un depósito por ${formatCLP(total)}. Si llegó, cambia el estado a «Pagado». Si pasan 48 horas y no llega, puedes cancelarlo: el stock vuelve solo.`,
-          }
-        : {
-            tone: "wait",
-            title: "Esperando el pago en Webpay",
-            text: "El cliente está pagando o dejó el pago a medias. No tienes que hacer nada: si no paga, el pedido se cancela solo.",
-          };
+      return {
+        tone: "wait",
+        title: "Esperando el pago en Webpay",
+        text: "El cliente está pagando o dejó el pago a medias. No tienes que hacer nada: si no paga, el pedido se cancela solo.",
+      };
     case "paid":
     case "processing":
       return pickup
@@ -86,7 +77,7 @@ export function orderNextStep({ status, paymentMethod, deliveryMethod, total, te
       return {
         tone: "done",
         title: "Pedido cancelado",
-        text: "El stock ya volvió al catálogo. Si el cliente había pagado, recuerda devolverle el dinero desde tu banco o desde Transbank.",
+        text: "El stock ya volvió al catálogo. Si el cliente había pagado, recuerda devolverle el dinero desde el portal de Transbank.",
       };
   }
 }

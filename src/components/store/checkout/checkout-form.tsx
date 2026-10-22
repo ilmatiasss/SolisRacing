@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Landmark, Lock, ShieldCheck, Store, Truck, PackageOpen, TriangleAlert } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck, Store, Truck, PackageOpen, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { startTransition, useActionState, useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { ProductImage } from "@/components/store/product-image";
@@ -9,7 +9,7 @@ import { Field, FieldError, Input, Select, Textarea } from "@/components/ui/fiel
 import { placeOrder, type CheckoutState } from "@/lib/actions/checkout";
 import { REGIONS, getRegion } from "@/lib/chile";
 import { cn } from "@/lib/cn";
-import type { DeliveryMethod, DocumentType, PaymentMethod } from "@/lib/db/schema";
+import type { DeliveryMethod, DocumentType } from "@/lib/db/schema";
 import { formatCLP } from "@/lib/format";
 import { formatRut } from "@/lib/rut";
 import type { PaymentSettings, ShippingSettings } from "@/lib/settings";
@@ -63,7 +63,7 @@ function saveDraft(formData: FormData) {
 
 export type CheckoutConfig = {
   shipping: ShippingSettings;
-  payments: Pick<PaymentSettings, "webpayEnabled" | "transferEnabled">;
+  payments: Pick<PaymentSettings, "webpayEnabled">;
   webpayEnvironment: "integration" | "production" | "mock";
   /** Sitio publicado en modo de pruebas: solo el administrador con sesión ve Webpay. */
   adminSandbox?: boolean;
@@ -84,17 +84,12 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment, adminSandbox
   const deliveryOptions = (["shipping", "shipping_collect", "pickup"] as const).filter((method) =>
     isDeliveryMethodEnabled(shipping, method),
   );
-  const paymentOptions = (["webpay", "transfer"] as const).filter((method) =>
-    method === "webpay" ? payments.webpayEnabled : payments.transferEnabled,
-  );
+  // El único medio de pago es Webpay (débito, crédito o prepago).
+  const canPay = payments.webpayEnabled;
 
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod | undefined>(() => {
     const saved = draft.deliveryMethod as DeliveryMethod | undefined;
     return saved && deliveryOptions.includes(saved) ? saved : deliveryOptions[0];
-  });
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(() => {
-    const saved = draft.paymentMethod as PaymentMethod | undefined;
-    return saved && paymentOptions.includes(saved) ? saved : paymentOptions[0];
   });
   const [documentType, setDocumentType] = useState<DocumentType>(
     draft.documentType === "factura" ? "factura" : "boleta",
@@ -160,7 +155,7 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment, adminSandbox
       <input type="hidden" name="expectedTotal" value={total} />
 
       <div className="space-y-6">
-        {webpayEnvironment !== "production" && paymentOptions.includes("webpay") && (
+        {webpayEnvironment !== "production" && canPay && (
           <div className="flex gap-3 rounded-lg border border-signal-400/30 bg-signal-400/10 p-4 text-sm" role="note">
             <TriangleAlert className="mt-0.5 size-4.5 shrink-0 text-signal-400" />
             <div className="space-y-1.5">
@@ -178,7 +173,7 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment, adminSandbox
               )}
               {adminSandbox && (
                 <p className="text-muted">
-                  Solo tú ves Webpay porque iniciaste sesión en el panel; los clientes ven solo transferencia. Anula los
+                  Solo tú ves Webpay porque iniciaste sesión en el panel; los clientes aún no pueden pagar. Cancela los
                   pedidos de prueba en el panel para devolver el stock.
                 </p>
               )}
@@ -393,33 +388,26 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment, adminSandbox
         </Section>
 
         <Section number={4} title="Pago">
-          {paymentOptions.length === 0 ? (
-            <p className="text-sm text-red-400">No hay medios de pago disponibles. Contáctanos para coordinar.</p>
-          ) : (
+          {canPay ? (
             <div className="grid gap-3 sm:grid-cols-2">
-              {paymentOptions.includes("webpay") && (
-                <OptionCard
-                  name="paymentMethod"
-                  value="webpay"
-                  checked={paymentMethod === "webpay"}
-                  onChange={() => setPaymentMethod("webpay")}
-                  icon={<CreditCard className="size-5" />}
-                  title="Webpay"
-                  description="Débito, crédito o prepago"
-                />
-              )}
-              {paymentOptions.includes("transfer") && (
-                <OptionCard
-                  name="paymentMethod"
-                  value="transfer"
-                  checked={paymentMethod === "transfer"}
-                  onChange={() => setPaymentMethod("transfer")}
-                  icon={<Landmark className="size-5" />}
-                  title="Transferencia bancaria"
-                  description="Te mostramos los datos al confirmar"
-                />
-              )}
+              <OptionCard
+                name="paymentMethod"
+                value="webpay"
+                checked
+                onChange={() => {}}
+                icon={<CreditCard className="size-5" />}
+                title="Webpay"
+                description="Débito, crédito o prepago"
+              />
             </div>
+          ) : (
+            <p className="text-sm text-red-400">
+              Por ahora no podemos recibir pagos en línea.{" "}
+              <Link href="/contacto" className="underline">
+                Escríbenos
+              </Link>{" "}
+              para coordinar tu compra.
+            </p>
           )}
           <FieldError message={errors.paymentMethod} />
         </Section>
@@ -500,14 +488,10 @@ function CheckoutFormInner({ shipping, payments, webpayEnvironment, adminSandbox
           type="submit"
           size="lg"
           className="w-full"
-          disabled={pending || refreshing || deliveryOptions.length === 0 || paymentOptions.length === 0}
+          disabled={pending || refreshing || deliveryOptions.length === 0 || !canPay}
         >
           <Lock className="size-4.5" />
-          {pending
-            ? "Procesando…"
-            : paymentMethod === "webpay"
-              ? `Pagar ${formatCLP(total)} con Webpay`
-              : "Confirmar pedido"}
+          {pending ? "Procesando…" : `Pagar ${formatCLP(total)} con Webpay`}
         </Button>
         <p className="flex items-center justify-center gap-1.5 text-xs text-muted">
           <ShieldCheck className="size-3.5" /> Tus datos viajan cifrados. No guardamos datos de tarjetas.

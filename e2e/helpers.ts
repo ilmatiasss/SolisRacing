@@ -14,10 +14,7 @@ export async function addProductToCart(page: Page, slug: string, quantity = 1) {
   await expect(page.getByRole("dialog")).toBeVisible();
 }
 
-export async function fillCheckout(
-  page: Page,
-  options: { payment: "webpay" | "transfer"; delivery?: "shipping" | "pickup" | "shipping_collect" },
-) {
+export async function fillCheckout(page: Page, options: { delivery?: "shipping" | "pickup" | "shipping_collect" } = {}) {
   await page.goto("/checkout");
   await page.locator("#name").fill("Camila Rojas");
   await page.locator("#email").fill("camila@example.com");
@@ -30,16 +27,19 @@ export async function fillCheckout(
     await page.locator("#commune").selectOption("Viña del Mar");
     await page.locator("#address").fill("Av. Libertad 1100");
   }
-  await page.locator(`label:has(input[name=paymentMethod][value=${options.payment}])`).click();
+  // Webpay es el único medio de pago y viene marcado.
+  await expect(page.locator("input[name=paymentMethod][value=webpay]")).toBeChecked();
   await page.locator("input[name=acceptTerms]").check();
 }
 
-/** Crea un pedido por transferencia como cliente y devuelve su número (ej: "SR-1005"). */
-export async function placeTransferOrder(page: Page, slug: string) {
+/** Compra un producto con Webpay (simulador, pago aprobado) y devuelve el número del pedido (ej: "SR-1005"). */
+export async function placePaidOrder(page: Page, slug: string) {
   await addProductToCart(page, slug);
-  await fillCheckout(page, { payment: "transfer" });
-  await page.getByRole("button", { name: "Confirmar pedido" }).click();
-  await page.waitForURL(/\/pedido\/\d+\?t=/);
+  await fillCheckout(page);
+  await page.getByRole("button", { name: /Pagar .* con Webpay/ }).click();
+  await page.waitForURL(/\/pago\/simulado\/pagar/);
+  await page.getByRole("button", { name: "Aprobar pago" }).click();
+  await page.waitForURL(/pago=aprobado/);
   return (await page.getByRole("heading", { level: 1 }).innerText()).trim();
 }
 

@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarClock, Inbox, PackageCheck, Plus, Receipt, TrendingUp, TriangleAlert, Wallet } from "lucide-react";
+import { ArrowRight, CalendarClock, Inbox, PackageCheck, Plus, Receipt, TrendingUp, TriangleAlert } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SalesChart } from "@/components/admin/sales-chart";
@@ -13,7 +13,7 @@ import { getDashboardData, getNavCounts } from "@/lib/data/admin";
 import { listUpcomingBookings } from "@/lib/data/booking";
 import { purgeExpiredPersonalData } from "@/lib/data/privacy";
 import { readStoreSettings } from "@/lib/data/settings";
-import { DEFAULT_SETTINGS, hasTransferAccount } from "@/lib/settings";
+import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
 import { inquiryTitle, ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
 import { expireAbandonedWebpayOrders } from "@/lib/orders";
@@ -45,10 +45,10 @@ export default async function DashboardPage() {
       done: Boolean(settings.email),
     },
     {
-      label: "Datos bancarios para transferencias",
-      hint: "Banco, cuenta y titular que verá el cliente al pagar por transferencia.",
+      label: "Pagos con Webpay activos",
+      hint: "Cuando Transbank te entregue el código de comercio y la API Key, se configuran y los clientes ya pueden pagar.",
       href: "/admin/configuracion",
-      done: hasTransferAccount(settings.payments),
+      done: env === "production" && isWebpayAvailable(),
     },
     {
       label: "Razón social y RUT de la empresa",
@@ -98,10 +98,10 @@ export default async function DashboardPage() {
           <span>
             <strong>Webpay está en modo {env === "mock" ? "simulador" : "de pruebas (integración)"}.</strong>{" "}
             {isWebpaySandboxForAdmins()
-              ? "Los clientes solo ven transferencia; tú, con la sesión del panel iniciada, puedes probar Webpay en la tienda con las tarjetas de prueba (los pedidos quedan marcados como PRUEBA)."
+              ? "Los clientes todavía no pueden pagar; tú, con la sesión del panel iniciada, puedes probar Webpay en la tienda con las tarjetas de prueba (los pedidos quedan marcados como PRUEBA)."
               : isWebpayAvailable()
                 ? "Los pagos con tarjeta no son reales."
-                : "Por eso los clientes solo ven el pago por transferencia."}{" "}
+                : "Por eso los clientes todavía no pueden pagar."}{" "}
             Cuando Transbank te entregue tu código de comercio y API Key, configura{" "}
             <code className="font-mono">WEBPAY_ENVIRONMENT=production</code> (ver README).
           </span>
@@ -110,7 +110,6 @@ export default async function DashboardPage() {
 
       <TodayTasks
         counts={{
-          pendingTransfers: data.pendingTransfers,
           toPrepare: data.toPrepare,
           preparing: data.preparing,
           newInquiries: navCounts.inquiries,
@@ -137,11 +136,11 @@ export default async function DashboardPage() {
           icon={PackageCheck}
         />
         <StatCard
-          label="Transferencias pendientes"
-          value={data.pendingTransfers}
-          hint="Revisa si llegó el pago"
-          tone={data.pendingTransfers ? "warning" : "neutral"}
-          icon={Wallet}
+          label="Solicitudes nuevas"
+          value={navCounts.inquiries}
+          hint="Mensajes sin responder"
+          tone={navCounts.inquiries ? "warning" : "neutral"}
+          icon={Inbox}
         />
       </div>
 

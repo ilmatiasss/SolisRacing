@@ -18,7 +18,7 @@ export const SECTION_GUIDES: Record<string, SectionGuide> = {
   "/admin": {
     intro: "Es tu inicio: lo que pide atención hoy, cómo van las ventas y lo que falta para dejar la tienda lista.",
     steps: [
-      "Revisa «Para hoy»: pedidos por despachar, transferencias por confirmar y mensajes nuevos.",
+      "Revisa «Para hoy»: pedidos por preparar o despachar, mensajes nuevos y horas de hoy.",
       "Haz clic en cualquier tarjeta para ir directo a resolverla.",
       "Mientras aparezca «Primeros pasos», completa lo que falta antes de abrir la tienda.",
     ],
@@ -26,8 +26,8 @@ export const SECTION_GUIDES: Record<string, SectionGuide> = {
   "/admin/pedidos": {
     intro: "Aquí llegan todas las compras de la tienda. Cada pedido avanza por estados hasta que el cliente lo recibe.",
     steps: [
-      "Pendiente de pago: si es transferencia, revisa tu banco y, cuando llegue el dinero, cámbialo a «Pagado».",
-      "Pagado: prepara los productos (puedes marcarlo «En preparación»).",
+      "Pendiente de pago: el cliente está pagando en Webpay. No hagas nada: si no paga, se cancela solo.",
+      "Pagado: Webpay aprobó el pago. Prepara los productos (puedes marcarlo «En preparación»).",
       "Enviado: al despachar, elige el courier y escribe el n° de seguimiento. Con «Avisar al cliente por correo» marcado, le llega un correo.",
       "Entregado: cuando el cliente lo recibió o lo retiró en la tienda.",
     ],
@@ -96,10 +96,10 @@ export const SECTION_GUIDES: Record<string, SectionGuide> = {
     tip: "El margen define el rango «desde–hasta» que ve el cliente. El valor final lo confirmas tú.",
   },
   "/admin/configuracion": {
-    intro: "Los datos de tu tienda: contacto, medios de pago, despachos y el aviso «Próximamente».",
+    intro: "Los datos de tu tienda: contacto, pago con Webpay, despachos y el aviso «Próximamente».",
     steps: [
       "Completa correo, teléfono, dirección y horario: se muestran en la tienda y en los correos.",
-      "En «Medios de pago», ingresa los datos bancarios para transferencias.",
+      "En «Pago con Webpay» ves si los pagos están en modo pruebas o ya cobran de verdad.",
       "En «Entregas y despachos», ajusta las tarifas por región y el monto de despacho gratis.",
       "Cuando quieras abrir la tienda al público, desactiva el aviso «Próximamente».",
     ],
@@ -152,13 +152,12 @@ export const HELP_TOPICS: HelpTopic[] = [
     title: "Atender un pedido, de principio a fin",
     steps: [
       "Te llega un aviso por correo y el pedido aparece en Pedidos (con un número rojo en el menú).",
-      "Si pagó con Webpay, ya aparece como «Pagado». Si eligió transferencia, aparece «Pendiente de pago».",
-      "Transferencia: revisa tu banco. Cuando veas el depósito, abre el pedido y cambia el estado a «Pagado».",
+      "El cliente paga con Webpay: cuando Transbank aprueba, el pedido aparece como «Pagado».",
       "Prepara los productos. Puedes marcarlo «En preparación» para que el cliente sepa que avanzas.",
       "Despacho: cambia a «Enviado», elige el courier y escribe el n° de seguimiento. Retiro en tienda: cambia a «Listo para retiro».",
       "Cuando el cliente lo recibe o lo retira, márcalo «Entregado».",
     ],
-    tip: "Con «Avisar al cliente por correo» marcado, cada cambio le llega por correo. Si no llega una transferencia, puedes cancelar el pedido y el stock vuelve solo.",
+    tip: "Con «Avisar al cliente por correo» marcado, cada cambio le llega por correo. Los pagos que quedan a medias se cancelan solos y el stock vuelve.",
   },
   {
     id: "cancelar",
@@ -168,7 +167,7 @@ export const HELP_TOPICS: HelpTopic[] = [
       "Escribe el motivo en «Mensaje para el historial» (opcional).",
       "El stock de los productos vuelve automáticamente.",
     ],
-    tip: "Si el cliente pagó, la devolución del dinero la haces tú desde tu banco o desde Transbank.",
+    tip: "Si el cliente pagó, la devolución del dinero la haces tú desde el portal de Transbank.",
   },
   {
     id: "solicitudes",

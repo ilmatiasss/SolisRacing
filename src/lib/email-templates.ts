@@ -3,7 +3,7 @@ import { getRegion } from "./chile";
 import type { DeliveryMethod, InquiryKind, OrderStatus, PaymentMethod } from "./db/schema";
 import { formatCLP, formatOrderNumber } from "./format";
 import { inquiryTitle, orderStatusLabel } from "./order-status";
-import { hasTransferAccount, type StoreSettings } from "./settings";
+import type { StoreSettings } from "./settings";
 import { DELIVERY_METHOD_LABELS } from "./shipping";
 import { siteUrl } from "./site";
 
@@ -114,43 +114,19 @@ function deliveryText(order: EmailOrder, settings: StoreSettings) {
   return `${DELIVERY_METHOD_LABELS[order.deliveryMethod]}: ${address}, ${order.shippingCommune ?? ""}, ${region}`;
 }
 
-function transferBlock(settings: StoreSettings, order: EmailOrder) {
-  const p = settings.payments;
-  const account = hasTransferAccount(p)
-    ? `Banco: ${e(p.transferBank)}<br>
-    Tipo de cuenta: ${e(p.transferAccountType)}<br>
-    N° de cuenta: ${e(p.transferAccountNumber)}<br>
-    Titular: ${e(p.transferHolder)}${p.transferRut ? `<br>RUT: ${e(p.transferRut)}` : ""}<br>
-    ${p.transferEmail ? `Correo: ${e(p.transferEmail)}<br>` : ""}`
-    : "Te enviaremos los datos de la cuenta por WhatsApp o correo a la brevedad.<br>";
-  return `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:16px;margin:16px 0;font-size:14px;line-height:1.7">
-    <strong>Datos para la transferencia</strong><br>
-    ${account}
-    Monto: <strong>${formatCLP(order.total)}</strong><br>
-    Asunto o comentario: <strong>${formatOrderNumber(order.id)}</strong>
-    ${p.transferInstructions ? `<br><br>${e(p.transferInstructions)}` : ""}
-  </div>`;
-}
-
 export function orderReceivedEmail(order: EmailOrder, settings: StoreSettings): EmailContent {
   const number = formatOrderNumber(order.id);
-  const isTransfer = order.paymentMethod === "transfer" && order.status === "pending";
-  const subject = isTransfer
-    ? `Recibimos tu pedido ${number}: falta la transferencia`
-    : `Confirmación de tu pedido ${number}`;
-  const intro = isTransfer
-    ? `Hola ${e(order.customerName)}, recibimos tu pedido <strong>${number}</strong>. Para confirmarlo, realiza la transferencia con los siguientes datos:`
-    : `Hola ${e(order.customerName)}, ¡gracias por tu compra! Tu pago fue aprobado y ya estamos preparando tu pedido <strong>${number}</strong>.`;
+  const subject = `Confirmación de tu pedido ${number}`;
+  const intro = `Hola ${e(order.customerName)}, ¡gracias por tu compra! Tu pago fue aprobado y ya estamos preparando tu pedido <strong>${number}</strong>.`;
   const html = layout(
     settings,
-    isTransfer ? "¡Pedido recibido!" : "¡Pago confirmado!",
+    "¡Pago confirmado!",
     paragraph(intro) +
-      (isTransfer ? transferBlock(settings, order) : "") +
       itemsTable(order) +
       paragraph(e(deliveryText(order, settings))) +
       button(orderUrl(order), "Ver mi pedido"),
   );
-  const text = `${isTransfer ? "Pedido recibido" : "Pago confirmado"} · ${number}\nTotal: ${formatCLP(order.total)}\n${deliveryText(order, settings)}\nVer pedido: ${orderUrl(order)}`;
+  const text = `Pago confirmado · ${number}\nTotal: ${formatCLP(order.total)}\n${deliveryText(order, settings)}\nVer pedido: ${orderUrl(order)}`;
   return { subject, html, text };
 }
 
@@ -195,7 +171,7 @@ export function orderStatusEmail(order: EmailOrder, settings: StoreSettings): Em
 
 export function newOrderAdminEmail(order: EmailOrder, settings: StoreSettings): EmailContent {
   const number = formatOrderNumber(order.id);
-  const status = order.status === "paid" ? "pagado con Webpay" : "pendiente de transferencia";
+  const status = order.status === "paid" ? "pagado con Webpay" : "pago pendiente";
   const adminUrl = `${siteUrl()}/admin/pedidos/${order.id}`;
   return {
     subject: `Nuevo pedido ${number} (${status}) · ${formatCLP(order.total)}`,

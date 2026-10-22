@@ -55,7 +55,6 @@ export function isWebpayAvailable(viewer: WebpayViewer = {}) {
 export function availablePayments(settings: Pick<StoreSettings, "payments">, viewer: WebpayViewer = {}) {
   return {
     webpayEnabled: settings.payments.webpayEnabled && isWebpayAvailable(viewer),
-    transferEnabled: settings.payments.transferEnabled,
   };
 }
 

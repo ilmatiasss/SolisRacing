@@ -14,8 +14,8 @@ export const instant = false;
 
 /** Qué significa cada estado de un pedido y qué te toca hacer. */
 const STATUS_HELP: Record<OrderStatus, string> = {
-  pending: "El cliente eligió transferencia y aún no confirmas el depósito. No prepares nada todavía.",
-  paid: "El dinero ya está. Te toca preparar los productos.",
+  pending: "El cliente está pagando en Webpay o dejó el pago a medias. No prepares nada: si no paga, se cancela solo.",
+  paid: "Webpay aprobó el pago. Te toca preparar los productos.",
   processing: "Estás armando el pedido. Opcional, sirve para que el cliente vea que avanzas.",
   shipped: "Despachado con courier (o «Listo para retiro» si lo retira en la tienda).",
   delivered: "El cliente ya lo tiene. El pedido está terminado.",

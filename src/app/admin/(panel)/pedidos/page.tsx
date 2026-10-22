@@ -5,11 +5,11 @@ import { AdminPagination, pageParam, stringParam } from "@/components/admin/pagi
 import { AdminPageHeader, Card, EmptyState, Table, Td, Th } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input, Select } from "@/components/ui/field";
+import { Input } from "@/components/ui/field";
 import { requireAdmin } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { listOrdersAdmin } from "@/lib/data/admin";
-import type { OrderStatus, PaymentMethod } from "@/lib/db/schema";
+import type { OrderStatus } from "@/lib/db/schema";
 import { formatCLP, formatDateTime, formatOrderNumber } from "@/lib/format";
 import { ORDER_STATUS_LABELS, ORDER_STATUS_TONES, orderStatusLabel, PAYMENT_METHOD_SHORT } from "@/lib/order-status";
 import { expireAbandonedWebpayOrders } from "@/lib/orders";
@@ -36,16 +36,13 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
   const sp = await searchParams;
   const statusParam = stringParam(sp.estado);
   const status = statusParam && statusParam in ORDER_STATUS_LABELS ? (statusParam as OrderStatus) : undefined;
-  const paymentParam = stringParam(sp.pago);
-  const payment = paymentParam === "webpay" || paymentParam === "transfer" ? (paymentParam as PaymentMethod) : undefined;
   const q = stringParam(sp.q);
   const page = pageParam(sp.pagina);
-  const { rows, total, pageCount } = await listOrdersAdmin({ status, payment, q, page });
+  const { rows, total, pageCount } = await listOrdersAdmin({ status, q, page });
 
   const tabHref = (value?: OrderStatus) => {
     const params = new URLSearchParams();
     if (value) params.set("estado", value);
-    if (payment) params.set("pago", payment);
     if (q) params.set("q", q);
     const query = params.toString();
     return query ? `/admin/pedidos?${query}` : "/admin/pedidos";
@@ -75,11 +72,6 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
             <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
             <Input name="q" defaultValue={q} placeholder="N° de pedido, nombre, correo o teléfono…" className="h-10 pl-9" />
           </div>
-          <Select name="pago" defaultValue={payment ?? ""} className="h-10 w-auto" aria-label="Medio de pago">
-            <option value="">Todos los pagos</option>
-            <option value="webpay">Webpay</option>
-            <option value="transfer">Transferencia</option>
-          </Select>
           <Button type="submit" variant="outline" size="sm" className="h-10">
             Buscar
           </Button>
@@ -137,7 +129,7 @@ export default async function OrdersAdminPage({ searchParams }: PageProps<"/admi
             </tbody>
           </Table>
         )}
-        <AdminPagination basePath="/admin/pedidos" params={{ estado: status, pago: payment, q }} page={page} pageCount={pageCount} />
+        <AdminPagination basePath="/admin/pedidos" params={{ estado: status, q }} page={page} pageCount={pageCount} />
       </Card>
     </>
   );

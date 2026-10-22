@@ -2,13 +2,10 @@
 
 import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { after } from "next/server";
 import { z } from "zod";
 import { isValidCommune } from "@/lib/chile";
 import { CATALOG_TAG } from "@/lib/data/catalog";
 import { readStoreSettings } from "@/lib/data/settings";
-import { notifyNewOrder } from "@/lib/order-notifications";
 import {
   cancelOrder,
   createOrder,
@@ -63,7 +60,7 @@ const checkoutSchema = z.object({
   address: optional(200),
   address2: optional(100),
   notes: optional(500),
-  paymentMethod: z.enum(["webpay", "transfer"], { error: "Elige un medio de pago" }),
+  paymentMethod: z.literal("webpay", { error: "Elige un medio de pago" }),
   acceptTerms: z.literal("on", { error: "Debes aceptar los términos y condiciones" }),
   expectedTotal: z.coerce.number().int().nonnegative(),
   items: z
@@ -130,11 +127,8 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   const viewer = { admin: Boolean(await getCurrentAdmin()) };
   const payments = availablePayments(settings, viewer);
 
-  if (data.paymentMethod === "webpay" && !payments.webpayEnabled) {
-    return { error: "El pago con Webpay no está disponible en este momento." };
-  }
-  if (data.paymentMethod === "transfer" && !payments.transferEnabled) {
-    return { error: "El pago por transferencia no está disponible en este momento." };
+  if (!payments.webpayEnabled) {
+    return { error: "Por ahora no podemos recibir pagos en línea. Escríbenos por WhatsApp para coordinar tu compra." };
   }
   if (!(await rateLimit("checkout"))) return { error: RATE_LIMIT_MESSAGE };
 
@@ -194,11 +188,6 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   const { order } = created;
   revalidateTag(CATALOG_TAG, "max");
 
-  if (data.paymentMethod === "transfer") {
-    after(() => notifyNewOrder(order.id));
-    redirect(`/pedido/${order.id}?t=${order.publicToken}`);
-  }
-
   try {
     const origin = await requestOrigin();
     const transaction = await createWebpayTransaction({
@@ -217,7 +206,7 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
     });
     return {
       error:
-        "No pudimos conectar con Webpay. Intenta nuevamente en unos minutos o elige pagar por transferencia.",
+        "No pudimos conectar con Webpay. Intenta nuevamente en unos minutos.",
     };
   }
 }

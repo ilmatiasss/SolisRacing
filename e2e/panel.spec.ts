@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { E2E_ADMIN } from "./constants";
-import { loginAsAdmin, placeTransferOrder, visible } from "./helpers";
+import { loginAsAdmin, placePaidOrder, visible } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
@@ -35,15 +35,17 @@ test("crear un producto con compatibilidad lo publica en la tienda", async ({ pa
   await expect(page.getByRole("link", { name: "Sensor de prueba para Swift Sport" })).toBeVisible();
 });
 
-test("marcar una transferencia como pagada y despacharla", async ({ page }) => {
-  const orderNumber = await placeTransferOrder(page, "pod-para-reloj-de-52-mm");
+test("preparar y despachar un pedido pagado con Webpay", async ({ page }) => {
+  const orderNumber = await placePaidOrder(page, "pod-para-reloj-de-52-mm");
   await loginAsAdmin(page);
   await page.goto(`/admin/pedidos/${orderNumber.replace("SR-", "")}`);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Pagado");
+  await expect(page.getByText("Qué hacer ahora")).toBeVisible();
 
-  await page.locator("#status").selectOption("paid");
+  await page.locator("#status").selectOption("processing");
   await page.getByRole("button", { name: "Actualizar estado" }).click();
   await expect(page.getByText("Estado actualizado y cliente notificado.")).toBeVisible();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Pagado");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("En preparación");
 
   await page.locator("#status").selectOption("shipped");
   await page.locator("#trackingCourier").fill("Starken");

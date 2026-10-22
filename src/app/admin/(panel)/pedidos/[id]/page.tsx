@@ -81,9 +81,7 @@ export default async function OrderAdminPage({ params }: PageProps<"/admin/pedid
       {order.adminNotes?.startsWith("⚠️") && <Notice tone="danger" className="mb-4">{order.adminNotes}</Notice>}
       <OrderNextStep
         status={order.status}
-        paymentMethod={order.paymentMethod}
         deliveryMethod={order.deliveryMethod}
-        total={order.total}
         testPayment={testPayment}
       />
 

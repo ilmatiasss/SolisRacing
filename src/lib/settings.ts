@@ -3,16 +3,9 @@ import { DEFAULT_BOOKING, normalizeBookingConfig, parseServiceLocations, weeklyL
 import type { RegionCode } from "./chile";
 import type { HarnessSettings } from "./harness";
 
+/** El único medio de pago es Webpay; desactivarlo pausa las compras en línea. */
 export type PaymentSettings = {
   webpayEnabled: boolean;
-  transferEnabled: boolean;
-  transferBank: string;
-  transferAccountType: string;
-  transferAccountNumber: string;
-  transferHolder: string;
-  transferRut: string;
-  transferEmail: string;
-  transferInstructions: string;
 };
 
 export type ShippingSettings = {
@@ -159,16 +152,6 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   },
   payments: {
     webpayEnabled: true,
-    transferEnabled: true,
-    transferBank: "Banco de Chile",
-    transferAccountType: "Cuenta corriente",
-    // Vacío hasta que la tienda ingrese su cuenta (Panel → Configuración).
-    transferAccountNumber: "",
-    transferHolder: "Solis Racing Parts",
-    transferRut: "",
-    transferEmail: "",
-    transferInstructions:
-      "Envíanos el comprobante por WhatsApp o correo indicando tu número de pedido. Despachamos una vez confirmado el pago.",
   },
   shipping: {
     pickupEnabled: true,
@@ -183,15 +166,6 @@ export const DEFAULT_SETTINGS: StoreSettings = {
       "Ideal para piezas grandes o pesadas (bidones de combustible, kits completos). Pagas el envío al recibir.",
   },
 };
-
-/** Número de cuenta de ejemplo que traían versiones anteriores: no se le muestra al cliente. */
-const PLACEHOLDER_ACCOUNT = "00-000-00000-00";
-
-/** Si ya hay datos bancarios reales para mostrarle al cliente que paga por transferencia. */
-export function hasTransferAccount(payments: Pick<PaymentSettings, "transferAccountNumber">) {
-  const number = payments.transferAccountNumber.trim();
-  return number !== "" && number !== PLACEHOLDER_ACCOUNT;
-}
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 

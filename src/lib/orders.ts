@@ -176,10 +176,7 @@ export async function createOrder(input: CreateOrderInput) {
     await tx.insert(orderEvents).values({
       orderId: order.id,
       status: "pending",
-      message:
-        input.paymentMethod === "webpay"
-          ? "Pedido creado. Esperando el pago con Webpay."
-          : "Pedido creado. Esperando la transferencia bancaria.",
+      message: "Pedido creado. Esperando el pago con Webpay.",
     });
     return { order, items };
   });

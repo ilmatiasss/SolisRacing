@@ -30,7 +30,7 @@ test("el buscador encuentra productos aunque se escriba sin tildes", async ({ pa
 
 test("compra con Webpay aprobada: descuenta stock y vacía el carrito", async ({ page }) => {
   await addProductToCart(page, "sensor-de-presion-ps10b-fueltech", 2);
-  await fillCheckout(page, { payment: "webpay" });
+  await fillCheckout(page);
   await expect(page.getByText("Webpay está en modo de prueba")).toBeVisible();
   // 2 × $135.000 supera el mínimo para despacho gratis.
   await expect(visible(page.getByText("Gratis", { exact: true }))).toBeVisible();
@@ -48,7 +48,7 @@ test("compra con Webpay aprobada: descuenta stock y vacía el carrito", async ({
 
 test("pago rechazado: cancela el pedido, devuelve el stock y conserva el carrito", async ({ page }) => {
   await addProductToCart(page, "fueltech-ft550");
-  await fillCheckout(page, { payment: "webpay", delivery: "pickup" });
+  await fillCheckout(page, { delivery: "pickup" });
   await page.getByRole("button", { name: /Pagar .* con Webpay/ }).click();
   await page.waitForURL(/\/pago\/simulado\/pagar/);
   await page.getByRole("button", { name: "Rechazar pago" }).click();
@@ -65,7 +65,7 @@ test("pago rechazado: cancela el pedido, devuelve el stock y conserva el carrito
 
 test("pago anulado en Webpay también cancela el pedido", async ({ page }) => {
   await addProductToCart(page, "fueltech-ft550");
-  await fillCheckout(page, { payment: "webpay", delivery: "pickup" });
+  await fillCheckout(page, { delivery: "pickup" });
   await page.getByRole("button", { name: /Pagar .* con Webpay/ }).click();
   await page.waitForURL(/\/pago\/simulado\/pagar/);
   await page.getByRole("button", { name: "Anular y volver al comercio" }).click();
@@ -75,20 +75,21 @@ test("pago anulado en Webpay también cancela el pedido", async ({ page }) => {
   await expect(visible(page.getByText("¡Última unidad!"))).toBeVisible();
 });
 
-test("compra por transferencia con factura y despacho pagado", async ({ page }) => {
+test("compra con factura y despacho pagado", async ({ page }) => {
   await addProductToCart(page, "riel-para-union-de-2-bombas-externas-epman");
-  await fillCheckout(page, { payment: "transfer" });
+  await fillCheckout(page);
   await page.locator("label:has(input[name=documentType][value=factura])").click();
   await page.locator("#companyName").fill("Taller Rojas SpA");
   await page.locator("#companyRut").fill("76.086.428-5");
   await page.locator("#companyGiro").fill("Mecánica automotriz");
-  await page.getByRole("button", { name: "Confirmar pedido" }).click();
-
-  await page.waitForURL(/\/pedido\/\d+\?t=/);
-  await expect(page.getByText("¡Pedido recibido! Falta tu transferencia")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Datos para transferir" })).toBeVisible();
-  await expect(page.getByText("Factura a Taller Rojas SpA (76.086.428-5)")).toBeVisible();
   // $38.000 + despacho a Valparaíso ($7.990)
+  await page.getByRole("button", { name: "Pagar $45.990 con Webpay" }).click();
+  await page.waitForURL(/\/pago\/simulado\/pagar/);
+  await page.getByRole("button", { name: "Aprobar pago" }).click();
+
+  await page.waitForURL(/pago=aprobado/);
+  await expect(page.getByText("Transferencia")).toHaveCount(0);
+  await expect(page.getByText("Factura a Taller Rojas SpA (76.086.428-5)")).toBeVisible();
   await expect(visible(page.getByText("$45.990")).first()).toBeVisible();
 });
 

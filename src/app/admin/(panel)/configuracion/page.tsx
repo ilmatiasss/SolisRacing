@@ -121,7 +121,7 @@ export default async function SettingsPage() {
           </div>
         </Card>
 
-        <Card title="Medios de pago">
+        <Card title="Pago con Webpay">
           <div className="space-y-5">
             <Checkbox
               name="payments.webpayEnabled"
@@ -131,43 +131,18 @@ export default async function SettingsPage() {
                 env === "production"
                   ? isWebpayAvailable()
                     ? "Conectado a Transbank en modo producción."
-                    : "Faltan WEBPAY_COMMERCE_CODE y WEBPAY_API_KEY: los clientes no ven Webpay hasta configurarlas."
+                    : "Faltan WEBPAY_COMMERCE_CODE y WEBPAY_API_KEY: los clientes no pueden pagar hasta configurarlas."
                   : isWebpaySandboxForAdmins()
-                    ? "Modo de pruebas de Transbank: los clientes no ven Webpay; tú, con la sesión iniciada, puedes probarlo en la tienda con las tarjetas de prueba."
+                    ? "Modo de pruebas de Transbank: los clientes aún no pueden pagar; tú, con la sesión iniciada, puedes probar Webpay en la tienda con las tarjetas de prueba."
                     : isWebpayAvailable()
                       ? `Modo actual: ${env === "mock" ? "simulador" : "integración (pruebas)"}. Las credenciales se configuran en las variables de entorno.`
                       : "El simulador no funciona en el sitio publicado: usa WEBPAY_ENVIRONMENT=integration para probar o production para cobrar."
               }
             />
-            <Checkbox
-              name="payments.transferEnabled"
-              defaultChecked={s.payments.transferEnabled}
-              label="Transferencia bancaria"
-              description="El pedido queda pendiente hasta que confirmes el pago."
-            />
-            <div className="grid gap-4 border-t border-line pt-5 md:grid-cols-2">
-              <Field label="Banco" htmlFor="transferBank">
-                <Input id="transferBank" name="payments.transferBank" defaultValue={s.payments.transferBank} />
-              </Field>
-              <Field label="Tipo de cuenta" htmlFor="transferAccountType">
-                <Input id="transferAccountType" name="payments.transferAccountType" defaultValue={s.payments.transferAccountType} />
-              </Field>
-              <Field label="Número de cuenta" htmlFor="transferAccountNumber">
-                <Input id="transferAccountNumber" name="payments.transferAccountNumber" defaultValue={s.payments.transferAccountNumber} />
-              </Field>
-              <Field label="Titular" htmlFor="transferHolder">
-                <Input id="transferHolder" name="payments.transferHolder" defaultValue={s.payments.transferHolder} />
-              </Field>
-              <Field label="RUT del titular" htmlFor="transferRut">
-                <Input id="transferRut" name="payments.transferRut" defaultValue={s.payments.transferRut} />
-              </Field>
-              <Field label="Correo para comprobantes" htmlFor="transferEmail">
-                <Input id="transferEmail" name="payments.transferEmail" type="email" defaultValue={s.payments.transferEmail} />
-              </Field>
-              <Field label="Instrucciones" htmlFor="transferInstructions" className="md:col-span-2">
-                <Textarea id="transferInstructions" name="payments.transferInstructions" rows={2} defaultValue={s.payments.transferInstructions} />
-              </Field>
-            </div>
+            <p className="text-sm text-muted">
+              Webpay es el único medio de pago de la tienda. Si lo desactivas, nadie puede comprar en línea hasta que lo
+              vuelvas a activar.
+            </p>
           </div>
         </Card>
 

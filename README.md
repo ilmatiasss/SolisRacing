@@ -1,6 +1,6 @@
 # Solis Racing Parts · Tienda online
 
-Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www.instagram.com/solis_racingparts/)): venta de partes de performance para autos y agenda de programación, pensado para Chile (pesos chilenos, regiones y comunas, RUT, boleta o factura, Webpay y transferencia).
+Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www.instagram.com/solis_racingparts/)): venta de partes de performance para autos y agenda de programación, pensado para Chile (pesos chilenos, regiones y comunas, RUT, boleta o factura, pago con Webpay).
 
 ## Qué incluye
 
@@ -11,14 +11,14 @@ Ecommerce a medida para **Solis Racing Parts** ([@solis_racingparts](https://www
 - Ficha de producto con galería, precio con oferta, stock, especificaciones, tabla de compatibilidad, productos relacionados y consulta por WhatsApp.
 - Carrito que se guarda en el navegador y se actualiza con los precios y el stock reales.
 - Checkout chileno: región y comuna (16 regiones, 346 comunas), boleta o factura con validación de RUT, despacho a domicilio (tarifa por región y despacho gratis desde un monto), envío por pagar o retiro en tienda.
-- Pago con **Webpay Plus** (débito, crédito y prepago) o **transferencia bancaria**.
-- Página del pedido con comprobante de pago, datos para transferir e historial; seguimiento con número de pedido + correo.
+- Pago con **Webpay Plus** (débito, crédito y prepago), el único medio de pago.
+- Página del pedido con comprobante de pago e historial.
 - Página de **servicios y programación** con formulario para agendar hora, contacto, despachos y devoluciones, términos y privacidad.
 - SEO: metadatos, sitemap, robots y datos estructurados de producto.
 
 **Panel de administración** (`/admin`)
 
-- Resumen: ventas del mes, pedidos por despachar, transferencias pendientes, stock bajo y solicitudes nuevas.
+- Resumen: «Para hoy», ventas del mes, pedidos por despachar, stock bajo y solicitudes nuevas.
 - Productos: crear y editar con fotos (arrastrar y soltar, se optimizan solas), compatibilidad por auto, especificaciones, ofertas, stock y estado.
 - Pedidos: filtros, detalle, cambio de estado con aviso por correo, número de seguimiento del courier, notas internas.
 - Categorías, marcas, vehículos (marcas y modelos), servicios, solicitudes, usuarios y configuración de la tienda (contacto, redes, datos bancarios, tarifas de despacho).
@@ -90,7 +90,7 @@ La tienda parte en el **ambiente de integración** de Transbank: puedes hacer co
 - VISA `4051 8856 0044 6623`, CVV `123`, cualquier fecha futura → **aprobada**
 - Cuando pida autenticación: RUT `11.111.111-1`, clave `123`
 
-En el sitio publicado (Vercel, ambiente *Production*) con `WEBPAY_ENVIRONMENT=integration`, **Webpay no se le muestra a los clientes** (nadie puede "pagar" con las tarjetas de prueba): ellos ven solo transferencia. En cambio, **un administrador con la sesión del panel iniciada sí ve Webpay** en el checkout, con las tarjetas de prueba a la vista, y puede hacer compras de prueba de punta a punta en el sitio real. Esos pedidos quedan marcados como **PRUEBA** en el panel: no los despaches y anúlalos para devolver el stock. En local y en los deploys de vista previa (*Preview*) Webpay de pruebas se ve para todos.
+En el sitio publicado (Vercel, ambiente *Production*) con `WEBPAY_ENVIRONMENT=integration`, **Webpay no se le muestra a los clientes** (nadie puede "pagar" con las tarjetas de prueba): como es el único medio de pago, todavía no pueden comprar. En cambio, **un administrador con la sesión del panel iniciada sí ve Webpay** en el checkout, con las tarjetas de prueba a la vista, y puede hacer compras de prueba de punta a punta en el sitio real. Esos pedidos quedan marcados como **PRUEBA** en el panel: no los despaches y anúlalos para devolver el stock. En local y en los deploys de vista previa (*Preview*) Webpay de pruebas se ve para todos.
 
 **Para cobrar de verdad:**
 
@@ -132,7 +132,7 @@ Para probar pagos sin conexión a Transbank, usa `WEBPAY_ENVIRONMENT=mock`: el c
 | `npm run build` / `npm start` | Preparar la base de datos (migraciones, administrador y catálogo inicial) y compilar / ejecutar en modo producción |
 | `npm run lint` / `npm run typecheck` | Revisiones de código |
 | `npm test` | Pruebas unitarias (RUT, precios, despachos, filtros…) |
-| `npm run test:e2e` | Pruebas de punta a punta: compras con Webpay simulado, transferencias y panel. Usan una base de datos de pruebas que se reinicia (`E2E_DATABASE_URL`, por defecto `solisracing_test`) |
+| `npm run test:e2e` | Pruebas de punta a punta: compras con Webpay simulado y panel. Usan una base de datos de pruebas que se reinicia (`E2E_DATABASE_URL`, por defecto `solisracing_test`) |
 | `npm run db:generate` | Genera una migración después de cambiar `src/lib/db/schema.ts` |
 | `npm run db:migrate` | Aplica migraciones pendientes |
 | `npm run db:seed` | Carga el catálogo inicial si no hay productos |
