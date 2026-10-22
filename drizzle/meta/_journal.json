@@ -71,6 +71,13 @@
       "when": 1792627108003,
       "tag": "0009_segunda_foto_lsu_42",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792627344730,
+      "tag": "0010_segunda_foto_lsu_49",
+      "breakpoints": true
     }
   ]
 }
