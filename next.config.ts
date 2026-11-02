@@ -47,6 +47,17 @@ const nextConfig: NextConfig = {
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          // Sin restringir scripts (Instagram, Next): bloquea plugins, cambio de <base>, que otros sitios nos
+          // enmarquen y que un formulario envíe datos fuera de la tienda (salvo al pago de Webpay).
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "base-uri 'self'",
+              "object-src 'none'",
+              "frame-ancestors 'self'",
+              "form-action 'self' https://webpay3g.transbank.cl https://webpay3gint.transbank.cl",
+            ].join("; "),
+          },
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",

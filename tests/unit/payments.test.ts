@@ -51,3 +51,15 @@ describe("Webpay en el sitio publicado", () => {
     expect(availablePayments({ payments: { ...enabled.payments, webpayEnabled: false } }).webpayEnabled).toBe(false);
   });
 });
+
+describe("comprobante de Webpay", async () => {
+  const { webpayCardType, webpayInstallmentType } = await import("@/lib/order-status");
+  it("indica débito, prepago o crédito y el tipo de cuota", () => {
+    expect(webpayCardType("VD")).toBe("Débito");
+    expect(webpayCardType("VP")).toBe("Prepago");
+    expect(webpayCardType("VC")).toBe("Crédito");
+    expect(webpayInstallmentType("VN")).toBe("Sin cuotas");
+    expect(webpayInstallmentType("VC")).toBe("Cuotas normales");
+    expect(webpayInstallmentType("SI")).toBe("3 cuotas sin interés");
+  });
+});

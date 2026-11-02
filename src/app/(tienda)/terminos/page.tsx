@@ -73,6 +73,30 @@ export default async function TermsPage() {
           <Link href="/privacidad" className="text-brand-400 hover:underline">política de privacidad</Link>.
         </p>
       </section>
+      <section>
+        <h2>8. Anulaciones y reembolsos</h2>
+        <p>
+          Si un pedido pagado se anula (por falta de stock, por ejercer tu derecho a retracto o por una devolución
+          aceptada), reembolsamos el monto pagado a la misma tarjeta con que compraste, mediante una anulación en Webpay.
+          El plazo en que el dinero se refleja depende de tu banco o emisor de la tarjeta.
+        </p>
+      </section>
+      <section>
+        <h2>9. Seguridad del pago</h2>
+        <p>
+          El pago con tarjeta se hace directamente en el formulario de Webpay (Transbank): este sitio no recibe ni guarda
+          los datos de tu tarjeta. Toda la comunicación con el sitio viaja cifrada (HTTPS).
+        </p>
+      </section>
+      <section>
+        <h2>10. Legislación aplicable y contacto</h2>
+        <p>
+          Estos términos se rigen por las leyes de la República de Chile, en especial la Ley N° 19.496 sobre Protección de
+          los Derechos de los Consumidores. Ante cualquier duda o reclamo puedes escribirnos por los medios indicados en la
+          sección 1 o en nuestra <Link href="/contacto" className="text-brand-400 hover:underline">página de contacto</Link>,
+          sin perjuicio de tu derecho a recurrir al Servicio Nacional del Consumidor (SERNAC).
+        </p>
+      </section>
     </LegalPage>
   );
 }

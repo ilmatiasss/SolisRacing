@@ -79,6 +79,29 @@ export const ORDER_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   cancelled: [],
 };
 
+/** Tipo de tarjeta según el código de pago de Webpay (comprobante). */
+export function webpayCardType(code: string | undefined): string {
+  if (code === "VD") return "Débito";
+  if (code === "VP") return "Prepago";
+  return code ? "Crédito" : "—";
+}
+
+/** Tipo de cuota según el código de pago de Webpay (comprobante). */
+export function webpayInstallmentType(code: string | undefined): string {
+  switch (code) {
+    case "VC":
+      return "Cuotas normales";
+    case "SI":
+      return "3 cuotas sin interés";
+    case "S2":
+      return "2 cuotas sin interés";
+    case "NC":
+      return "Cuotas sin interés";
+    default:
+      return "Sin cuotas";
+  }
+}
+
 /** Tipos de pago informados por Webpay (payment_type_code). */
 export const WEBPAY_PAYMENT_TYPES: Record<string, string> = {
   VD: "Venta débito",

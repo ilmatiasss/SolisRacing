@@ -9,13 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { getRegion } from "@/lib/chile";
+import { cn } from "@/lib/cn";
 import { getStoreSettings } from "@/lib/data/settings";
 import { formatCLP, formatDateTime, formatOrderNumber, whatsappLink } from "@/lib/format";
 import {
   ORDER_STATUS_TONES,
   orderStatusLabel,
   PAYMENT_METHOD_LABELS,
-  WEBPAY_PAYMENT_TYPES,
+  webpayCardType,
+  webpayInstallmentType,
 } from "@/lib/order-status";
 import { getOrderForCustomer } from "@/lib/orders";
 import { DELIVERY_METHOD_LABELS } from "@/lib/shipping";
@@ -43,7 +45,7 @@ const RESULT_MESSAGES: Record<string, { tone: "success" | "danger" | "warning"; 
   rechazado: {
     tone: "danger",
     title: "El pago fue rechazado",
-    text: "Tu banco o Webpay rechazó la transacción y no se realizó ningún cargo. Tu carrito sigue guardado para que lo intentes de nuevo.",
+    text: "La transacción no fue autorizada y no se realizó ningún cargo. Las posibles causas son: error al ingresar los datos de tu tarjeta (fecha de vencimiento o código de seguridad), saldo o cupo insuficiente, o una tarjeta aún no habilitada en el sistema financiero. Tu carrito sigue guardado para que lo intentes de nuevo.",
   },
   anulado: {
     tone: "warning",
@@ -129,23 +131,29 @@ async function OrderView({ params, searchParams }: Props) {
             <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
               <DataRow label="Comercio" value={settings.legalName || settings.storeName} />
               <DataRow label="Orden de compra" value={webpay.buy_order} />
-              <DataRow label="Monto pagado" value={formatCLP(webpay.amount)} strong />
+              <DataRow label="Monto pagado" value={`${formatCLP(webpay.amount)} (pesos chilenos, CLP)`} strong />
               <DataRow label="Código de autorización" value={webpay.authorization_code ?? "—"} />
               <DataRow
                 label="Fecha de la transacción"
                 value={webpay.transaction_date ? formatDateTime(webpay.transaction_date) : "—"}
               />
+              <DataRow label="Tipo de pago" value={webpayCardType(webpay.payment_type_code)} />
+              <DataRow label="Tipo de cuota" value={webpayInstallmentType(webpay.payment_type_code)} />
               <DataRow
-                label="Tipo de pago"
-                value={WEBPAY_PAYMENT_TYPES[webpay.payment_type_code ?? ""] ?? webpay.payment_type_code ?? "—"}
-              />
-              <DataRow
-                label="Cuotas"
+                label="Cantidad de cuotas"
                 value={webpay.installments_number ? String(webpay.installments_number) : "Sin cuotas"}
               />
+              {!!webpay.installments_number && !!webpay.installments_amount && (
+                <DataRow label="Monto de cada cuota" value={formatCLP(webpay.installments_amount)} />
+              )}
               <DataRow
                 label="Tarjeta"
                 value={webpay.card_detail?.card_number ? `**** **** **** ${webpay.card_detail.card_number}` : "—"}
+              />
+              <DataRow
+                label="Descripción"
+                value={order.items.map((item) => `${item.quantity} × ${item.productName}`).join(", ")}
+                className="sm:col-span-2"
               />
             </dl>
           </section>
@@ -280,9 +288,9 @@ function Banner({ tone, title, children }: { tone: "success" | "danger" | "warni
   );
 }
 
-function DataRow({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+function DataRow({ label, value, strong, className }: { label: string; value: string; strong?: boolean; className?: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-line pb-2 sm:block sm:border-0 sm:pb-0">
+    <div className={cn("flex items-center justify-between gap-3 border-b border-line pb-2 sm:block sm:border-0 sm:pb-0", className)}>
       <dt className="text-muted">{label}</dt>
       <dd className={strong ? "font-bold text-white" : "font-medium"}>{value}</dd>
     </div>
